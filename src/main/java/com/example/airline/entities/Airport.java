@@ -22,7 +22,7 @@ public class Airport {
     private String city;
 
     @OneToMany(mappedBy = "originAirport")
-    private List<Flight> flights;
+    private List<Flight> flightsOrigin;
 
     @OneToMany(mappedBy = "destinationAirport")
     private List<Flight> flightsDestination;

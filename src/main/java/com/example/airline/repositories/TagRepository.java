@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface TagRepository extends JpaRepository<Tag,Long> {
 Optional<Tag> FindTagByNameIgnoreCase(String name);
 
-List<Tag> FindTagsByAirportName(Collection<String> names);
+List<Tag> FindTagsByNameIn(Collection<String> names);
 }

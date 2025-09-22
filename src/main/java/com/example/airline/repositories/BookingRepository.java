@@ -1,12 +1,13 @@
 package com.example.airline.repositories;
 
 import com.example.airline.entities.Booking;
-import com.example.airline.entities.BookingItems;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
@@ -19,9 +20,9 @@ order by b.createdAt desc
                                                    Pageable pageable);
 
     @Query("""
-select b from Booking b left join fetch Passenger p left join fetch 
+select b from Booking b left join fetch b.passenger left join fetch 
 b.items i left join fetch i.flight where b.id = :bookingId
 """)
-    Booking findBookingbyId(@Param("bookingId") Long bookingId);
+    Optional<Booking> findBookingById(@Param("bookingId") Long bookingId);
 
 }
