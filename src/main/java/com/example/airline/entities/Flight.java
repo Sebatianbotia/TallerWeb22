@@ -27,10 +27,10 @@ public class Flight {
     private Airline airline;
     @ManyToOne
     @JoinColumn(name="originAirportId")
-    private Airport airport;
+    private Airport originAirport;
     @ManyToOne
     @JoinColumn(name="destinationAirportId")
-    private Airport destination;
+    private Airport destinationAirport;
     @ManyToMany
     @JoinTable(
             name="AirportTag",

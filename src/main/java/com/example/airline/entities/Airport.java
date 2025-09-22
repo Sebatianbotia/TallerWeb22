@@ -21,9 +21,9 @@ public class Airport {
     private String code;
     private String city;
 
-    @OneToMany(mappedBy = "airport")
+    @OneToMany(mappedBy = "originAirport")
     private List<Flight> flights;
 
-    @OneToMany(mappedBy = "destination")
+    @OneToMany(mappedBy = "destinationAirport")
     private List<Flight> flightsDestination;
 }

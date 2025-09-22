@@ -17,9 +17,9 @@ public class SeatInventory {
     private long id;
     private Integer totalSeats;
     private enum cabin {
-        FirstClass,
-        bussines,
-        economy
+        ECONOMY,
+        PREMIUM,
+        BUSINESS
     }
     private Integer availableSeats;
     @ManyToOne
