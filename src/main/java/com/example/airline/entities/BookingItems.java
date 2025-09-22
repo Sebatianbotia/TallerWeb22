@@ -20,9 +20,9 @@ public class BookingItems {
     private BigDecimal price;
     private Integer segmentOrder;
     private enum cabin {
-        FirstClass,
-        bussines,
-        economy
+        ECONOMY,
+        PREMIUM,
+        BUSINESS
     }
     @ManyToOne
     @JoinColumn(name = "bookingId")
