@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
-    List<Flight> findFlightByAirlineByNameIgnoreCase(String airlineName, Pageable pageable);
+    List<Flight> findFlightByAirline_NameIgnoreCase(String airlineName, Pageable pageable);
 
     @Query("""
     select f from Flight f where f.originAirport.code = :origen and f.destinationAirport.code = :destino

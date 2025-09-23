@@ -16,12 +16,8 @@ public class SeatInventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private Integer totalSeats;
-    private enum cabin {
-        ECONOMY,
-        PREMIUM,
-        BUSINESS
-    }
     private Integer availableSeats;
+    private Cabin cabin;
     @ManyToOne
     @JoinColumn(name="flightId")
     private Flight flight;

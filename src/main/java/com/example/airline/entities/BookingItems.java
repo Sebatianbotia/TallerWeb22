@@ -19,11 +19,7 @@ public class BookingItems {
     private long id;
     private BigDecimal price;
     private Integer segmentOrder;
-    private enum cabin {
-        ECONOMY,
-        PREMIUM,
-        BUSINESS
-    }
+    private Cabin cabin;
     @ManyToOne
     @JoinColumn(name = "bookingId")
     private Booking booking;

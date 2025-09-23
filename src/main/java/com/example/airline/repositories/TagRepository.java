@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TagRepository extends JpaRepository<Tag,Long> {
-Optional<Tag> FindTagByNameIgnoreCase(String name);
+Optional<Tag> findTagByNameIgnoreCase(String name);
 
-List<Tag> FindTagsByNameIn(Collection<String> names);
+List<Tag> findTagsByNameIn(Collection<String> names);
 }
