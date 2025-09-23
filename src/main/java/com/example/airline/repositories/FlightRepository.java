@@ -43,10 +43,10 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
 
         @Query(value = """
-select f.* from Flights f join AirportTag at on f.id = at.FlightId 
-join Tags t on at.TagId = t.id
+select f.* from Flights f join airport_tag at on f.id = at.flight_id 
+join Tags t on at.tag_id = t.id
+where t.name in (:tags) 
 group by f.id
-    where t.name in (:tags) 
 having count(distinct t.id) = :tamañoTags
 """, nativeQuery = true)
         List<Flight> findFlightsWithTags(@Param("tags") Collection<String> tags,

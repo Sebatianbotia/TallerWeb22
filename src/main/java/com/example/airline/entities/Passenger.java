@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,6 +24,11 @@ public class Passenger {
     @JoinColumn(name = "passengerProfileId")
     private PassengerProfile profile;
     @OneToMany(mappedBy = "passenger")
-    private List<Booking> bookings;
+    @Builder.Default
+    private List<Booking> bookings = new ArrayList<>();
 
+    public void addBooking(Booking booking) {
+        bookings.add(booking);
+        booking.setPassenger(this);
+    }
 }

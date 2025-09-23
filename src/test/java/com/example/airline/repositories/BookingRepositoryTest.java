@@ -2,6 +2,8 @@ package com.example.airline.repositories;
 
 import com.example.airline.AbstractRepositoryPSQL;
 import com.example.airline.entities.Booking;
+import com.example.airline.entities.BookingItems;
+import com.example.airline.entities.Flight;
 import com.example.airline.entities.Passenger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,6 +27,13 @@ class BookingRepositoryTest extends AbstractRepositoryPSQL {
 
     @Autowired
     PassengerRepository passengerRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private BookingItemsRepository bookingItemsRepository;
+
 
     @Test
     @DisplayName("Booking: Reservas de un pasajero por email")
@@ -57,4 +67,29 @@ class BookingRepositoryTest extends AbstractRepositoryPSQL {
 
     }
 
+    @Test
+    @DisplayName("Booking: Trae reserva por ID")
+    void shouldFindBookingById() {
+// 1. Arrange: Create and save all related entities
+        var passenger = Passenger.builder().fullName("John Doe").email("john.doe@test.com").build();
+        passengerRepository.save(passenger);
+
+        var flight = Flight.builder().build();
+        flightRepository.save(flight);
+
+        var booking = Booking.builder().build();
+        passenger.addBooking(booking);
+        bookingRepository.save(booking);
+
+        var bookingItem = BookingItems.builder().booking(booking).flight(flight).build();
+        bookingItemsRepository.save(bookingItem);
+
+        Optional<Booking> foundBooking = bookingRepository.findBookingById(booking.getId());
+
+        assertThat(foundBooking).isPresent();
+        assertThat(foundBooking.get().getPassenger()).isNotNull();
+        assertThat(foundBooking.get().getItems()).isNotEmpty();
+        assertThat(foundBooking.get().getItems().getFirst().getFlight()).isNotNull();
+
+    }
 }

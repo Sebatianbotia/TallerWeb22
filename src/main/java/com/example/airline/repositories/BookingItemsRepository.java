@@ -1,6 +1,7 @@
 package com.example.airline.repositories;
 
 import com.example.airline.entities.BookingItems;
+import com.example.airline.entities.Cabin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,5 +25,5 @@ Select sum(coalesce(bi.price,0)) from BookingItems bi where bi.booking.id = :boo
 select count(bi) from BookingItems bi where bi.flight.id = :flightId and bi.cabin = :cabin
 """)
     Long howManyBookingWasSellByFlightIdAndCabin(@Param("flightId")  Long flightId,
-                                                 @Param("cabin") String cabin);
+                                                 @Param("cabin") Cabin cabin);
 }

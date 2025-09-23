@@ -68,7 +68,7 @@ class BookingItemsRepositoryTest extends AbstractRepositoryPSQL {
         BigDecimal totalCalculado = repository.totalPriceOfBookingItems(savedBooking.getId());
 
         // Verificamos la suma
-        assertThat(totalCalculado).isEqualTo(new BigDecimal("300"));
+        assertThat(totalCalculado).isEqualTo(new BigDecimal("300.00"));
     }
 
     @Test
@@ -85,7 +85,7 @@ class BookingItemsRepositoryTest extends AbstractRepositoryPSQL {
         repository.saveAll(List.of(bookingItem1, bookingItem2));
 
         Long asientosReservados = repository.howManyBookingWasSellByFlightIdAndCabin(savedFlight.getId(),
-        Cabin.BUSINESS.toString()
+                Cabin.BUSINESS
         );
 
         assertThat(asientosReservados).isNotNull();
