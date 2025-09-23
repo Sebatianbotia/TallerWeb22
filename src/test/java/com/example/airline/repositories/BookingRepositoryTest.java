@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookingRepositoryTest extends AbstractRepositoryPSQL {
 
     @Autowired
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @Autowired
-    PassengerRepository passengerRepository;
+    private PassengerRepository passengerRepository;
 
     @Autowired
     private FlightRepository flightRepository;
@@ -70,21 +70,26 @@ class BookingRepositoryTest extends AbstractRepositoryPSQL {
     @Test
     @DisplayName("Booking: Trae reserva por ID")
     void shouldFindBookingById() {
-// 1. Arrange: Create and save all related entities
-        var passenger = Passenger.builder().fullName("John Doe").email("john.doe@test.com").build();
-        passengerRepository.save(passenger);
+
+        // 1. Arrange: Create and save all related entities
 
         var flight = Flight.builder().build();
-        flightRepository.save(flight);
+        Flight saveFlight = flightRepository.save(flight);
 
-        var booking = Booking.builder().build();
-        passenger.addBooking(booking);
-        bookingRepository.save(booking);
+        var passenger = Passenger.builder().fullName("John Doe").email("john.doe@test.com").build();
+        Passenger savePassenger = passengerRepository.save(passenger);
 
-        var bookingItem = BookingItems.builder().booking(booking).flight(flight).build();
-        bookingItemsRepository.save(bookingItem);
+        var bookingItem = BookingItems.builder().flight(flight).build();
+        BookingItems saveBookingItems = bookingItemsRepository.save(bookingItem);
 
-        Optional<Booking> foundBooking = bookingRepository.findBookingById(booking.getId());
+        var booking = Booking.builder().passenger(savePassenger).items(
+                List.of(saveBookingItems)
+        ).build();
+        Booking saveBooking = bookingRepository.save(booking);
+
+
+
+        Optional<Booking> foundBooking = bookingRepository.findBookingById(saveBooking.getId());
 
         assertThat(foundBooking).isPresent();
         assertThat(foundBooking.get().getPassenger()).isNotNull();
