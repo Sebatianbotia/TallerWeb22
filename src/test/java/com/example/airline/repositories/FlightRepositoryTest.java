@@ -4,18 +4,12 @@ import com.example.airline.entities.Airline;
 import com.example.airline.entities.Airport;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.Tag;
-import com.example.airline.repositories.AirlineRepository;
-import com.example.airline.repositories.AirportRepository;
-import com.example.airline.repositories.FlightRepository;
-import com.example.airline.repositories.TagRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
