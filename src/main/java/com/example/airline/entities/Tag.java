@@ -19,7 +19,7 @@ public class Tag {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private long id;
 private String name;
-@ManyToMany
+@ManyToMany(mappedBy = "tags")
 private Set<Flight> flights;
 
 }

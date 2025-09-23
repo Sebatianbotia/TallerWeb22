@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 
-public class BookingItems {
+public class BookingItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

@@ -43,7 +43,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 
 
         @Query(value = """
-select f.* from Flights f join airport_tag at on f.id = at.flight_id 
+select f.* from Flights f join Flight_tag at on f.id = at.flight_id 
 join Tags t on at.tag_id = t.id
 where t.name in (:tags) 
 group by f.id

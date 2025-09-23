@@ -2,7 +2,7 @@ package com.example.airline.repositories;
 
 import com.example.airline.AbstractRepositoryPSQL;
 import com.example.airline.entities.Booking;
-import com.example.airline.entities.BookingItems;
+import com.example.airline.entities.BookingItem;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.Passenger;
 import org.junit.jupiter.api.DisplayName;
@@ -77,11 +77,11 @@ class BookingRepositoryTest extends AbstractRepositoryPSQL {
         var passenger = Passenger.builder().fullName("John Doe").email("john.doe@test.com").build();
         Passenger savePassenger = passengerRepository.save(passenger);
 
-        var bookingItem = BookingItems.builder().flight(flight).build();
-        BookingItems saveBookingItems = bookingItemsRepository.save(bookingItem);
+        var bookingItem = BookingItem.builder().flight(flight).build();
+        BookingItem saveBookingItem = bookingItemsRepository.save(bookingItem);
 
         var booking = Booking.builder().passenger(savePassenger).items(
-                List.of(saveBookingItems)
+                List.of(saveBookingItem)
         ).build();
         Booking saveBooking = bookingRepository.save(booking);
 

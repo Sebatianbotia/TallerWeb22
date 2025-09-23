@@ -34,7 +34,7 @@ public class Flight {
     private Airport destinationAirport;
     @ManyToMany
     @JoinTable(
-            name="AirportTag",
+            name="Flight_tag",
             joinColumns = @JoinColumn(name="FlightId"),
             inverseJoinColumns = @JoinColumn(name="TagId")
     )
@@ -42,7 +42,7 @@ public class Flight {
     @OneToMany(mappedBy = "flight")
     private List<SeatInventory> seatInventories;
     @OneToMany(mappedBy = "flight")
-    private List<BookingItems> bookingItems;
+    private List<BookingItem> bookingItems;
 
 
 

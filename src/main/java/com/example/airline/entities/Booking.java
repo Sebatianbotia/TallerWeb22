@@ -23,6 +23,6 @@ public class Booking {
     @JoinColumn(name ="passengerId")
     private Passenger passenger;
     @OneToMany(mappedBy = "booking")
-    private List<BookingItems> items;
+    private List<BookingItem> items;
 
 }
