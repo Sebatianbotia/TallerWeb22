@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AirlineRepositoryTest extends AbstractRepositoryPSQL {
     @Autowired
-    private com.example.airline.repositories.AirlineRepository airlineRepository;
+    private AirlineRepository airlineRepository;
 
     @Test
     @DisplayName("Buscar por codigo existente zzz")
