@@ -20,7 +20,6 @@ public class Airline {
     private long id;
     private String name;
 
-    @Column(unique = true)
     private String code;
 
     @OneToMany(mappedBy = "airline")

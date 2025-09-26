@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 public class BookingDTO {
-    public record bookingCreateRequest(passengerDTO passenger) implements Serializable{}
-    public record passengerDTO(String fullName, String email )implements Serializable{}
-    public record bookingUpdateRequest(passengerDTO passenger) implements Serializable{}
-    public record bookingResponse(long id, OffsetDateTime createdAt, Passenger passenger) implements Serializable{}
+    public record bookingCreateRequest(Long passengerId) implements Serializable{}
+    public record bookingUpdateRequest(Long passengerId) implements Serializable{}
+    public record bookingResponseBasic(long id, OffsetDateTime createdAt, PassengerDTO.passengerResponseProfileDetails passenger) implements Serializable{}
 
 }

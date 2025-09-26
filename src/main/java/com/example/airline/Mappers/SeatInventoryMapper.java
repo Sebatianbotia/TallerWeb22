@@ -8,7 +8,6 @@ import com.example.airline.repositories.SeatInventoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 @Component
 public class SeatInventoryMapper {
     private SeatInventoryRepository seatInventoryRepository;
@@ -18,7 +17,7 @@ public class SeatInventoryMapper {
         Flight foundFlight = flightRepository.findById(createRequest.flightId())
                 .orElseThrow(() -> new EntityNotFoundException("Vuelo con el ID: " + createRequest.flightId() + "no encontrado"));
 
-        return new SeatInventory().builder().availableSeats(createRequest.availableSeats()).totalSeats(createRequest.totalSeats()).cabin(createRequest.cabin()).flight(foundFlight).build();
+        return SeatInventory.builder().availableSeats(createRequest.availableSeats()).totalSeats(createRequest.totalSeats()).cabin(createRequest.cabin()).flight(foundFlight).build();
     }
 
     public SeatInventory updateSeatInventory(SeatInvetoryDTO.seatInventoryUpdateRequest updateRequest){
