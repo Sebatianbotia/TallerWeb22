@@ -26,4 +26,11 @@ public class Airport {
 
     @OneToMany(mappedBy = "destinationAirport")
     private List<Flight> flightsDestination;
+
+    public void addFlightOrigin(Flight flight) {
+        flightsOrigin.add(flight);
+    }
+    public void addFlightDestination(Flight flight) {
+        flightsDestination.add(flight);
+    }
 }
