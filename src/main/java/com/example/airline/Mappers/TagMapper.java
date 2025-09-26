@@ -37,10 +37,26 @@ public class TagMapper {
     // Se termina cuando se tenga toDTO de flight
     public TagDTO.tagResponse toDTO(Long tagId){
         Tag foundTag = tagRepository.findById(tagId).orElseThrow(() -> new EntityNotFoundException("Tag con id: " + tagId + " no encontrado"));
-        return new TagDTO.tagResponse(foundTag.getId(), foundTag.getName(), foundTag.getFlights());
+        return new TagDTO.tagResponse(foundTag.getId(), foundTag.getName());
     }
 
-    private Set<Flight> getSetFlightsWithID(Set<Long> flightsIds) {
+    public static TagDTO.tagResponse toDTO(Tag tag){
+        return new TagDTO.tagResponse(tag.getId(), tag.getName());
+    }
+
+    public static Set<TagDTO.tagResponse> toDTO(Set<Tag> tags){
+        if (tags == null || tags.isEmpty()) return null;
+        Set<TagDTO.tagResponse> tagResponseList = new HashSet<>();
+        for (Tag tag : tags) {
+            tagResponseList.add(toDTO(tag));
+        }
+        return tagResponseList;
+    }
+
+
+
+
+        private Set<Flight> getSetFlightsWithID(Set<Long> flightsIds) {
         if (flightsIds == null || flightsIds.isEmpty()) {
             return new HashSet<>();
         }

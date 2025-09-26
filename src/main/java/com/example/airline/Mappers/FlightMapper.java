@@ -2,25 +2,27 @@ package com.example.airline.Mappers;
 
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.DTO.TagDTO;
-import com.example.airline.entities.Airline;
-import com.example.airline.entities.Airport;
-import com.example.airline.entities.Flight;
-import com.example.airline.entities.Tag;
+import com.example.airline.entities.*;
 import com.example.airline.repositories.AirlineRepository;
 import com.example.airline.repositories.AirportRepository;
 import com.example.airline.repositories.FlightRepository;
 import com.example.airline.repositories.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class FlightMapper {
+
+    @Autowired
     private FlightRepository flightRepository;
     private AirlineRepository airlineRepository;
-    public AirportRepository airportRepository;
-    public TagRepository tagRepository;
+    private AirportRepository airportRepository;
+    private TagRepository tagRepository;
+
 
 
     public Flight toEntity(FlightDto.flightCreateRequest createRequest) {
@@ -85,10 +87,16 @@ public class FlightMapper {
                 foundFlight.getAirline().getId(),
                 foundFlight.getOriginAirport().getId(),
                 foundFlight.getDestinationAirport().getId(),
-                foundFlight.getTags().stream().map(Tag::getId).collect(Collectors.toSet()));
+                TagMapper.toDTO(foundFlight.getTags()),SeatInventoryMapper.toDTO(foundFlight.getSeatInventories()));
     }
 
-    private TagDTO.tagResponse getTagResponse(Set<Tag> tags) {
-
+    private Set<TagDTO.tagResponse> getTagResponse(Set<Tag> tags) {
+        if (tags == null || tags.isEmpty()) return null;
+        Set<TagDTO.tagResponse> tagsResponse = new HashSet<>();
+        for (Tag tag : tags) {
+            tagsResponse.add(new TagDTO.tagResponse(tag.getId(), tag.getName()));
+        }
+        return tagsResponse;
     }
+
 }
