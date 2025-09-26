@@ -8,8 +8,8 @@ public class SeatInvetoryDTO {
     public record seatInventoryCreateRequest(Integer totalSeats, Integer availableSeats,
                                             Cabin cabin, Long flightId) implements Serializable {}
     public record seatInventoryUpdateRequest(Long seatInventoryId,  Integer totalSeats, Integer availableSeats,
-                                             Cabin cabin,Long flightID) implements Serializable {}
+                                             Cabin cabin, Long flightId) implements Serializable {}
     public record seatInventoryDtoResponse(Long seatInventoryId,Integer totalSeats, Integer availableSeats,
-                                           Cabin cabin, Long flightID) implements Serializable{}
+                                           Cabin cabin, FlightDto flight) implements Serializable{}
 
 }

@@ -1,15 +1,18 @@
 package com.example.airline.Mappers;
 
+import com.example.airline.DTO.FlightDto;
 import com.example.airline.DTO.SeatInvetoryDTO;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.FlightRepository;
 import com.example.airline.repositories.SeatInventoryRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SeatInventoryMapper {
+    @Autowired
     private SeatInventoryRepository seatInventoryRepository;
     private FlightRepository flightRepository;
 
@@ -33,22 +36,24 @@ public class SeatInventoryMapper {
        if (updateRequest.cabin()!= null){
            foundSeatInventory.setCabin(updateRequest.cabin());
        }
-       if (updateRequest.flightID()!= null){
-           Flight foundFlight = flightRepository.findById(updateRequest.flightID())
-                   .orElseThrow(() -> new EntityNotFoundException("Vuelo con ID: " + updateRequest.flightID() + "no encontrado"));
+       if (updateRequest.flightId()!= null){
+           Flight foundFlight = flightRepository.findById(updateRequest.flightId())
+                   .orElseThrow(() -> new EntityNotFoundException("Vuelo con ID: " + updateRequest.flightId() + "no encontrado"));
            foundSeatInventory.setFlight(foundFlight);
        }
-       return seatInventoryRepository.save(foundSeatInventory);
+       return foundSeatInventory;
 
     }
-
-    public static SeatInvetoryDTO.seatInventoryDtoResponse seatInventoryResponse(SeatInventory seatInventory){
-        if (seatInventory.getAvailableSeats() == null){
-            return null;
-        }
-        return new SeatInvetoryDTO.seatInventoryDtoResponse(seatInventory.getId(),
-                seatInventory.getTotalSeats(), seatInventory.getAvailableSeats(), seatInventory.getCabin(),
-                seatInventory.getFlight().getId());
+// Falta el toDTO de flight en el ultimo parametro
+    public SeatInvetoryDTO.seatInventoryDtoResponse toDTO(Long airlineId){
+        SeatInventory foundSeatInventory = seatInventoryRepository.findById(airlineId).orElseThrow(() -> new EntityNotFoundException("Seat inventory con id: " + airlineId + " no encontrado"));
+        return new SeatInvetoryDTO.seatInventoryDtoResponse(foundSeatInventory.getId(), foundSeatInventory.getTotalSeats(), foundSeatInventory.getAvailableSeats(), foundSeatInventory.getCabin(), )
     }
+
+    private FlightDto.flightResponse getFlightResponse(Flight flight){
+        return new FlightDto.flightResponse(flight.getId(), flight.getNumber(), flight.getArrivalTime(), flight.getDepartureTime(), flight.getAirline().getId(), flight.getOriginAirport().getId(),
+                flight)
+    }
+
 
 }
