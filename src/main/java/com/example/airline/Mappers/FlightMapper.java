@@ -1,6 +1,7 @@
 package com.example.airline.Mappers;
 
 import com.example.airline.DTO.FlightDto;
+import com.example.airline.DTO.TagDTO;
 import com.example.airline.entities.Airline;
 import com.example.airline.entities.Airport;
 import com.example.airline.entities.Flight;
@@ -85,5 +86,9 @@ public class FlightMapper {
                 foundFlight.getOriginAirport().getId(),
                 foundFlight.getDestinationAirport().getId(),
                 foundFlight.getTags().stream().map(Tag::getId).collect(Collectors.toSet()));
+    }
+
+    private TagDTO.tagResponse getTagResponse(Set<Tag> tags) {
+
     }
 }

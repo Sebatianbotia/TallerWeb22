@@ -37,12 +37,14 @@ public class AirlineMapper {
         return new AirlaneDTO.airlineDtoResponse(foundAirline.getId(), foundAirline.getName(), foundAirline.getCode(), getFlightIds(foundAirline.getFlights()));
     }
 
+    // Luego de que se tenga toDTO de flight se continua
     private List<Long> getFlightDTOS(List<Flight> flights) {
         if (flights == null || flights.isEmpty()) {
             return new ArrayList<>();
         }
         List<Long> flightIds = new ArrayList<>();
-        
+        for (Flight flight : flights) {
+        }
     }
 
 }
