@@ -11,9 +11,10 @@ public class BookingMapper {
     PassengerRepository passengerRepository;
     Passenger passenger;
     BookingRepository bookingRepository;
+    PassengerMapper passengerMapper;
     public Booking toEntity(BookingDTO.bookingCreateRequest request) {
         Passenger foundPassenger = passengerRepository.findById(request.passengerId()).orElseThrow(() -> new EntityNotFoundException("Passenger not found"));
-        Booking booking = Booking.builder().passenger(foundPassenger).build():
+        Booking booking = Booking.builder().passenger(foundPassenger).build();
         return booking;
     }
 
@@ -23,6 +24,6 @@ public class BookingMapper {
         return new BookingDTO.bookingResponseBasic(
                 booking.getId(),
                 booking.getCreatedAt(),
-                booking.)
+                passengerMapper.toDTO(id));
     }
 }
