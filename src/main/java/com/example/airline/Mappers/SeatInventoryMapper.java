@@ -10,6 +10,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class SeatInventoryMapper {
     @Autowired
@@ -47,13 +50,22 @@ public class SeatInventoryMapper {
 // Falta el toDTO de flight en el ultimo parametro
     public SeatInvetoryDTO.seatInventoryDtoResponse toDTO(Long airlineId){
         SeatInventory foundSeatInventory = seatInventoryRepository.findById(airlineId).orElseThrow(() -> new EntityNotFoundException("Seat inventory con id: " + airlineId + " no encontrado"));
-        return new SeatInvetoryDTO.seatInventoryDtoResponse(foundSeatInventory.getId(), foundSeatInventory.getTotalSeats(), foundSeatInventory.getAvailableSeats(), foundSeatInventory.getCabin(), )
+        return new SeatInvetoryDTO.seatInventoryDtoResponse(foundSeatInventory.getId(), foundSeatInventory.getTotalSeats(), foundSeatInventory.getAvailableSeats(), foundSeatInventory.getCabin());
     }
 
-    private FlightDto.flightResponse getFlightResponse(Flight flight){
-        return new FlightDto.flightResponse(flight.getId(), flight.getNumber(), flight.getArrivalTime(), flight.getDepartureTime(), flight.getAirline().getId(), flight.getOriginAirport().getId(),
-                flight)
+    public static SeatInvetoryDTO.seatInventoryDtoResponse toDTO(SeatInventory seatInventory){
+        return new SeatInvetoryDTO.seatInventoryDtoResponse(seatInventory.getId(), seatInventory.getTotalSeats(), seatInventory.getAvailableSeats(), seatInventory.getCabin());
     }
+
+    public static List<SeatInvetoryDTO.seatInventoryDtoResponse> toDTO(List<SeatInventory> seatInventoryList){
+        if (seatInventoryList == null){return null;}
+        List<SeatInvetoryDTO.seatInventoryDtoResponse> seatInvetoryDTOList = new ArrayList<>();
+        for (SeatInventory seatInventory : seatInventoryList){
+            seatInvetoryDTOList.add(toDTO(seatInventory));
+        }
+        return seatInvetoryDTOList;
+    }
+
 
 
 }

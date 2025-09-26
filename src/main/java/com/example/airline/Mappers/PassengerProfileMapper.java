@@ -41,7 +41,7 @@ public class PassengerProfileMapper {
     }
 
     public PassengerProfileDTO.passengerProfileResponse toDTO(Long passengerProfileID) {
-        PassengerProfile foundPassengerProfile = passengerProfileRepository.findById(passengerProfileID).orElseThrow(() -> new EntityNotFoundException("Passenger id: " + passengerProfileID() + " no encontrado"));
+        PassengerProfile foundPassengerProfile = passengerProfileRepository.findById(passengerProfileID).orElseThrow(() -> new EntityNotFoundException("Passenger id: " + passengerProfileID + " no encontrado"));
         return new PassengerProfileDTO.passengerProfileResponse(foundPassengerProfile.getId(), foundPassengerProfile.getPhone(), foundPassengerProfile.getCountryCode());
     }
 }
