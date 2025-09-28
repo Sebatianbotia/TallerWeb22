@@ -89,14 +89,6 @@ public class FlightMapper {
                 foundFlight.getDestinationAirport().getId(),
                 TagMapper.toDTO(foundFlight.getTags()),SeatInventoryMapper.toDTO(foundFlight.getSeatInventories()));
     }
-
-    private Set<TagDTO.tagResponse> getTagResponse(Set<Tag> tags) {
-        if (tags == null || tags.isEmpty()) return null;
-        Set<TagDTO.tagResponse> tagsResponse = new HashSet<>();
-        for (Tag tag : tags) {
-            tagsResponse.add(new TagDTO.tagResponse(tag.getId(), tag.getName()));
-        }
-        return tagsResponse;
     }
 
-}
+

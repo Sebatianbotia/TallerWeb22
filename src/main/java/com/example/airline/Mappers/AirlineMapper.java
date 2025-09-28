@@ -21,7 +21,7 @@ public class AirlineMapper {
     }
 
     public Airline updateEntity(AirlaneDTO.airlineUpdateRequest updateRequest) {
-    Airline foundAirline = airlineRepository.findById(updateRequest.airlineId()).orElseThrow(() -> new EntityNotFoundException("Aerolinea con id: " + id + " no encontrado"));
+    Airline foundAirline = airlineRepository.findById(updateRequest.airlineId()).orElseThrow(() -> new EntityNotFoundException("Aerolinea con id: " + updateRequest.airlineId() + " no encontrado"));
 
     if (updateRequest.name() != null) {
         foundAirline.setName(updateRequest.name());
@@ -34,17 +34,18 @@ public class AirlineMapper {
 
     public AirlaneDTO.airlineDtoResponse toDTO(Long airlineId) {
         Airline foundAirline = airlineRepository.findById(airlineId).orElseThrow(() -> new EntityNotFoundException("Aerolinea con id: " + airlineId + " no encontrado"));
-        return new AirlaneDTO.airlineDtoResponse(foundAirline.getId(), foundAirline.getName(), foundAirline.getCode(), getFlightIds(foundAirline.getFlights()));
+        return new AirlaneDTO.airlineDtoResponse(foundAirline.getId(), foundAirline.getName(), foundAirline.getCode());
     }
 
-    // Luego de que se tenga toDTO de flight se continua
-    private List<Long> getFlightDTOS(List<Flight> flights) {
-        if (flights == null || flights.isEmpty()) {
+    private List<Long> getFlighstId(List<Flight> flights){
+        if (flights == null || flights.isEmpty()){
             return new ArrayList<>();
         }
-        List<Long> flightIds = new ArrayList<>();
-        for (Flight flight : flights) {
+        List<Long> ids = new ArrayList<>();
+        for (Flight flight : flights){
+            ids.add(flight.getId());
         }
+        return ids;
     }
 
 }

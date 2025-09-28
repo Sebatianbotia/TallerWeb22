@@ -65,6 +65,6 @@ public class BookingItemMapper {
         BookingItem foundBookingItem = bookingItemsRepository.findById(bookingItemId).orElseThrow(() -> new EntityNotFoundException(
                 "BookingItem con id: " + bookingItemId + " no encontrado"
         ));
-        return new BookingItemDTO.bookingItemReponse(foundBookingItem.getId(), foundBookingItem.getCabin(), foundBookingItem.getBooking().getId(), foundBookingItem.getFlight().getId())
+        return new BookingItemDTO.bookingItemReponse(foundBookingItem.getId(), foundBookingItem.getCabin(), foundBookingItem.getBooking().getId(), foundBookingItem.getFlight().getId());
     }
 }
