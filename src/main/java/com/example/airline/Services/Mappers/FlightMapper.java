@@ -1,7 +1,6 @@
-package com.example.airline.Mappers;
+package com.example.airline.Services.Mappers;
 
 import com.example.airline.DTO.FlightDto;
-import com.example.airline.DTO.TagDTO;
 import com.example.airline.entities.*;
 import com.example.airline.repositories.AirlineRepository;
 import com.example.airline.repositories.AirportRepository;
