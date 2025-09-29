@@ -20,6 +20,6 @@ public class FlightDto {
 
     public record flightResponse(Long flightId, String number, OffsetDateTime arrivalTime,
                                  OffsetDateTime departureTime, Long airlineId, Long originAirportId,
-                                 Long destinationAirpotId, Set<TagDTO.tagResponse> tags, List<SeatInvetoryDTO.seatInventoryDtoResponse> seatInventory) implements Serializable {}
+                                 Long destinationAirpotId, Set<TagDTO.tagResponse> tags, List<SeatInventoryDTO.seatInventoryDtoResponse> seatInventory) implements Serializable {}
 
 }

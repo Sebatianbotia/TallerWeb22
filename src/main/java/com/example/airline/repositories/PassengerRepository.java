@@ -17,5 +17,5 @@ where lower(p.email) = lower(:email)
     Optional<Passenger> findPassengerByEmailIgnoreCaseJPQL(@Param("email") String email);
 
 
-    Optional<Passenger> findByid(long id);
+    Optional<Passenger> findByid(Long id);
 }
