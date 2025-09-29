@@ -3,31 +3,26 @@ package com.example.airline.Services.Mappers;
 import com.example.airline.DTO.AirportDTO;
 import com.example.airline.entities.Airport;
 import com.example.airline.repositories.AirportRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 public class AirportMapper {
-    AirportRepository airportRepository;
-    public Airport toEntity(AirportDTO.AirportCreateRequest createRequest) {
-        Airport airport = Airport.builder()
+    private AirportRepository airportRepository;
+    public static Airport toEntity(AirportDTO.AirportCreateRequest createRequest) {
+        return Airport.builder()
                 .name(createRequest.name())
                 .code(createRequest.code())
                 .city(createRequest.city())
                 .build();
-        return airport;
     }
 
-    public Airport updateEntity(AirportDTO.AirportUpdateRequest updateRequest) {
-        if (updateRequest == null) return null;
-        Airport foundAirport = airportRepository.findById(updateRequest.id()).orElseThrow(()-> new EntityNotFoundException("Airport id: " + updateRequest.id() + " no encontrado"));
-        if (updateRequest.name() != null) foundAirport.setName( updateRequest.name());
-        if (updateRequest.code() != null) foundAirport.setCode( updateRequest.code());
-        if (updateRequest.city() != null) foundAirport.setCity( updateRequest.city());
-        return foundAirport;
+    public static void updateEntity(Airport airport, AirportDTO.AirportUpdateRequest updateRequest) {
+        if (updateRequest == null) return;
+        if (updateRequest.name() != null) airport.setName( updateRequest.name());
+        if (updateRequest.code() != null) airport.setCode( updateRequest.code());
+        if (updateRequest.city() != null) airport.setCity( updateRequest.city());
     }
 
-    public AirportDTO.AirportResponse toDTO(Long id) {
-        Airport foundAirport = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport id: " + id + " no encontrado"));
-        return new AirportDTO.AirportResponse(id, foundAirport.getName(), foundAirport.getCode(), foundAirport.getCity());
+    public static AirportDTO.AirportResponse toDTO(Airport airport) {
+        return new AirportDTO.AirportResponse(airport.getId(), airport.getName(), airport.getCode(), airport.getCity());
 
     }
 }
