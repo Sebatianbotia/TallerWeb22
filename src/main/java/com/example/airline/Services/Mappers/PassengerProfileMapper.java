@@ -12,36 +12,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class PassengerProfileMapper {
 
-    @Autowired
-    private PassengerRepository passengerRepository;
-    private PassengerProfileRepository passengerProfileRepository;
 
-    public PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        Passenger foundpassenger = passengerRepository.findByid(createRequest.passengerId()).orElseThrow(() -> new EntityNotFoundException("Passenger con id: " + createRequest.passengerId() + " no encontrado"));
-        PassengerProfile passengerProfile = PassengerProfile.builder().phone(createRequest.phoneNumber()).countryCode(createRequest.countryCode()).passenger(foundpassenger).build();
+    public static PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
+        PassengerProfile passengerProfile = PassengerProfile.builder().phone(createRequest.phoneNumber()).countryCode(createRequest.countryCode()).build();
         return passengerProfile;
     }
 
-    public PassengerProfile updatePassengerProfile(PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
-        if (updateRequest == null) {
-            return null;
-        }
-
-        PassengerProfile foundPassengerProfile = passengerProfileRepository.findById(updateRequest.passengerId()).orElseThrow(() -> new EntityNotFoundException("Passenger id: " + updateRequest.passengerId() + " no encontrado"));
-        if (updateRequest.phoneNumber() != null) {
-            foundPassengerProfile.setPhone(updateRequest.phoneNumber());
-        }
-
-        if (updateRequest.countryCode() != null) {
-            foundPassengerProfile.setCountryCode(updateRequest.countryCode());
-        }
-
-        return foundPassengerProfile;
-
+    public static PassengerProfile toEntity(PassengerProfileDTO.passengerProfileResponse createRequest) {
+        PassengerProfile passengerProfile = PassengerProfile.builder().phone(createRequest.phoneNumber()).countryCode(createRequest.countryCode()).build();
+        return passengerProfile;
     }
 
-    public PassengerProfileDTO.passengerProfileResponse toDTO(Long passengerProfileID) {
-        PassengerProfile foundPassengerProfile = passengerProfileRepository.findById(passengerProfileID).orElseThrow(() -> new EntityNotFoundException("Passenger id: " + passengerProfileID + " no encontrado"));
-        return new PassengerProfileDTO.passengerProfileResponse(foundPassengerProfile.getId(), foundPassengerProfile.getPhone(), foundPassengerProfile.getCountryCode());
+    public static void path(PassengerProfile profile,PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
+        if (updateRequest.phoneNumber() != null){profile.setPhone(updateRequest.phoneNumber());}
+        if (updateRequest.countryCode() != null){profile.setCountryCode(updateRequest.countryCode());}
+    }
+
+    public static PassengerProfileDTO.passengerProfileResponse toDTO(PassengerProfile profile) {
+        return new PassengerProfileDTO.passengerProfileResponse(profile.getId(), profile.getPhone(), profile.getCountryCode());
     }
 }
