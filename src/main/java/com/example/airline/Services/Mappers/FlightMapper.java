@@ -1,6 +1,7 @@
 package com.example.airline.Services.Mappers;
 
 import com.example.airline.DTO.FlightDto;
+import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.entities.*;
 import com.example.airline.repositories.AirlineRepository;
@@ -42,9 +43,12 @@ public class FlightMapper {
     }
 
     public static FlightDto.flightResponse toDTO(Flight entity) {
-        return new FlightDto.flightResponse(entity.getId(), entity.getNumber(), entity.getArrivalTime(), entity.getDepartureTime(),
-
-                )
+        var tag = entity.getTags() == null ? Set.<TagDTO.tagResponse>of():
+                entity.getTags().stream().map(TagMapper::toDTO).collect(Collectors.toSet());
+        var seatInventories = entity.getSeatInventories() == null ? List.<SeatInventoryDTO.seatInventoryFlightView>of():
+                entity.getSeatInventories().stream().map(SeatInventoryMapper::toDTO).toList();
+        return new FlightDto.flightResponse(entity.getId(), entity.getNumber(), entity.getArrivalTime(), entity.getDepartureTime(), AirlineMapper.airlineFlightView(entity.getAirline()),tag,seatInventories
+                );
     }
 
     public static FlightDto.flightAirportView flightAirportView(Flight entity) {
