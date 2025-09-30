@@ -11,6 +11,7 @@ public interface PassengerProfileService {
     PassengerProfileDTO.passengerProfileResponse update(PassengerProfile profile,PassengerProfileDTO.passengerProfileUpdateRequest updateRequest);
     PassengerProfileDTO.passengerProfileResponse findById(Long id);
     PassengerProfileDTO.passengerProfileResponse update(Long id,PassengerProfileDTO.passengerProfileUpdateRequest updateRequest);
+    PassengerProfile get(Long id);
     List<PassengerProfileDTO.passengerProfileResponse> findAll();
     void delete(Long id);
 

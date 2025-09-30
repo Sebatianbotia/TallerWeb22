@@ -1,13 +1,15 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.PassengerDTO;
+import com.example.airline.entities.Passenger;
 
 import java.util.List;
 
 public interface PassengerService {
-    PassengerDTO.passengerResponse createPassenger(PassengerDTO.passengerCreateRequest createRequest);
-    PassengerDTO.passengerResponse updatePassenger(Long id, PassengerDTO.passengerUpdateRequest updateRequest);
-    void deletePassenger(Long id);
-    PassengerDTO.passengerResponse findPassengerById(Long id);
-    List<PassengerDTO.passengerResponse> findAllPassengers();
+    PassengerDTO.passengerResponse create(PassengerDTO.passengerCreateRequest createRequest);
+    PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest);
+    void delete(Long id);
+    PassengerDTO.passengerResponse find(Long id);
+    Passenger get(Long id);
+    List<PassengerDTO.passengerResponse> findAll();
 }

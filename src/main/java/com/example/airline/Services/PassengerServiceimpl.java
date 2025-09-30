@@ -21,19 +21,20 @@ public class PassengerServiceimpl implements PassengerService{
 
 
     @Override
-    public PassengerDTO.passengerResponse createPassenger(PassengerDTO.passengerCreateRequest createRequest) {
+    public PassengerDTO.passengerResponse create(PassengerDTO.passengerCreateRequest createRequest) {
         Passenger passenger = PassengerMapper.toEntity(createRequest);
         if (createRequest.passengerProfile() != null) {
            var profile =  passengerProfileService.createObject(createRequest.passengerProfile());
            passenger.setProfile(profile);
+           profile.setPassenger(passenger);
         }
         passengerRepository.save(passenger);
         return PassengerMapper.toDTO(passenger);
     }
 
     @Override
-    public PassengerDTO.passengerResponse updatePassenger(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
-        var m = passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Member %d not found".formatted(id)));
+    public PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
+        var m = get(id);
         PassengerMapper.path(m, updateRequest);
         if (updateRequest.passengerProfile() != null) { // Si no tiene informacion nueva se toma passengerProfile como NULL
             if (m.getProfile() == null) { // Crea un perfil si entra informacion nueva y el usuario no tiene un perfil
@@ -45,21 +46,25 @@ public class PassengerServiceimpl implements PassengerService{
     }
 
     @Override
-    public void deletePassenger(Long id) {
-        var m = passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Member %d not found".formatted(id)));
+    public void delete(Long id) {
+        var m = get(id);
         passengerRepository.delete(m);
     }
 
     @Override
-    public PassengerDTO.passengerResponse findPassengerById(Long id) {
-        return PassengerMapper.toDTO(passengerRepository.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("Passenger with id " + id + " not found")
-                ));
+    public PassengerDTO.passengerResponse find(Long id) {
+        return PassengerMapper.toDTO(get(id));
     }
 
     @Override
-    public List<PassengerDTO.passengerResponse> findAllPassengers() {
+    public List<PassengerDTO.passengerResponse> findAll() {
         var passenger =  passengerRepository.findAll();
         return passenger.stream().map(PassengerMapper::toDTO).toList();
+    }
+
+    @Override
+    public Passenger get(Long id){
+        var p =  passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Passenger with id " + id + " not found"));
+        return p;
     }
 }
