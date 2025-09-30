@@ -39,10 +39,12 @@ public class TagServiceImpl implements TagService {
         tagRepository.deleteById(id);
     }
 
+
     public Tag findById(Long id) {
         return tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag no encontrado"));
     }
-    public Optional<Tag> findTagByName(String name) {
-        return tagRepository.findTagByNameIgnoreCase(name);
+
+    public Tag findTagByName(String name) {
+        return tagRepository.findTagByNameIgnoreCase(name).orElseThrow(() -> new EntityNotFoundException("Tag no encontrado"));
     }
 }

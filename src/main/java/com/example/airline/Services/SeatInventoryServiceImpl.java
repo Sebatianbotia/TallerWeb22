@@ -20,11 +20,15 @@ public class SeatInventoryServiceImpl implements  SeatInventoryService {
     private final SeatInventoryRepository seatInventoryRepository;
 
     @Override
-    public SeatInventoryDTO.seatInventoryDtoResponse create(Flight flight, SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest) {
+    public SeatInventoryDTO.seatInventoryDtoResponse create(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest) {
         SeatInventory seatInventory = SeatInventoryMapper.toEntity(inventoryCreateRequest);
-        seatInventory.setFlight(flight);
         seatInventoryRepository.save(seatInventory);
         return SeatInventoryMapper.toDTO(seatInventory);
+    }
+
+    public SeatInventory createAndReturn(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest){
+        SeatInventory seatInventory = SeatInventoryMapper.toEntity(inventoryCreateRequest);
+        return seatInventoryRepository.save(seatInventory);
     }
 
     @Override

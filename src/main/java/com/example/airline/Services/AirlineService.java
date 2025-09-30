@@ -1,13 +1,16 @@
 package com.example.airline.Services;
 import com.example.airline.DTO.AirlaneDTO.*;
+import com.example.airline.entities.Airline;
+
 import java.util.List;
 
 public interface AirlineService {
-public airlineDtoResponse create(airlineCreateRequest Req);
-public airlineDtoResponse get(Long id);
-public List<airlineDtoResponse> list();
+public airlineResponse create(airlineCreateRequest Req);
+public airlineResponse get(Long id);
+public Airline getObjectById(Long id);
+public List<airlineResponse> list();
 public void delete(Long id);
-public airlineDtoResponse update(long id, airlineUpdateRequest Req);
+public airlineResponse update(long id, airlineUpdateRequest Req);
 }
 
 

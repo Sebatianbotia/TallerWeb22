@@ -8,13 +8,13 @@ import java.util.Set;
 
 public class FlightDto {
     public record flightCreateRequest(String number, OffsetDateTime arrivalTime,
-                                      OffsetDateTime departureTime, String airlineCode, String OriginairportCode,
-                                      String destinationAirportCode, Set<String> tags
+                                      OffsetDateTime departureTime, Long airlineId, Long originAirportCode,
+                                      Long destinationAirportCode, Set<String> tags, List<SeatInventoryDTO.seatInventoryCreateRequest> seatInventories
     ) implements Serializable {}
 
     public record flightUpdateRequest(String number, OffsetDateTime arrivalTime,
-                                      OffsetDateTime departureTime, String airlineCode, String OriginairportCode,
-                                      String destinationAirportCode, Set<String> tags) implements Serializable {
+                                      OffsetDateTime departureTime, Long airlineId, Long originAirportId,
+                                      Long destinationAirportId, Set<String> tags) implements Serializable {
     }
 
 

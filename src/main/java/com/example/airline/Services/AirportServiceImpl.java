@@ -29,10 +29,13 @@ public class AirportServiceImpl implements AirportService {
        var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
        return AirportMapper.toDTO(a);
     }
+    @Override
+    public Airport getObjectById(Long id) {
+        return airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport with code " + id + " not found"));
+    }
 
     @Override
-
-    public AirportResponse update(long id, AirportUpdateRequest request) {
+    public AirportResponse update(Long id, AirportUpdateRequest request) {
         var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
         AirportMapper.updateEntity(a, request);
         return AirportMapper.toDTO(a);

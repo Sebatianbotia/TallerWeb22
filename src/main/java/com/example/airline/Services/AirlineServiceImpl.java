@@ -2,6 +2,7 @@ package com.example.airline.Services;
 
 import com.example.airline.DTO.AirlaneDTO.*;
 import com.example.airline.Services.Mappers.AirlineMapper;
+import com.example.airline.entities.Airline;
 import com.example.airline.repositories.AirlineRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +20,25 @@ public class AirlineServiceImpl implements AirlineService {
     private final AirlineMapper airlineMapper;
 
     @Override
-    public airlineDtoResponse create(airlineCreateRequest req) {
+    public airlineResponse create(airlineCreateRequest req) {
         return AirlineMapper.toDTO(airlineRepository.save(airlineMapper.toEntity(req)));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public airlineDtoResponse get(Long id) {
+    public airlineResponse get(Long id) {
         return airlineRepository.findAirlineById(id).map(AirlineMapper::toDTO).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
 
     }
 
     @Override
+    public Airline getObjectById(Long id) {
+        return airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline with id " + id + " not found"));
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public List<airlineDtoResponse> list() {
+    public List<airlineResponse> list() {
         return airlineRepository.findAll().stream().map(AirlineMapper::toDTO).toList();
     }
 
@@ -42,7 +48,7 @@ public class AirlineServiceImpl implements AirlineService {
     }
 
     @Override
-    public airlineDtoResponse update(long id, airlineUpdateRequest req) {
+    public airlineResponse update(long id, airlineUpdateRequest req) {
         var a = airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
         AirlineMapper.updateEntity(a,req);
         return  AirlineMapper.toDTO(a);

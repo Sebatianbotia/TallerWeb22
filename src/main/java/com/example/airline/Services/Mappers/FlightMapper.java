@@ -18,14 +18,6 @@ import java.util.stream.Collectors;
 @Component
 public class FlightMapper {
 
-    @Autowired
-    private FlightRepository flightRepository;
-    private AirlineRepository airlineRepository;
-    private AirportRepository airportRepository;
-    private TagRepository tagRepository;
-
-
-
     public static Flight toEntity(FlightDto.flightCreateRequest createRequest) {
         return Flight.builder().number(createRequest.number()).arrivalTime(createRequest.arrivalTime()).departureTime(createRequest.departureTime()).build();
     }
@@ -45,8 +37,10 @@ public class FlightMapper {
     public static FlightDto.flightResponse toDTO(Flight entity) {
         var tag = entity.getTags() == null ? Set.<TagDTO.tagResponse>of():
                 entity.getTags().stream().map(TagMapper::toDTO).collect(Collectors.toSet());
+
         var seatInventories = entity.getSeatInventories() == null ? List.<SeatInventoryDTO.seatInventoryFlightView>of():
                 entity.getSeatInventories().stream().map(SeatInventoryMapper::seatInventoryFlightView).toList();
+
         return new FlightDto.flightResponse(entity.getId(), entity.getNumber(), entity.getArrivalTime(), entity.getDepartureTime(), AirlineMapper.airlineFlightView(entity.getAirline()), AirportMapper.AirportFlightView(entity.getOriginAirport()),
                 AirportMapper.AirportFlightView(entity.getDestinationAirport()), tag, seatInventories
                 );
