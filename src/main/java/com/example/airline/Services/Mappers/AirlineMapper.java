@@ -2,7 +2,7 @@ package com.example.airline.Services.Mappers;
 
 import com.example.airline.DTO.AirlaneDTO;
 import com.example.airline.DTO.FlightDto;
-import com.example.airline.DTO.SeatInvetoryDTO;
+import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.entities.Airline;
 import com.example.airline.entities.Flight;
@@ -45,7 +45,7 @@ public class AirlineMapper {
     private static FlightDto.flightResponse flightResponse(Flight i) {
         var tags = i.getTags()==null?List.<TagDTO.tagResponse>of():
                 i.getTags().stream().map(AirlineMapper::tagResponse).toList();
-        var seatInventories = i.getSeatInventories() == null ? List.<SeatInvetoryDTO.seatInventoryDtoResponse>of():
+        var seatInventories = i.getSeatInventories() == null ? List.<SeatInventoryDTO.seatInventoryDtoResponse>of():
                 i.getSeatInventories().stream().map(AirlineMapper::seatInventoryResponse).toList();
         return new FlightDto.flightResponse(
                 i.getId(),
@@ -66,12 +66,13 @@ public class AirlineMapper {
                 i.getName());
     }
 
-    private static SeatInvetoryDTO.seatInventoryDtoResponse seatInventoryResponse(SeatInventory i){
-        return new SeatInvetoryDTO.seatInventoryDtoResponse(
+    private static SeatInventoryDTO.seatInventoryDtoResponse seatInventoryResponse(SeatInventory i){
+        return new SeatInventoryDTO.seatInventoryDtoResponse(
                 i.getId(),
                 i.getTotalSeats(),
                 i.getAvailableSeats(),
-                i.getCabin()
+                i.getCabin(),
+                i.getFlight().getNumber()
         );
     }
 }

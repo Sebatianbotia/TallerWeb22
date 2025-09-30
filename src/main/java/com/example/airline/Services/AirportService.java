@@ -4,7 +4,7 @@ import com.example.airline.DTO.AirportDTO.*;
 
 import java.util.List;
 
-public interface AirportService {
+public interface   AirportService {
     public AirportResponse create(AirportCreateRequest request);
     public AirportResponse get(Long id);
     public AirportResponse update(long id, AirportUpdateRequest request);

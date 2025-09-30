@@ -6,9 +6,10 @@ import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,6 +59,7 @@ public class PassengerServiceimpl implements PassengerService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PassengerDTO.passengerResponse> findAllPassengers() {
         var passenger =  passengerRepository.findAll();
         return passenger.stream().map(PassengerMapper::toDTO).toList();

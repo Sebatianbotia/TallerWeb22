@@ -35,7 +35,7 @@ public class FlightMapper {
                 .collect(Collectors.toSet());
 
 
-        Flight flight = Flight.builder()
+        return Flight.builder()
                 .number(createRequest.number())
                 .arrivalTime(createRequest.arrivalTime())
                 .departureTime(createRequest.departureTime())
@@ -44,8 +44,6 @@ public class FlightMapper {
                 .destinationAirport(foundDestinationAirport)
                 .tags(tags)
                 .build();
-
-        return flight;
     }
 
     public Flight updateEntity(FlightDto.flightUpdateRequest updateRequest) {
@@ -76,8 +74,7 @@ public class FlightMapper {
         return foundFlight;
     }
 
-    public FlightDto.flightResponse toDTO(long id) {
-        Flight foundFlight = flightRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Flight no encontrado"));
+    public static FlightDto.flightResponse toDTO(Flight foundFlight) {
         return new FlightDto.flightResponse(
                 foundFlight.getId(),
                 foundFlight.getNumber(),
