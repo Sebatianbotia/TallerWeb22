@@ -8,7 +8,6 @@ import java.util.List;
 public interface TagService {
     TagDTO.tagResponse create(TagDTO.tagCreateRequest createRequest);
     TagDTO.tagResponse find(Long id);
-    Tag findTagObject(Long id);
     TagDTO.tagResponse update(TagDTO.tagUpdateRequest updateRequest);
     List<TagDTO.tagResponse> findAll();
     void delete(Long id);
