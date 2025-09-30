@@ -46,8 +46,9 @@ public class FlightMapper {
         var tag = entity.getTags() == null ? Set.<TagDTO.tagResponse>of():
                 entity.getTags().stream().map(TagMapper::toDTO).collect(Collectors.toSet());
         var seatInventories = entity.getSeatInventories() == null ? List.<SeatInventoryDTO.seatInventoryFlightView>of():
-                entity.getSeatInventories().stream().map(SeatInventoryMapper::toDTO).toList();
-        return new FlightDto.flightResponse(entity.getId(), entity.getNumber(), entity.getArrivalTime(), entity.getDepartureTime(), AirlineMapper.airlineFlightView(entity.getAirline()),tag,seatInventories
+                entity.getSeatInventories().stream().map(SeatInventoryMapper::seatInventoryFlightView).toList();
+        return new FlightDto.flightResponse(entity.getId(), entity.getNumber(), entity.getArrivalTime(), entity.getDepartureTime(), AirlineMapper.airlineFlightView(entity.getAirline()), AirportMapper.AirportFlightView(entity.getOriginAirport()),
+                AirportMapper.AirportFlightView(entity.getDestinationAirport()), tag, seatInventories
                 );
     }
 
