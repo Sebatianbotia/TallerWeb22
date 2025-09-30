@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,8 +27,8 @@ public class AirportServiceImpl implements AirportService {
     @Override
     @Transactional(readOnly = true)
     public AirportResponse get(Long id) {
-       var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
-       return AirportMapper.toDTO(a);
+        var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
+        return AirportMapper.toDTO(a);
     }
     @Override
     public Airport getObjectById(Long id) {
