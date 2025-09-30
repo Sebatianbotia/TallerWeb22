@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 public class PassengerProfileMapper {
 
 
-    public static PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        PassengerProfile passengerProfile = PassengerProfile.builder().phone(createRequest.phoneNumber()).countryCode(createRequest.countryCode()).build();
+    public static PassengerProfile toEntity(Passenger passenger, PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
+        PassengerProfile passengerProfile = PassengerProfile.builder().phone(createRequest.phoneNumber()).countryCode(createRequest.countryCode()).passenger(passenger).build();
         return passengerProfile;
     }
 
