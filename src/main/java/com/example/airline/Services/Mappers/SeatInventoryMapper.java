@@ -2,6 +2,7 @@ package com.example.airline.Services.Mappers;
 
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.entities.Cabin;
+import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,12 @@ public class SeatInventoryMapper {
     }
 
     public static SeatInventoryDTO.seatInventoryDtoResponse toDTO(SeatInventory entity){
-        return new SeatInventoryDTO.seatInventoryDtoResponse(entity.getId(), entity.getTotalSeats(), entity.getAvailableSeats(), entity.getCabin(), entity.getFlight().getNumber());
+        String flightNumber = null;
+        if (entity.getFlight() != null){
+            flightNumber = entity.getFlight().getNumber();
+        }
+        return new SeatInventoryDTO.seatInventoryDtoResponse(entity.getId(), entity.getTotalSeats(), entity.getAvailableSeats(), entity.getCabin(),flightNumber);
+
     }
 
     public static SeatInventoryDTO.seatInventoryFlightView seatInventoryFlightView(SeatInventory entity){

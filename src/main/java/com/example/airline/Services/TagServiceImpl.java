@@ -7,24 +7,21 @@ import com.example.airline.repositories.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TagServiceImpl implements TagService {
     TagRepository tagRepository;
     @Override
     public TagDTO.tagResponse create(TagDTO.tagCreateRequest createRequest) {
-
-        return TagMapper.toDTO(tagRepository.save(Tag.builder().name(createRequest.name()).build()));
+        return TagMapper.toDTO(tagRepository.save(TagMapper.toEntity(createRequest)));
     }
 
     @Override
     public TagDTO.tagResponse find(Long id) {
-
-        return TagMapper.toDTO(tagRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Tag no encontrado")));
+        return TagMapper.toDTO(findById(id));
     }
     @Override
-    public TagDTO.tagResponse update(TagDTO.tagUpdateRequest updateRequest) {
-        Tag tag = findById(updateRequest.tagId());
+    public TagDTO.tagResponse update(Long id,TagDTO.tagUpdateRequest updateRequest) {
+        var tag = findById(id);
         TagMapper.updateRequest(tag, updateRequest);
         return TagMapper.toDTO(tag);
     }
