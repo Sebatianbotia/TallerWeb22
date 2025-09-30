@@ -49,15 +49,6 @@ class BookingItemServiceImplTest {
     @Mock
     private FlightMapper flightMapper;
 
-    @BeforeEach
-    void setUp() {
-
-        Flight mockFlight = Flight.builder().id(FLIGHT_ID).number("FL101").build();
-        FlightDto.flightResponse mockFlightResponse = new FlightDto.flightResponse(FLIGHT_ID, "FL101", null, null, null, null, null, null, null);
-
-    }
-
-
 
     @Test
     void shouldCreateAndReturnResponseSuccessfully() {
