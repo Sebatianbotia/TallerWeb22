@@ -9,6 +9,8 @@ public class SeatInventoryDTO {
                                             Cabin cabin) implements Serializable {}
     public record seatInventoryUpdateRequest(Integer totalSeats, Integer availableSeats,
                                              Cabin cabin) implements Serializable {}
+    public record seatInventoryFlightView(Long seatInventoryId,Integer totalSeats, Integer availableSeats,
+                                         Cabin cabin) implements Serializable {}
     public record seatInventoryDtoResponse(Long seatInventoryId,Integer totalSeats, Integer availableSeats,
                                            Cabin cabin, String flightNumber) implements Serializable{}
 

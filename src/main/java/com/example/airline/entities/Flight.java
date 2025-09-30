@@ -19,7 +19,7 @@ import java.util.Set;
 public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String number;
     private OffsetDateTime arrivalTime;
     private OffsetDateTime departureTime;

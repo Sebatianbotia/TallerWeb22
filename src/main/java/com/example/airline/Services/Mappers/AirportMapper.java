@@ -25,4 +25,8 @@ public class AirportMapper {
         return new AirportDTO.AirportResponse(airport.getId(), airport.getName(), airport.getCode(), airport.getCity());
 
     }
+
+    public static AirportDTO.AirportFlightView AirportFlightView(Airport airport) {
+        return new AirportDTO.AirportFlightView(airport.getId(), airport.getName(), airport.getCode(), airport.getCity());
+    }
 }

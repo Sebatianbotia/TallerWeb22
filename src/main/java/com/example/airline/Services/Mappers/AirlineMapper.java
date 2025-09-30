@@ -34,45 +34,16 @@ public class AirlineMapper {
     }
 
 
-    public static AirlaneDTO.airlineDtoResponse toDTO(Airline airline) {
-        var flights = airline.getFlights()==null?List.<FlightDto.flightResponse>of():
-                airline.getFlights().stream().map(AirlineMapper::flightResponse).toList();
-        return new AirlaneDTO.airlineDtoResponse(airline.getId(), airline.getName(), airline.getCode(), flights);
+    public static AirlaneDTO.airlineResponse toDTO(Airline airline) {
+        var flights = airline.getFlights() == null ? List.<FlightDto.flightAirlineView>of():
+                airline.getFlights().stream().map(FlightMapper::flightAirlineView).toList();
+        return new AirlaneDTO.airlineResponse(airline.getId(), airline.getName(), airline.getCode(), flights);
+    }
+
+    public static AirlaneDTO.airlineFlightView airlineFlightView(Airline airline) {
+        return  new AirlaneDTO.airlineFlightView(airline.getId(), airline.getName(), airline.getCode());
     }
 
 
 
-    private static FlightDto.flightResponse flightResponse(Flight i) {
-        var tags = i.getTags()==null?List.<TagDTO.tagResponse>of():
-                i.getTags().stream().map(AirlineMapper::tagResponse).toList();
-        var seatInventories = i.getSeatInventories() == null ? List.<SeatInventoryDTO.seatInventoryDtoResponse>of():
-                i.getSeatInventories().stream().map(AirlineMapper::seatInventoryResponse).toList();
-        return new FlightDto.flightResponse(
-                i.getId(),
-                i.getNumber(),
-                i.getArrivalTime(),
-                i.getDepartureTime(),
-                i.getAirline().getId(),
-                i.getOriginAirport().getId(),
-                i.getDestinationAirport().getId(),
-                tags,
-                seatInventories);
-
-    }
-
-    private static TagDTO.tagResponse tagResponse(Tag i) {
-        return new TagDTO.tagResponse(
-                i.getId(),
-                i.getName());
-    }
-
-    private static SeatInventoryDTO.seatInventoryDtoResponse seatInventoryResponse(SeatInventory i){
-        return new SeatInventoryDTO.seatInventoryDtoResponse(
-                i.getId(),
-                i.getTotalSeats(),
-                i.getAvailableSeats(),
-                i.getCabin(),
-                i.getFlight().getNumber()
-        );
-    }
 }
