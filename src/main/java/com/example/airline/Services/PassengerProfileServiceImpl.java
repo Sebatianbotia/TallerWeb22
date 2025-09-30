@@ -33,17 +33,21 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse findById(Long id) {
-        var profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                String.format("PassengerProfile with id %s not found", id)
-        ));
+        var profile = get(id);
         return PassengerProfileMapper.toDTO(profile);
     }
 
     @Override
-    public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
+    public PassengerProfile get(Long id) {
         var profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                String.format("PassengerProfile with id %s not found", id)
+                "Profile with id " + id + " not found"
         ));
+        return profile;
+    }
+
+    @Override
+    public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
+        var profile = get(id);
         PassengerProfileMapper.path(profile, updateRequest);
         return PassengerProfileMapper.toDTO(profile);
     }
@@ -62,9 +66,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public void delete(Long id) {
-        var profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                String.format("PassengerProfile with id %s not found", id)
-        ));
+        var profile = get(id);
         passengerProfileRepository.delete(profile);
     }
 }
