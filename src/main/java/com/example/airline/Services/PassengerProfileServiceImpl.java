@@ -23,10 +23,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse create(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        Passenger passenger = findPassenger(createRequest.passengerID());
-
-        var profile = PassengerProfileMapper.toEntity(passenger, createRequest);
-        passenger.setProfile(profile);
+        var profile = PassengerProfileMapper.toEntity(createRequest);
         return PassengerProfileMapper.toDTO(passengerProfileRepository.save(profile));
     }
 

@@ -24,7 +24,11 @@ public class PassengerMapper {
     }
 
     public static PassengerDTO.passengerResponse toDTO(Passenger passenger) {
-        PassengerDTO.passengerProfileView profileDTO = new PassengerDTO.passengerProfileView(passenger.getProfile().getPhone(), passenger.getProfile().getCountryCode());
+        PassengerDTO.passengerProfileView profileDTO = null;
+        if (passenger.getProfile() != null){
+            profileDTO = new PassengerDTO.passengerProfileView(passenger.getProfile().getPhone(), passenger.getProfile().getCountryCode());
+        }
         return new PassengerDTO.passengerResponse(passenger.getId(), passenger.getFullName(), passenger.getEmail(), profileDTO);
+
     }
 }

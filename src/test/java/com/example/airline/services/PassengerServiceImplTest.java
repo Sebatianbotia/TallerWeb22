@@ -2,6 +2,7 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.DTO.PassengerProfileDTO;
+import com.example.airline.Services.Mappers.PassengerMapper;
 import com.example.airline.Services.PassengerProfileServiceImpl;
 import com.example.airline.Services.PassengerServiceimpl;
 import com.example.airline.entities.Passenger;
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -67,14 +70,33 @@ public class PassengerServiceImplTest {
 
 
 
-        var passengerUpdate = new PassengerDTO.passengerUpdateRequest("Que tal", "yatengo@gmail.com", new PassengerProfileDTO.passengerProfileUpdateRequest(null,"+57"));
+        var passengerUpdate = new PassengerDTO.passengerUpdateRequest("Que tal", "yatengo@gmail.com", null);
         var update = passengerServiceimpl.update(1L, passengerUpdate);
+
 
 
 
         assertThat(update.fullName()).isEqualTo("Que tal");
         assertThat(update.email()).isEqualTo("yatengo@gmail.com");
-        assertThat(update.passengerProfile().countryCode()).isEqualTo("+57");
+
+    }
+
+    @Test
+    void shouldFindAll(){
+        var passenger  = Passenger.builder().id(1L).fullName("Jose").build();
+        List<Passenger> findAllss = new ArrayList<>(List.of(
+                passenger
+        ));
+
+        when(passengerRepository.findAll()).thenReturn(findAllss);
+
+        var passengerDTO = passengerServiceimpl.findAll();
+
+        assertThat(passengerDTO.size()).isEqualTo(1);
+        assertThat(passengerDTO.get(0).fullName()).isEqualTo("Jose");
+
+
+
 
     }
 }

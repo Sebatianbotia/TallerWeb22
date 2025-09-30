@@ -18,7 +18,7 @@ public class PassengerProfileMapper {
         return passengerProfile;
     }
 
-    public static PassengerProfile toEntity(PassengerProfileDTO.passengerProfileResponse createRequest) {
+    public static PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
         PassengerProfile passengerProfile = PassengerProfile.builder().phone(createRequest.phoneNumber()).countryCode(createRequest.countryCode()).build();
         return passengerProfile;
     }
