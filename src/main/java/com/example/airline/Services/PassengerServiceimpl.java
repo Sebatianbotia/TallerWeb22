@@ -33,6 +33,7 @@ public class PassengerServiceimpl implements PassengerService{
     }
 
     @Override
+    @Transactional
     public PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
         var m = get(id);
         passengerMapper.path(m, updateRequest);

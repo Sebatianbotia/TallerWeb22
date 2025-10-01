@@ -46,6 +46,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
+    @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
         var seatInventory = findSeatInventoryObject(id);
         seatInventoryMapper.path(updateRequest, seatInventory);

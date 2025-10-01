@@ -49,6 +49,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     }
 
     @Override
+    @Transactional
     public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
         var profile = get(id);
         passengerProfileMapper.updateEntity(updateRequest, profile);

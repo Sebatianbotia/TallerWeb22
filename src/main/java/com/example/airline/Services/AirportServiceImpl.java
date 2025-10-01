@@ -37,7 +37,7 @@ public class AirportServiceImpl implements AirportService {
     @Override
     public AirportResponse update(Long id, AirportUpdateRequest request) {
         var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
-        airportMapper.updateEntity(a, request);
+        airportMapper.updateEntity(request,a);
         return airportMapper.toDTO(a);
     }
 

@@ -30,6 +30,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public TagDTO.tagResponse update(Long id, TagDTO.tagUpdateRequest updateRequest) {
         var tag = findById(id);
         tagMapper.updateRequest(updateRequest, tag);

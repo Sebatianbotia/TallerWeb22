@@ -1,6 +1,7 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.FlightDto;
+import com.example.airline.Mappers.FlightMapper;
 import com.example.airline.entities.Flight;
 import com.example.airline.repositories.FlightRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,10 +22,11 @@ public class FlightServiceImpl implements FlightService{
     private final AirlineServiceImpl airlineService;
     private final TagServiceImpl tagService;
     private final SeatInventoryServiceImpl seatInventoryService;
+    private final FlightMapper flightMapper;
 
     @Override
     public FlightDto.flightResponse create(FlightDto.flightCreateRequest createRequest) {
-        var flight = FlightMapper.toEntity(createRequest);
+        var flight = flightMapper.toEntity(createRequest);
         var originAirport = airportService.getObjectById(createRequest.originAirportCode());
         var destinationAirport = airportService.getObjectById(createRequest.destinationAirportCode());
         var airline = airlineService.getObjectById(createRequest.airlineId());
@@ -47,14 +49,15 @@ public class FlightServiceImpl implements FlightService{
 
 
         var saveFlight = flightRepository.save(flight);
-        return FlightMapper.toDTO(saveFlight);
+        return flightMapper.toDTO(saveFlight);
 
     }
 
     @Override
+    @Transactional
     public FlightDto.flightResponse update(Long id, FlightDto.flightUpdateRequest updateRequest) {
         var flight = getFlightObject(id);
-        FlightMapper.path(flight, updateRequest);
+        flightMapper.path(updateRequest, flight);
         if (updateRequest.airlineId() != null){
             var airline = airlineService.getObjectById(updateRequest.airlineId());
             flight.getAirline().getFlights().remove(flight);
@@ -80,17 +83,17 @@ public class FlightServiceImpl implements FlightService{
             flight.setTags(newTags);
             newTags.forEach(newTag -> newTag.getFlights().add(flight));
         }
-        return FlightMapper.toDTO(flightRepository.save(flight));
+        return flightMapper.toDTO(flightRepository.save(flight));
     }
 
     @Override
     public FlightDto.flightResponse find(Long id) {
-        return FlightMapper.toDTO(getFlightObject(id));
+        return flightMapper.toDTO(getFlightObject(id));
     }
 
     @Override
     public List<FlightDto.flightResponse> findAll() {
-        return flightRepository.findAll().stream().map(FlightMapper::toDTO).toList();
+        return flightRepository.findAll().stream().map(flightMapper::toDTO).toList();
     }
 
     @Override
