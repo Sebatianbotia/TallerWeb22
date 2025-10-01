@@ -17,17 +17,18 @@ import java.util.List;
 public class AirlineServiceImpl implements AirlineService {
 
     private final AirlineRepository airlineRepository;
+    private final AirlineMapper Mapper;
     private final AirlineMapper airlineMapper;
 
     @Override
     public airlineResponse create(airlineCreateRequest req) {
-        return AirlineMapper.toDTO(airlineRepository.save(AirlineMapper.toEntity(req)));
+        return Mapper.toDTO(airlineRepository.save(Mapper.toEntity(req)));
     }
 
     @Override
     @Transactional(readOnly = true)
     public airlineResponse get(Long id) {
-        return airlineRepository.findAirlineById(id).map(AirlineMapper::toDTO).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
+        return airlineRepository.findAirlineById(id).map(Mapper::toDTO).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
 
     }
 
@@ -39,7 +40,7 @@ public class AirlineServiceImpl implements AirlineService {
     @Override
     @Transactional(readOnly = true)
     public List<airlineResponse> list() {
-        return airlineRepository.findAll().stream().map(AirlineMapper::toDTO).toList();
+        return airlineRepository.findAll().stream().map(Mapper::toDTO).toList();
     }
 
     @Override
@@ -48,9 +49,9 @@ public class AirlineServiceImpl implements AirlineService {
     }
 
     @Override
-    public airlineResponse update(long id, airlineUpdateRequest req) {
+    public airlineResponse update(Long id, airlineUpdateRequest req) {
         var a = airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
-        AirlineMapper.updateEntity(a,req);
-        return  AirlineMapper.toDTO(a);
+        Mapper.updateEntity(a,req);
+        return  Mapper.toDTO(a);
     }
 }

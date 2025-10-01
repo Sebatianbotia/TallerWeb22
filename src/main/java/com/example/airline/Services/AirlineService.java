@@ -10,7 +10,7 @@ public airlineResponse get(Long id);
 public Airline getObjectById(Long id);
 public List<airlineResponse> list();
 public void delete(Long id);
-public airlineResponse update(long id, airlineUpdateRequest Req);
+public airlineResponse update(Long id, airlineUpdateRequest Req);
 }
 
 
