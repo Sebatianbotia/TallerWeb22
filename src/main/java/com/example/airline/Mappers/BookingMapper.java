@@ -1,30 +1,24 @@
 package com.example.airline.Mappers;
 
 import com.example.airline.DTO.BookingDTO;
-import com.example.airline.DTO.BookingItemDTO;
+import com.example.airline.entities.Passenger;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
 import com.example.airline.entities.Booking;
-import com.example.airline.entities.BookingItem;
 
-import java.util.List;
+@Mapper(
+        componentModel = "spring",
+        uses = {
+                com.example.airline.Mappers.PassengerMapper.class,
+                com.example.airline.Mappers.BookingItemMapper.class
+        }
+)
+public interface BookingMapper {
 
-public class BookingMapper {
+    Booking toEntity(BookingDTO.bookingCreateRequest request, Passenger passenger);
+    @Mapping(source = "items", target = "bookingItems")
+    @Mapping(source = "passenger", target = "passenger")
+    BookingDTO.bookingResponse toDTO(Booking booking);
 
-
-    public static BookingDTO.bookingResponse toDTO(Booking booking) {
-        var bookingItems =  booking.getItems()==null? List.<BookingItemDTO.bookingItemReponse>of():
-                booking.getItems().stream().map(BookingMapper::bookingItemResponse).toList();
-        return new BookingDTO.bookingResponse(
-                booking.getId(),
-                booking.getCreatedAt(),
-                PassengerMapper.toDTO(booking.getPassenger()),
-                bookingItems);
-    }
-    private static BookingItemDTO.bookingItemReponse bookingItemResponse(BookingItem i) {
-        return new BookingItemDTO.bookingItemReponse(
-                i.getId(),
-                i.getCabin(),
-                i.getBooking().getId(),
-                FlightMapper.toDTO(i.getFlight())
-        );
-    }
 }
