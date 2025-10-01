@@ -1,8 +1,6 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.AirportDTO.*;
-import com.example.airline.Services.Mappers.AirlineMapper;
-import com.example.airline.Services.Mappers.AirportMapper;
 import com.example.airline.entities.Airport;
 import com.example.airline.repositories.AirportRepository;
 import jakarta.persistence.EntityNotFoundException;

@@ -18,31 +18,31 @@ import java.util.List;
 public class PassengerServiceimpl implements PassengerService{
     private final PassengerRepository passengerRepository;
     private final PassengerProfileServiceImpl passengerProfileService;
-
+    private final PassengerMapper passengerMapper;
 
     @Override
     public PassengerDTO.passengerResponse create(PassengerDTO.passengerCreateRequest createRequest) {
-        Passenger passenger = PassengerMapper.toEntity(createRequest);
+        Passenger passenger = passengerMapper.toEntity(createRequest);
         if (createRequest.passengerProfile() != null) {
-           var profile =  passengerProfileService.createObject(createRequest.passengerProfile());
-           passenger.setProfile(profile);
-           profile.setPassenger(passenger);
+            var profile =  passengerProfileService.createObject(createRequest.passengerProfile());
+            passenger.setProfile(profile);
+            profile.setPassenger(passenger);
         }
         passengerRepository.save(passenger);
-        return PassengerMapper.toDTO(passenger);
+        return passengerMapper.toDTO(passenger);
     }
 
     @Override
     public PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
         var m = get(id);
-        PassengerMapper.path(m, updateRequest);
-        if (updateRequest.passengerProfile() != null) { // Si no tiene informacion nueva se toma passengerProfile como NULL
-            if (m.getProfile() == null) { // Crea un perfil si entra informacion nueva y el usuario no tiene un perfil
+        passengerMapper.path(m, updateRequest);
+        if (updateRequest.passengerProfile() != null) {
+            if (m.getProfile() == null) {
                 m.setProfile(new PassengerProfile());
             }
             passengerProfileService.update(m.getProfile(), updateRequest.passengerProfile());
         }
-        return PassengerMapper.toDTO(m);
+        return passengerMapper.toDTO(m);
     }
 
     @Override
@@ -53,13 +53,13 @@ public class PassengerServiceimpl implements PassengerService{
 
     @Override
     public PassengerDTO.passengerResponse find(Long id) {
-        return PassengerMapper.toDTO(get(id));
+        return passengerMapper.toDTO(get(id));
     }
 
     @Override
     public List<PassengerDTO.passengerResponse> findAll() {
         var passenger =  passengerRepository.findAll();
-        return passenger.stream().map(PassengerMapper::toDTO).toList();
+        return passenger.stream().map(passengerMapper::toDTO).toList();
     }
 
     @Override

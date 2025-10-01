@@ -1,30 +1,20 @@
 package com.example.airline.Services.Mappers;
 
-import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.DTO.TagDTO;
-import com.example.airline.entities.Flight;
 import com.example.airline.entities.Tag;
-import jakarta.persistence.EntityNotFoundException;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import java.util.HashSet;
-import java.util.Set;
+@Mapper(componentModel = "spring")
+public interface TagMapper {
 
+    Tag toEntity(TagDTO.tagCreateRequest createRequest);
 
-public class TagMapper {
+    @Mapping(target = "tagId", source = "id")
+    TagDTO.tagResponse toDTO(Tag entity);
 
-    public static Tag toEntity(TagDTO.tagCreateRequest createRequest) {
-        return Tag.builder().name(createRequest.name()).build();
-    }
+    @Mapping(target = "id", ignore = true)
+    void updateRequest(TagDTO.tagUpdateRequest updateRequest, @MappingTarget Tag tag);
 
-
-    public static void updateRequest(Tag entity, TagDTO.tagUpdateRequest request) {
-        if (request.name() != null) {
-            entity.setName(request.name());
-        }
-    }
-
-
-    public static TagDTO.tagResponse toDTO(Tag tag){
-        return new TagDTO.tagResponse(tag.getId(), tag.getName());
-    }
 }

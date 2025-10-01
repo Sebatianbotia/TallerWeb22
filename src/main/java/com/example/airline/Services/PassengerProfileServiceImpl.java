@@ -1,7 +1,6 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
-import com.example.airline.Services.Mappers.PassengerMapper;
 import com.example.airline.Services.Mappers.PassengerProfileMapper;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
@@ -20,11 +19,12 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     private final PassengerProfileRepository passengerProfileRepository;
     private final PassengerRepository passengerRepository;
+    private final PassengerProfileMapper passengerProfileMapper;
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse create(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        var profile = PassengerProfileMapper.toEntity(createRequest);
-        return PassengerProfileMapper.toDTO(passengerProfileRepository.save(profile));
+        var profile = passengerProfileMapper.toEntity(createRequest);
+        return passengerProfileMapper.toDTO(passengerProfileRepository.save(profile));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     @Override
     public PassengerProfileDTO.passengerProfileResponse findById(Long id) {
         var profile = get(id);
-        return PassengerProfileMapper.toDTO(profile);
+        return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
@@ -51,20 +51,20 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     @Override
     public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
         var profile = get(id);
-        PassengerProfileMapper.path(profile, updateRequest);
-        return PassengerProfileMapper.toDTO(profile);
+        passengerProfileMapper.updateEntity(updateRequest, profile);
+        return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse update(PassengerProfile profile, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
-        PassengerProfileMapper.path(profile, updateRequest);
-        return PassengerProfileMapper.toDTO(profile);
+        passengerProfileMapper.path(profile, updateRequest);
+        return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
     public List<PassengerProfileDTO.passengerProfileResponse> findAll() {
         var profiles = passengerProfileRepository.findAll();
-        return profiles.stream().map(PassengerProfileMapper::toDTO).toList();
+        return profiles.stream().map(passengerProfileMapper::toDTO).toList();
     }
 
     @Override

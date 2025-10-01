@@ -1,9 +1,6 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.BookingDTO;
-import com.example.airline.DTO.PassengerDTO;
-import com.example.airline.Services.Mappers.BookingMapper;
-import com.example.airline.Services.Mappers.PassengerMapper;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.Passenger;
 import com.example.airline.repositories.BookingRepository;

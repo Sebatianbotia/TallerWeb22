@@ -5,30 +5,40 @@ import com.example.airline.Services.Mappers.TagMapper;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Service
+@Transactional
+@RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
-    TagRepository tagRepository;
+    private final TagRepository tagRepository;
+    private final TagMapper tagMapper;
+
     @Override
     public TagDTO.tagResponse create(TagDTO.tagCreateRequest createRequest) {
-        return TagMapper.toDTO(tagRepository.save(TagMapper.toEntity(createRequest)));
+        var tag = tagMapper.toEntity(createRequest);
+        return tagMapper.toDTO(tagRepository.save(tag));
     }
 
     @Override
     public TagDTO.tagResponse find(Long id) {
-        return TagMapper.toDTO(findById(id));
+        return tagMapper.toDTO(findById(id));
     }
+
     @Override
-    public TagDTO.tagResponse update(Long id,TagDTO.tagUpdateRequest updateRequest) {
+    public TagDTO.tagResponse update(Long id, TagDTO.tagUpdateRequest updateRequest) {
         var tag = findById(id);
-        TagMapper.updateRequest(tag, updateRequest);
-        return TagMapper.toDTO(tag);
+        tagMapper.updateRequest(updateRequest, tag);
+        return tagMapper.toDTO(tag);
     }
 
     @Override
     public List<TagDTO.tagResponse> findAll() {
-        return tagRepository.findAll().stream().map(TagMapper::toDTO).toList();
+        var tags = tagRepository.findAll();
+        return tags.stream().map(tagMapper::toDTO).toList();
     }
 
     @Override

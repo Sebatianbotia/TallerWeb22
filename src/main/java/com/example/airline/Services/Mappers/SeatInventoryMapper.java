@@ -1,44 +1,31 @@
 package com.example.airline.Services.Mappers;
 
 import com.example.airline.DTO.SeatInventoryDTO;
-import com.example.airline.entities.Cabin;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
+@Mapper(componentModel = "spring")
+public interface SeatInventoryMapper {
+    SeatInventory toEntity(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest);
 
-@Component
-public class SeatInventoryMapper {
+    @Mapping(target = "flightNumber", source = "flight", qualifiedByName = "mapFlightToNumber")
+    @Mapping(target = "seatInventoryId", source = "id")
+    SeatInventoryDTO.seatInventoryDtoResponse toDTO(SeatInventory entity);
 
-    public static SeatInventory toEntity(SeatInventoryDTO.seatInventoryCreateRequest createRequest){
-       return SeatInventory.builder().totalSeats(createRequest.totalSeats()).availableSeats(createRequest.availableSeats()).cabin(createRequest.cabin()).build();
+    @Mapping(target = "seatInventoryId", source = "id")
+    SeatInventoryDTO.seatInventoryFlightView toFlightView(SeatInventory entity);
+
+    default String mapFlightToNumber(Flight flight) {
+        if (flight == null) {
+            return null;
+        }
+        return flight.getNumber();
     }
 
-    public static void path(SeatInventory entity,SeatInventoryDTO.seatInventoryUpdateRequest updateRequest){
-        if (updateRequest.totalSeats() != null){
-            entity.setTotalSeats(updateRequest.totalSeats());
-        }
-        if (updateRequest.availableSeats() != null){
-            entity.setAvailableSeats(updateRequest.availableSeats());
-        }
-        if (updateRequest.cabin() != null){
-            entity.setCabin(updateRequest.cabin());
-        }
-
-    }
-
-    public static SeatInventoryDTO.seatInventoryDtoResponse toDTO(SeatInventory entity){
-        String flightNumber = null;
-        if (entity.getFlight() != null){
-            flightNumber = entity.getFlight().getNumber();
-        }
-        return new SeatInventoryDTO.seatInventoryDtoResponse(entity.getId(), entity.getTotalSeats(), entity.getAvailableSeats(), entity.getCabin(),flightNumber);
-
-    }
-
-    public static SeatInventoryDTO.seatInventoryFlightView seatInventoryFlightView(SeatInventory entity){
-        return new SeatInventoryDTO.seatInventoryFlightView(entity.getId(), entity.getTotalSeats(), entity.getAvailableSeats(), entity.getCabin());
-    }
-
-
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "flight", ignore = true) // Ignoramos la relación, el servicio la manejaría si fuera necesario.
+    void path(SeatInventoryDTO.seatInventoryUpdateRequest updateRequest, @MappingTarget SeatInventory entity);
 }
