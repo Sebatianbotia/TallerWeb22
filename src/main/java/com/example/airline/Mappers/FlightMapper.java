@@ -1,18 +1,13 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.DTO.TagDTO;
-import com.example.airline.entities.*;
-import com.example.airline.repositories.AirlineRepository;
-import com.example.airline.repositories.AirportRepository;
-import com.example.airline.repositories.FlightRepository;
-import com.example.airline.repositories.TagRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.airline.entities.Flight;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component

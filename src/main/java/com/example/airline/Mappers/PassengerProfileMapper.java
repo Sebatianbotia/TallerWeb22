@@ -1,12 +1,8 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
-import com.example.airline.repositories.PassengerProfileRepository;
-import com.example.airline.repositories.PassengerRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

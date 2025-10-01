@@ -1,8 +1,6 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
 import com.example.airline.DTO.SeatInventoryDTO;
-import com.example.airline.entities.Cabin;
-import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;
 import org.springframework.stereotype.Component;
 

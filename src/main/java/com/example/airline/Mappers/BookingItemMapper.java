@@ -1,6 +1,8 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
-import com.example.airline.DTO.BookingItemDTO.*;
+import com.example.airline.DTO.BookingItemDTO.bookingItemCreateRequest;
+import com.example.airline.DTO.BookingItemDTO.bookingItemReponse;
+import com.example.airline.DTO.BookingItemDTO.bookingItemUpdateRequest;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.BookingItem;
 import com.example.airline.entities.Flight;

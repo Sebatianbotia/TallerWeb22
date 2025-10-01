@@ -1,13 +1,7 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
-import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.DTO.TagDTO;
-import com.example.airline.entities.Flight;
 import com.example.airline.entities.Tag;
-import jakarta.persistence.EntityNotFoundException;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class TagMapper {

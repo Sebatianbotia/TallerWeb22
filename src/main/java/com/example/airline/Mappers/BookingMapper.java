@@ -1,10 +1,9 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
 import com.example.airline.DTO.BookingDTO;
 import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.BookingItem;
-
 
 import java.util.List;
 

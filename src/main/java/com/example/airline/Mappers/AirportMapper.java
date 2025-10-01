@@ -1,9 +1,10 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
-import com.example.airline.DTO.AirportDTO;
-import com.example.airline.DTO.AirportDTO.*;
+import com.example.airline.DTO.AirportDTO.AirportCreateRequest;
+import com.example.airline.DTO.AirportDTO.AirportFlightView;
+import com.example.airline.DTO.AirportDTO.AirportResponse;
+import com.example.airline.DTO.AirportDTO.AirportUpdateRequest;
 import com.example.airline.entities.Airport;
-import com.example.airline.repositories.AirportRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

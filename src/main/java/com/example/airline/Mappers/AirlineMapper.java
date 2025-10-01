@@ -1,21 +1,12 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
-import com.example.airline.DTO.AirlaneDTO.*;
-import com.example.airline.DTO.FlightDto;
-import com.example.airline.DTO.SeatInventoryDTO;
-import com.example.airline.DTO.TagDTO;
+import com.example.airline.DTO.AirlaneDTO.airlineCreateRequest;
+import com.example.airline.DTO.AirlaneDTO.airlineResponse;
+import com.example.airline.DTO.AirlaneDTO.airlineUpdateRequest;
 import com.example.airline.entities.Airline;
-import com.example.airline.entities.Flight;
-import com.example.airline.entities.SeatInventory;
-import com.example.airline.entities.Tag;
-import com.example.airline.repositories.AirlineRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.springframework.stereotype.Component;
-
-import java.util.*;
 
 @Mapper(componentModel = "spring")
 public interface AirlineMapper {
