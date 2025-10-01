@@ -19,7 +19,7 @@ import java.util.*;
 
 @Mapper(componentModel = "spring")
 public interface AirlineMapper {
-
+    @Mapping(target = "id", ignore = true)
     Airline toEntity(airlineCreateRequest request);
     airlineResponse toDTO(Airline airline);
     airlineCreateRequest toFlightView(Airline airline);
