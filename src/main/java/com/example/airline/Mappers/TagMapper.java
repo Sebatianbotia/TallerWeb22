@@ -1,4 +1,4 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.entities.Tag;

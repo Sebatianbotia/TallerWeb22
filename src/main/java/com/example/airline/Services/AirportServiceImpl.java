@@ -20,14 +20,14 @@ public class AirportServiceImpl implements AirportService {
 
     @Override
     public AirportResponse create(AirportCreateRequest request) {
-        return AirportMapper.toDTO(airportRepository.save(AirportMapper.toEntity(request)));
+        return airportMapper.toDTO(airportRepository.save(airportMapper.toEntity(request)));
     }
 
     @Override
     @Transactional(readOnly = true)
     public AirportResponse get(Long id) {
         var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
-        return AirportMapper.toDTO(a);
+        return airportMapper.toDTO(a);
     }
     @Override
     public Airport getObjectById(Long id) {
@@ -37,8 +37,8 @@ public class AirportServiceImpl implements AirportService {
     @Override
     public AirportResponse update(Long id, AirportUpdateRequest request) {
         var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
-        AirportMapper.updateEntity(a, request);
-        return AirportMapper.toDTO(a);
+        airportMapper.updateEntity(a, request);
+        return airportMapper.toDTO(a);
     }
 
     @Override
@@ -49,6 +49,6 @@ public class AirportServiceImpl implements AirportService {
     @Override
     @Transactional(readOnly = true)
     public List<AirportResponse> list() {
-        return airportRepository.findAll().stream().map(AirportMapper::toDTO).toList();
+        return airportRepository.findAll().stream().map(airportMapper::toDTO).toList();
     }
 }
