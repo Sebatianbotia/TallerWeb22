@@ -12,7 +12,7 @@ public interface SeatInventoryMapper {
 
     SeatInventory toEntity(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest);
 
-    @Mapping(target = "flight", source = "flight")
+    @Mapping(target = "flightNumber", source = "flight")
     @Mapping(target = "seatInventoryId", source = "id")
     SeatInventoryDTO.seatInventoryDtoResponse toDTO(SeatInventory entity);
 

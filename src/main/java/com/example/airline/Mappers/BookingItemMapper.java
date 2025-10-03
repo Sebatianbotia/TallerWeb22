@@ -26,7 +26,6 @@ public interface BookingItemMapper {
             }
             return booking.getId();
         }
-
         default Long mapFlightToId(Flight flight) {
             if (flight == null) {return null;}
             return flight.getId();

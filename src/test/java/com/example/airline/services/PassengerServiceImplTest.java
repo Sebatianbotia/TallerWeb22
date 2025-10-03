@@ -2,6 +2,7 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.DTO.PassengerProfileDTO;
+import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.Services.PassengerProfileServiceImpl;
 import com.example.airline.Services.PassengerServiceimpl;
 import com.example.airline.entities.Passenger;
@@ -29,6 +30,8 @@ public class PassengerServiceImplTest {
     PassengerProfileServiceImpl passengerProfileService;
     @InjectMocks
     PassengerServiceimpl passengerServiceimpl;
+    @Mock
+    PassengerMapper  passengerMapper;
 
 
 
