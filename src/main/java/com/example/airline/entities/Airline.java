@@ -19,11 +19,11 @@ public class Airline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
     private String code;
 
     @OneToMany(mappedBy = "airline")
     List<Flight> flights;
+
     public List<Flight> getFlights() {
         List<Flight> flights = new ArrayList<>();
         for(Flight flight : flights){

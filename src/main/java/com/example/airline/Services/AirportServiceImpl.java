@@ -35,6 +35,7 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AirportResponse update(Long id, AirportUpdateRequest request) {
         var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
         airportMapper.updateEntity(request,a);

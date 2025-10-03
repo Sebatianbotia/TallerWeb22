@@ -9,10 +9,10 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface PassengerProfileMapper {
-    @Mapping(target = "id", ignore = true )
+
     PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest dto);
 
-    @Mapping(target = "passengerProfileID", source = "id")
+    @Mapping(target = "passengerProfileId", source = "id")
     PassengerProfileDTO.passengerProfileResponse toDTO(PassengerProfile entity);
 
     @Mapping(target = "id", ignore = true)

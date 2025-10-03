@@ -9,13 +9,11 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface TagMapper {
 
-    @Mapping(target = "id", ignore = true)
     Tag toEntity(TagDTO.tagCreateRequest createRequest);
 
     @Mapping(target = "tagId", source = "id")
     TagDTO.tagResponse toDTO(Tag entity);
 
-    @Mapping(target = "id", ignore = true)
     void updateRequest(TagDTO.tagUpdateRequest updateRequest, @MappingTarget Tag tag);
 
 }

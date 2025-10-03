@@ -1,25 +1,24 @@
 package com.example.airline.Mappers;
 
-import com.example.airline.DTO.AirlaneDTO;
-import com.example.airline.DTO.AirlaneDTO.airlineCreateRequest;
-import com.example.airline.DTO.AirlaneDTO.airlineResponse;
-import com.example.airline.DTO.AirlaneDTO.airlineUpdateRequest;
+import com.example.airline.DTO.AirlaneDTO.*;
+
 import com.example.airline.entities.Airline;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = FlightMapper.class)
 public interface AirlineMapper {
-
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "flights", ignore = true)
     Airline toEntity(airlineCreateRequest request);
+
 
     airlineResponse toDTO(Airline airline);
 
-    AirlaneDTO.airlineFlightView toFlightView(Airline airline);
+    airlineFlightView toFlightView(Airline airline);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "flights", ignore = true)
     void updateEntity(@MappingTarget Airline  airline, airlineUpdateRequest request);
 
 
