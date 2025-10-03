@@ -1,5 +1,6 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
+import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.entities.PassengerProfile;
 import org.mapstruct.Mapper;
@@ -8,6 +9,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface PassengerProfileMapper {
+    @Mapping(target = "id", ignore = true )
     PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest dto);
 
     @Mapping(target = "passengerProfileID", source = "id")
@@ -16,6 +18,5 @@ public interface PassengerProfileMapper {
     @Mapping(target = "id", ignore = true)
     void updateEntity(PassengerProfileDTO.passengerProfileUpdateRequest dto, @MappingTarget PassengerProfile entity);
 
-    @Mapping(target = "id", ignore = true)
-    void path(PassengerProfile entity, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest);
+    PassengerDTO.passengerProfileView toPassengerProfileView(PassengerProfile passengerProfile);
 }

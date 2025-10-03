@@ -1,7 +1,7 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.PassengerDTO;
-import com.example.airline.Services.Mappers.PassengerMapper;
+import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerRepository;
@@ -36,7 +36,7 @@ public class PassengerServiceimpl implements PassengerService{
     @Transactional
     public PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
         var m = get(id);
-        passengerMapper.path(m, updateRequest);
+        passengerMapper.updateEntity(m, updateRequest);
         if (updateRequest.passengerProfile() != null) {
             if (m.getProfile() == null) {
                 m.setProfile(new PassengerProfile());

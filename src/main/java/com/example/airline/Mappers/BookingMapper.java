@@ -1,20 +1,24 @@
 package com.example.airline.Mappers;
 
 import com.example.airline.DTO.BookingDTO;
+import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.Passenger;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(
-        componentModel = "spring",
-        uses = {com.example.airline.Services.Mappers.PassengerMapper.class} // Asume que tienes un PassengerMapper para la relación
-)
+        componentModel = "spring", uses = {PassengerMapper.class, BookingItemMapper.class})
 public interface BookingMapper {
 
-    @Mapping(target = "bookingItems", source = "items")
-    @Mapping(target = "passenger", source = "passenger")
-    BookingDTO.bookingResponse toDTO(Booking booking);
-    @Mapping(target = "passenger", ignore = true) // Ignoramos la relación, el servicio la asignará
+    @Mapping(target = "passenger", ignore = true)
+    @Mapping(target = "booking", ignore = true)
     Booking toEntity(BookingDTO.bookingCreateRequest request);
+
+    @Mapping(target = "bookingItems", source = "items")
+    BookingDTO.bookingResponse toDTO(Booking booking);
+
+
+
 }

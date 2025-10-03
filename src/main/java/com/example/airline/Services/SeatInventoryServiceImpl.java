@@ -1,9 +1,9 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.SeatInventoryDTO;
+import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
-import com.example.airline.Services.Mappers.SeatInventoryMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -49,14 +49,14 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
         var seatInventory = findSeatInventoryObject(id);
-        seatInventoryMapper.path(updateRequest, seatInventory);
+        seatInventoryMapper.updateEntity(updateRequest, seatInventory);
         return seatInventoryMapper.toDTO(seatInventory);
     }
 
     @Override
+    @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(SeatInventory entity, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
-        seatInventoryMapper.path(updateRequest, entity);
-        seatInventoryRepository.save(entity);
+        seatInventoryMapper.updateEntity(updateRequest, entity);
         return seatInventoryMapper.toDTO(entity);
     }
 

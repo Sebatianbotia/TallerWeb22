@@ -1,30 +1,23 @@
-package com.example.airline.Services.Mappers;
+package com.example.airline.Mappers;
 
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {PassengerProfileMapper.class})
 public interface PassengerMapper {
     @Mapping(target = "profile", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Passenger toEntity(PassengerDTO.passengerCreateRequest dto);
 
-    @Mapping(target = "passengerProfile", source = "profile")
+    @Mapping(target ="passengerProfile" ,source = "profile")
     PassengerDTO.passengerResponse toDTO(Passenger entity);
-
-    default PassengerDTO.passengerProfileView mapProfileToView(PassengerProfile profile) {
-        if (profile == null) {
-            return null;
-        }
-        return new PassengerDTO.passengerProfileView(
-                profile.getPhone(),
-                profile.getCountryCode()
-        );
-    }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "profile", ignore = true)
-    void path(Passenger passenger, PassengerDTO.passengerUpdateRequest updateRequest);
+    void updateEntity(@MappingTarget Passenger passenger, PassengerDTO.passengerUpdateRequest updateRequest);
 }

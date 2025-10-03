@@ -18,18 +18,18 @@ import java.time.OffsetDateTime;
 @Transactional
 public class BookingServiceImpl implements BookingService {
 
-    private final PassengerRepository passengerRepository;
+    private final PassengerServiceimpl passengerService;
     private final BookingRepository bookingRepository;
-
     private final BookingMapper bookingMapper;
 
     @Override
     public BookingDTO.bookingResponse create(BookingDTO.bookingCreateRequest request) {
-        Passenger p = findPassenger(request.passengerId());
+        Passenger p = passengerService.get(request.passengerId());
 
         Booking b = bookingMapper.toEntity(request);
         b.setPassenger(p); // Asignamos la relación Passenger
         b.setCreatedAt(OffsetDateTime.now());
+        p.getBookings().add(b);
 
         b = bookingRepository.save(b);
 
@@ -38,19 +38,18 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public BookingDTO.bookingResponse get(long id) {
+    public BookingDTO.bookingResponse get(Long id) {
         // Usamos la instancia inyectada para el mapeo
-        return bookingRepository.findBookingById(id)
-                .map(bookingMapper::toDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        return bookingMapper.toDTO(getObject(id));
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(Long id) {
         bookingRepository.deleteById(id);
     }
 
-    public Passenger findPassenger(long id) {
-        return passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Passenger not found"));
+    public Booking getObject(Long id){
+        return bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Booking not found"));
     }
+
 }

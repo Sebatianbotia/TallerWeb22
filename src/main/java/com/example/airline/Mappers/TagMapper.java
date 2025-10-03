@@ -9,6 +9,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface TagMapper {
 
+    @Mapping(target = "id", ignore = true)
     Tag toEntity(TagDTO.tagCreateRequest createRequest);
 
     @Mapping(target = "tagId", source = "id")

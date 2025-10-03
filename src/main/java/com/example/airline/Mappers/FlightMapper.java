@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring", uses = {AirlineMapper.class, AirportMapper.class, TagMapper.class, com.example.airline.Services.Mappers.SeatInventoryMapper.class})
+@Mapper(componentModel = "spring")
 public interface FlightMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "airline", ignore = true)

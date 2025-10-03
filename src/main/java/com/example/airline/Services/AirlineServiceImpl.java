@@ -27,8 +27,7 @@ public class AirlineServiceImpl implements AirlineService{
     @Override
     @Transactional(readOnly = true)
     public AirlaneDTO.airlineResponse get(Long id) {
-        return airlineRepository.findAirlineById(id).map(Mapper::toDTO).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
-
+        return Mapper.toDTO(getObjectById(id));
     }
 
     @Override

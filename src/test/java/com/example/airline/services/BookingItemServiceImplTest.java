@@ -2,6 +2,8 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.FlightDto;
+import com.example.airline.Mappers.BookingItemMapper;
+import com.example.airline.Mappers.FlightMapper;
 import com.example.airline.Services.BookingItemServiceImpl;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.BookingItem;
@@ -10,9 +12,12 @@ import com.example.airline.entities.Flight;
 import com.example.airline.repositories.BookingItemsRepository;
 import com.example.airline.repositories.BookingRepository;
 import com.example.airline.repositories.FlightRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -43,6 +48,15 @@ class BookingItemServiceImplTest {
 
     @Mock
     private FlightMapper flightMapper;
+
+    @BeforeEach
+    void setUp() {
+
+        Flight mockFlight = Flight.builder().id(FLIGHT_ID).number("FL101").build();
+        FlightDto.flightResponse mockFlightResponse = new FlightDto.flightResponse(FLIGHT_ID, "FL101", null, null, null, null, null, null, null);
+
+    }
+
 
 
     @Test

@@ -1,7 +1,7 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
-import com.example.airline.Services.Mappers.PassengerProfileMapper;
+import com.example.airline.Mappers.PassengerProfileMapper;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
@@ -29,7 +29,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public PassengerProfile createObject(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        var profile = PassengerProfile.builder().countryCode(createRequest.countryCode()).phone(createRequest.phoneNumber()).build();
+        var profile = passengerProfileMapper.toEntity(createRequest);
         profile =  passengerProfileRepository.save(profile);
         return profile;
     }
@@ -42,7 +42,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public PassengerProfile get(Long id) {
-        var profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "Profile with id " + id + " not found"
         ));
         return profile;
@@ -58,7 +58,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse update(PassengerProfile profile, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
-        passengerProfileMapper.path(profile, updateRequest);
+        passengerProfileMapper.updateEntity(updateRequest, profile);
         return passengerProfileMapper.toDTO(profile);
     }
 
