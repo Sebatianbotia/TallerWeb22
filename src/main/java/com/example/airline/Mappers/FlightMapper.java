@@ -15,9 +15,9 @@ public interface FlightMapper {
     @Mapping(target = "airline", ignore = true)
     @Mapping(target = "originAirport", ignore = true)
     @Mapping(target = "destinationAirport", ignore = true)
-    @Mapping(target = "items", ignore = true)
     @Mapping(target = "seatInventories", ignore = true)
     @Mapping(target = "bookingItems", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     Flight toEntity(FlightDto.flightCreateRequest dto);
 
     @Mapping(target = "id", ignore = true)

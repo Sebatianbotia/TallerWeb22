@@ -13,7 +13,7 @@ import org.mapstruct.MappingTarget;
 public interface BookingMapper {
 
     @Mapping(target = "passenger", ignore = true)
-    @Mapping(target = "booking", ignore = true)
+    @Mapping(target = "items", ignore = true)
     Booking toEntity(BookingDTO.bookingCreateRequest request);
 
     @Mapping(target = "bookingItems", source = "items")

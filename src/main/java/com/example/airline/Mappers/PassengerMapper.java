@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring", uses = {PassengerProfileMapper.class})
 public interface PassengerMapper {
-    @Mapping(target = "passengerProfile", ignore = true)
+    @Mapping(target = "profile", ignore = true)
     @Mapping(target = "id", ignore = true)
     Passenger toEntity(PassengerDTO.passengerCreateRequest dto);
 

@@ -16,11 +16,10 @@ public interface BookingItemMapper {
     @Mapping(target = "flight", ignore = true)
     BookingItem toEntity(BookingItemDTO.bookingItemCreateRequest createRequest);
 
-    @Mapping(target = "bookingId", source = "booking", qualifiedByName = "mapBookingToId")
-    @Mapping(target = "fligthId", source = "flight", qualifiedByName = "mapFlightToId")
+    @Mapping(target = "bookingId", source = "booking")
+    @Mapping(target = "flight", source = "flight")
     BookingItemDTO.bookingItemReponse toDTO(BookingItem entity);
 
-    @Named("mapBookingToId")
     default Long mapBookingToId(Booking booking) {
             if (booking == null) {
                 return null;
@@ -28,7 +27,6 @@ public interface BookingItemMapper {
             return booking.getId();
         }
 
-        @Named("mapFlightToId")
         default Long mapFlightToId(Flight flight) {
             if (flight == null) {return null;}
             return flight.getId();

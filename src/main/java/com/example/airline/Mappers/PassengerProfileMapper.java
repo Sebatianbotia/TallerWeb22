@@ -12,7 +12,6 @@ public interface PassengerProfileMapper {
 
     PassengerProfile toEntity(PassengerProfileDTO.passengerProfileCreateRequest dto);
 
-    @Mapping(target = "passengerProfileId", source = "id")
     PassengerProfileDTO.passengerProfileResponse toDTO(PassengerProfile entity);
 
     @Mapping(target = "id", ignore = true)
