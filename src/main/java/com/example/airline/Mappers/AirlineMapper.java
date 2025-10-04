@@ -10,6 +10,7 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring", uses = FlightMapper.class)
 public interface AirlineMapper {
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "flights", ignore = true)
     Airline toEntity(airlineCreateRequest request);
 

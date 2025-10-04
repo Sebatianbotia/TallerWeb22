@@ -1,10 +1,12 @@
 package com.example.airline.services;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 import com.example.airline.DTO.AirportDTO.*;
+import com.example.airline.Mappers.AirportMapper;
 import com.example.airline.Services.AirportServiceImpl;
 import com.example.airline.entities.Airport;
 import com.example.airline.repositories.AirportRepository;
@@ -20,6 +22,8 @@ class AirportServiceImplTest {
 
     @Mock
     private AirportRepository airportRepository;
+    @Mock
+    private AirportMapper mapper;
 
     @InjectMocks
     private AirportServiceImpl airportService;
@@ -28,12 +32,20 @@ class AirportServiceImplTest {
     @Test
     void shouldCreateAndReturnResponse() {
         var createRequest = new AirportCreateRequest("El Dorado", "BOG", "Bogotá");
+        Airport createdAirport = Airport.builder()
+                .name(createRequest.name())
+                .code(createRequest.code())
+                .city(createRequest.city())
+                .build();
+        AirportResponse expectedRespose = new AirportResponse(TEST_ID,"El Dorado", "BOG", "Bogotá", null, null);
 
+        when(mapper.toEntity(any(AirportCreateRequest.class))).thenReturn(createdAirport);
         when(airportRepository.save(any(Airport.class))).thenAnswer(invocation -> {
             Airport airportEntity = invocation.getArgument(0);
             airportEntity.setId(TEST_ID); // Asigna el ID de prueba
             return airportEntity;
         });
+        when(mapper.toDTO(any(Airport.class))).thenReturn(expectedRespose);
 
         AirportResponse actualResponse = airportService.create(createRequest);
 
@@ -53,10 +65,21 @@ class AirportServiceImplTest {
                 .code("OLD")
                 .city("Old City")
                 .build();
+        AirportResponse expectedResponse = new AirportResponse(TEST_ID,"New Name","NEW","New City",null,null);
 
         var updateRequest = new AirportUpdateRequest("New Name", "NEW", "New City");
 
         when(airportRepository.findById(TEST_ID)).thenReturn(Optional.of(existingAirport));
+        doAnswer(invocationOnMock -> {
+            AirportUpdateRequest req = invocationOnMock.getArgument(0);
+            Airport airportEntity = invocationOnMock.getArgument(1);
+            airportEntity.setId(TEST_ID);
+            airportEntity.setName(req.name());
+            airportEntity.setCode(req.code());
+            airportEntity.setCity(req.city());
+            return null;//retorna nulo porque el metodo es void
+        }).when(mapper).updateEntity(any(AirportUpdateRequest.class), any(Airport.class));
+        when(mapper.toDTO(any(Airport.class))).thenReturn(expectedResponse);
 
         AirportResponse actualResponse = airportService.update(TEST_ID, updateRequest);
 

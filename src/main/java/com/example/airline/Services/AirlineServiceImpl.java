@@ -21,7 +21,9 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Override
     public AirlaneDTO.airlineResponse create(AirlaneDTO.airlineCreateRequest req) {
-        return Mapper.toDTO(airlineRepository.save(Mapper.toEntity(req)));
+        Airline entity = Mapper.toEntity(req);
+        Airline saved = airlineRepository.save(entity);
+        return Mapper.toDTO(saved);
     }
 
     @Override
