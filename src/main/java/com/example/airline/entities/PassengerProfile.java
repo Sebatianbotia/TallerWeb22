@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class PassengerProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String phone;
     private String countryCode;
     @OneToOne(mappedBy = "profile", fetch = FetchType.EAGER)

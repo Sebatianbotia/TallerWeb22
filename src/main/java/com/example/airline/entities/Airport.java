@@ -16,7 +16,7 @@ import java.util.List;
 public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String code;
     private String city;
@@ -26,4 +26,11 @@ public class Airport {
 
     @OneToMany(mappedBy = "destinationAirport")
     private List<Flight> flightsDestination;
+
+    public void addFlightOrigin(Flight flight) {
+        flightsOrigin.add(flight);
+    }
+    public void addFlightDestination(Flight flight) {
+        flightsDestination.add(flight);
+    }
 }

@@ -8,4 +8,7 @@ import java.util.Optional;
 
 public interface AirlineRepository extends JpaRepository<Airline, Long> {
 Optional<Airline> findAirlineByCodeIgnoreCase(String code);
+
+    Optional<Airline> findAirlineById(Long id);
+    Optional<Airline> findAirlineByNameIgnoreCase(String name);
 }

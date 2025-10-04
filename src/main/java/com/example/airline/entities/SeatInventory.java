@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class SeatInventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private Integer totalSeats;
     private Integer availableSeats;
     private Cabin cabin;

@@ -22,4 +22,7 @@ private String name;
 @ManyToMany(mappedBy = "tags")
 private Set<Flight> flights;
 
+public void  addFlight(Flight flight) {
+this.flights.add(flight);
+}
 }
