@@ -2,13 +2,16 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.DTO.PassengerProfileDTO;
+import com.example.airline.Mappers.PassengerProfileMapper;
 import com.example.airline.Services.PassengerProfileServiceImpl;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -22,8 +25,12 @@ import static org.mockito.Mockito.*;
 public class PassengerProfileServiceImplTest {
     @Mock
     PassengerProfileRepository passengerProfileRepository;
+    @Spy
+    PassengerProfileMapper passengerProfileMapper =  Mappers.getMapper(PassengerProfileMapper.class);
     @InjectMocks
-    PassengerProfileServiceImpl passengerProfileServiceImpl;
+    PassengerProfileServiceImpl passengerProfileService;
+
+
 
     @Test
     void shouldCreateAndreturnResponseDTO(){
@@ -34,7 +41,8 @@ public class PassengerProfileServiceImplTest {
             return pp;
         });
 
-        var saved = passengerProfileServiceImpl.create(p);
+
+        var saved = passengerProfileService.create(p);
         assertThat(saved).isNotNull();
         assertThat(saved.passengerProfileID()).isEqualTo(1L);
         assertThat(saved.phoneNumber()).isEqualTo("222");
@@ -48,7 +56,7 @@ public class PassengerProfileServiceImplTest {
         when(passengerProfileRepository.findById(1L)).thenReturn(Optional.of(p));
 
         var passengerProfileUpdate = new PassengerProfileDTO.passengerProfileUpdateRequest("33", "+34");
-        var update = passengerProfileServiceImpl.update(1L, passengerProfileUpdate);
+        var update = passengerProfileService.update(1L, passengerProfileUpdate);
 
         assertThat(update.passengerProfileID()).isEqualTo(1L);
         assertThat(update.phoneNumber()).isEqualTo("33");
@@ -63,7 +71,7 @@ public class PassengerProfileServiceImplTest {
         );
         when(passengerProfileRepository.findAll()).thenReturn(passengerProfiles);
 
-        var saved = passengerProfileServiceImpl.findAll();
+        var saved = passengerProfileService.findAll();
 
         assertThat(saved.getFirst().passengerProfileID()).isEqualTo(1L);
         assertThat(saved.getFirst().phoneNumber()).isEqualTo("222");

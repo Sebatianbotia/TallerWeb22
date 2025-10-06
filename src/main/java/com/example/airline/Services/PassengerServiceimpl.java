@@ -28,8 +28,8 @@ public class PassengerServiceimpl implements PassengerService{
             passenger.setProfile(profile);
             profile.setPassenger(passenger);
         }
-        passengerRepository.save(passenger);
-        return passengerMapper.toDTO(passenger);
+        var save = passengerRepository.save(passenger);
+        return passengerMapper.toDTO(save);
     }
 
     @Override

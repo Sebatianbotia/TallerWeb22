@@ -3,6 +3,7 @@ package com.example.airline.services;
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.Mappers.PassengerMapper;
+import com.example.airline.Mappers.PassengerProfileMapper;
 import com.example.airline.Services.PassengerProfileServiceImpl;
 import com.example.airline.Services.PassengerServiceimpl;
 import com.example.airline.entities.Passenger;
@@ -10,8 +11,11 @@ import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
@@ -28,10 +32,10 @@ public class PassengerServiceImplTest {
     PassengerRepository passengerRepository;
     @Mock
     PassengerProfileServiceImpl passengerProfileService;
+    @Spy
+    PassengerMapper passengerMapper = Mappers.getMapper(PassengerMapper.class);
     @InjectMocks
     PassengerServiceimpl passengerServiceimpl;
-    @Mock
-    PassengerMapper  passengerMapper;
 
 
 
@@ -49,6 +53,20 @@ public class PassengerServiceImplTest {
                 .phone("222")
                 .id(2L)
                 .build();
+
+        when(passengerServiceimpl.create(any())).thenAnswer(inv -> {
+            PassengerDTO.passengerCreateRequest passengerCreateRequest = inv.getArgument(0);
+            Passenger passenger = passengerMapper.toEntity(passengerCreateRequest);
+            if ( passengerCreateRequest.passengerProfile()!= null) {
+                var profile =  passengerProfileService.createObject(passengerCreateRequest.passengerProfile());
+                passenger.setProfile(profile);
+                profile.setPassenger(passenger);
+            }
+            var save = passengerRepository.save(passenger);
+            return passengerMapper.toDTO(save);
+        });
+
+
 
         when(passengerProfileService.createObject(any()))
                 .thenReturn(expectedProfile);
