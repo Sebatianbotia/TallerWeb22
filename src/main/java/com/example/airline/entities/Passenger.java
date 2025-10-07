@@ -29,6 +29,6 @@ public class Passenger {
 
     public void addBooking(Booking booking) {
         bookings.add(booking);
-        booking.setPassenger(this);
+
     }
 }

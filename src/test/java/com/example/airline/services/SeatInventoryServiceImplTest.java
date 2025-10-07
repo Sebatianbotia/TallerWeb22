@@ -1,14 +1,17 @@
 package com.example.airline.services;
 
 import com.example.airline.DTO.SeatInventoryDTO;
+import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.Services.SeatInventoryServiceImpl;
 import com.example.airline.entities.Cabin;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class SeatInventoryServiceImplTest {
     SeatInventoryRepository seatInventoryRepository;
     @InjectMocks
     SeatInventoryServiceImpl seatInventoryServiceImpl;
+    @Spy
+    SeatInventoryMapper seatInventoryMapper = Mappers.getMapper(SeatInventoryMapper.class);
 
 
     @Test

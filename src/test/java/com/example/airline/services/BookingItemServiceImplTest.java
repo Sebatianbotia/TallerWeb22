@@ -72,17 +72,13 @@ class BookingItemServiceImplTest {
                 .flight(mockFlight)
                 .build();
 
-        when(bookingItemMapper.toEntity(any(bookingItemCreateRequest.class)))
-                .thenReturn(mockBookingItem);
+        when(bookingItemMapper.toEntity(any(bookingItemCreateRequest.class))).thenReturn(mockBookingItem);
 
-        when(flightServiceImpl.getFlightObject(FLIGHT_ID))
-                .thenReturn(mockFlight);
+        when(flightServiceImpl.getFlightObject(FLIGHT_ID)).thenReturn(mockFlight);
 
-        when(bookingServiceImpl.getObject(BOOKING_ID))
-                .thenReturn(mockBooking);
+        when(bookingServiceImpl.getObject(BOOKING_ID)).thenReturn(mockBooking);
 
-        when(bookingItemsRepository.save(any(BookingItem.class)))
-                .thenReturn(mockBookingItem);
+        when(bookingItemsRepository.save(any(BookingItem.class))).thenReturn(mockBookingItem);
 
         when(bookingItemMapper.toDTO(any(BookingItem.class)))
                 .thenReturn(

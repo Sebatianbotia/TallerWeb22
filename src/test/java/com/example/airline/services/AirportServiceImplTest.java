@@ -77,7 +77,7 @@ class AirportServiceImplTest {
             airportEntity.setName(req.name());
             airportEntity.setCode(req.code());
             airportEntity.setCity(req.city());
-            return null;//retorna nulo porque el metodo es void
+            return null; //retorna nulo porque el metodo es void
         }).when(mapper).updateEntity(any(AirportUpdateRequest.class), any(Airport.class));
         when(mapper.toDTO(any(Airport.class))).thenReturn(expectedResponse);
 

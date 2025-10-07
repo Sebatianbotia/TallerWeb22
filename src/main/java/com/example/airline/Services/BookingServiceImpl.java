@@ -29,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
         Booking b = bookingMapper.toEntity(request);
         b.setPassenger(p); // Asignamos la relación Passenger
         b.setCreatedAt(OffsetDateTime.now());
-        p.getBookings().add(b);
+        p.addBooking(b);
 
         b = bookingRepository.save(b);
 

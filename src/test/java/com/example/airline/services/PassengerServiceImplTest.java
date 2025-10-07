@@ -1,6 +1,6 @@
 package com.example.airline.services;
 
-import com.example.airline.DTO.PassengerDTO;
+import com.example.airline.DTO.PassengerDTO.*;
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.Mappers.PassengerProfileMapper;
@@ -41,7 +41,7 @@ public class PassengerServiceImplTest {
 
     @Test
     void shouldCreateAndReturnResponseDTO() {
-        var p = new PassengerDTO.passengerCreateRequest("Jose", "notiene@gmail.com", new PassengerProfileDTO.passengerProfileCreateRequest("222", "+33"));
+        var p = new passengerCreateRequest("Jose", "notiene@gmail.com", new PassengerProfileDTO.passengerProfileCreateRequest("222", "+33"));
         when(passengerRepository.save(any(Passenger.class))).thenAnswer(inv -> {
             Passenger p2 = inv.getArgument(0);
             p2.setId(11L);
@@ -54,8 +54,8 @@ public class PassengerServiceImplTest {
                 .id(2L)
                 .build();
 
-        when(passengerServiceimpl.create(any())).thenAnswer(inv -> {
-            PassengerDTO.passengerCreateRequest passengerCreateRequest = inv.getArgument(0);
+        when(passengerServiceimpl.create(any(passengerCreateRequest.class)).thenAnswer(inv -> {
+            passengerCreateRequest passengerCreateRequest = inv.getArgument(0);
             Passenger passenger = passengerMapper.toEntity(passengerCreateRequest);
             if ( passengerCreateRequest.passengerProfile()!= null) {
                 var profile =  passengerProfileService.createObject(passengerCreateRequest.passengerProfile());
@@ -65,7 +65,6 @@ public class PassengerServiceImplTest {
             var save = passengerRepository.save(passenger);
             return passengerMapper.toDTO(save);
         });
-
 
 
         when(passengerProfileService.createObject(any()))
@@ -90,7 +89,7 @@ public class PassengerServiceImplTest {
 
 
 
-        var passengerUpdate = new PassengerDTO.passengerUpdateRequest("Que tal", "yatengo@gmail.com", null);
+        var passengerUpdate = new passengerUpdateRequest("Que tal", "yatengo@gmail.com", null);
         var update = passengerServiceimpl.update(1L, passengerUpdate);
 
 
