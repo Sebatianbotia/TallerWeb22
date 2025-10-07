@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,20 +25,24 @@ public class BookingItemServiceImpl implements BookingItemService {
     private final FlightServiceImpl flightServiceImpl;
 
     @Override
-    @Transactional
     public bookingItemReponse create(bookingItemCreateRequest request) {
         BookingItem bookingItem = bookingItemMapper.toEntity(request);
         Flight f = flightServiceImpl.getFlightObject(request.fligthId());
         Booking b = bookingServiceImpl.getObject(request.bookingId());
 
+
         // Asignamos el vuelo y el booking
         bookingItem.setBooking(b);
         bookingItem.setFlight(f);
-
-        // Ahora a el vuelo y booking le asignamos el bookingItem
-
+        if (b.getItems() == null) {
+            b.setItems(new ArrayList<>());
+        }
         b.getItems().add(bookingItem);
-        // Me recomendo la IA que coloque que verifique si hay un puesto ahi
+
+        // ✅ Lo mismo para Flight
+        if (f.getBookingItems() == null) {
+            f.setBookingItems(new ArrayList<>());
+        }
         f.getBookingItems().add(bookingItem);
 
         bookingItem = bookingItemsRepository.save(bookingItem);
