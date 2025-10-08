@@ -4,14 +4,13 @@ import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.Services.SeatInventoryServiceImpl;
 import com.example.airline.entities.Cabin;
+import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -19,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SeatInventoryServiceImplTest {
@@ -26,8 +26,8 @@ public class SeatInventoryServiceImplTest {
     SeatInventoryRepository seatInventoryRepository;
     @InjectMocks
     SeatInventoryServiceImpl seatInventoryServiceImpl;
-    @Spy
-    SeatInventoryMapper seatInventoryMapper = Mappers.getMapper(SeatInventoryMapper.class);
+    @Mock
+    SeatInventoryMapper seatInventoryMapper;
 
 
     @Test
@@ -35,7 +35,7 @@ public class SeatInventoryServiceImplTest {
         var seatRequest = new SeatInventoryDTO.seatInventoryCreateRequest(
                 150,
                 150,
-                Cabin.ECONOMY // Asumo que Cabin es un Enum
+                Cabin.ECONOMY
         );
 
         when(seatInventoryRepository.save(any())).thenAnswer(inv -> {
@@ -45,6 +45,24 @@ public class SeatInventoryServiceImplTest {
             return seatInventory;
         });
 
+        when(seatInventoryMapper.toEntity(any())).thenAnswer(inv -> {
+            SeatInventoryDTO.seatInventoryCreateRequest request = inv.getArgument(0);
+            Flight flight = Flight.builder().id(55L).number("HOOOLLLLL").build();
+            return SeatInventory.builder().totalSeats(request.totalSeats()).availableSeats(request.availableSeats()).cabin(request.cabin())
+                    .flight(flight).build();
+        });
+
+        when(seatInventoryMapper.toDTO(any())).thenAnswer(inv -> {
+            SeatInventory object =  inv.getArgument(0);
+            String flightNumber = "No hay flight";
+            if (object.getFlight() != null) {
+                flightNumber = object.getFlight().getNumber();
+            }
+            return new SeatInventoryDTO.seatInventoryDtoResponse(object.getId(), object.getTotalSeats(),
+                    object.getAvailableSeats(), object.getCabin(), flightNumber
+            );
+        });
+
         var saved = seatInventoryServiceImpl.create(seatRequest);
 
         assertThat(saved).isNotNull();
@@ -52,7 +70,8 @@ public class SeatInventoryServiceImplTest {
         assertThat(saved.totalSeats()).isEqualTo(150);
         assertThat(saved.availableSeats()).isEqualTo(150);
         assertThat(saved.cabin()).isEqualTo(Cabin.ECONOMY);
-        assertThat(saved.flightNumber()).isNull();
+        assertThat(saved.flightNumber()).isNotNull();
+        assertThat(saved.flightNumber()).isEqualTo("HOOOLLLLL");
         verify(seatInventoryRepository).save(any(SeatInventory.class));
     }
 
@@ -65,6 +84,32 @@ public class SeatInventoryServiceImplTest {
                 90,
                 Cabin.BUSINESS
         );
+
+        doAnswer(inv -> {
+            SeatInventoryDTO.seatInventoryUpdateRequest request = inv.getArgument(0);
+            SeatInventory seatInventory = inv.getArgument(1);
+            if (request.totalSeats() != null &&  request.totalSeats() >= 0) {
+                seatInventory.setTotalSeats(request.totalSeats());
+            }
+            if (request.cabin() != null) {
+                seatInventory.setCabin(request.cabin());
+            }
+            if (request.availableSeats() != null &&  request.availableSeats() >= 0) {
+                seatInventory.setAvailableSeats(request.availableSeats());
+            }
+            return null;
+        }).when(seatInventoryMapper).updateEntity(any(), any());
+
+        when(seatInventoryMapper.toDTO(any())).thenAnswer(inv -> {
+            SeatInventory object =  inv.getArgument(0);
+            String flightNumber = "No hay flight";
+            if (object.getFlight() != null) {
+                flightNumber = object.getFlight().getNumber();
+            }
+            return new SeatInventoryDTO.seatInventoryDtoResponse(object.getId(), object.getTotalSeats(),
+                    object.getAvailableSeats(), object.getCabin(), flightNumber
+            );
+        });
 
         var updated = seatInventoryServiceImpl.update(55L, seatUpdateRequest);
 
@@ -85,6 +130,18 @@ public class SeatInventoryServiceImplTest {
 
         when(seatInventoryRepository.findAll()).thenReturn(seatInventories);
 
+        when(seatInventoryMapper.toDTO(any())).thenAnswer(inv -> {
+            SeatInventory object =  inv.getArgument(0);
+            String flightNumber = "No hay flight";
+            if (object.getFlight() != null) {
+                flightNumber = object.getFlight().getNumber();
+            }
+            return new SeatInventoryDTO.seatInventoryDtoResponse(object.getId(), object.getTotalSeats(),
+                    object.getAvailableSeats(), object.getCabin(), flightNumber
+            );
+        });
+
+
         var savedSeats = seatInventoryServiceImpl.findAll();
 
         assertThat(savedSeats).isNotNull();
@@ -94,7 +151,7 @@ public class SeatInventoryServiceImplTest {
         assertThat(savedSeats.getFirst().totalSeats()).isEqualTo(50);
         assertThat(savedSeats.getFirst().availableSeats()).isEqualTo(40);
         assertThat(savedSeats.getFirst().cabin()).isEqualTo(Cabin.ECONOMY);
-        assertThat(savedSeats.getFirst().flightNumber()).isNull();
+        assertThat(savedSeats.getFirst().flightNumber()).isNotNull();
 
         assertThat(savedSeats.get(1).seatInventoryId()).isEqualTo(20L);
         assertThat(savedSeats.get(1).totalSeats()).isEqualTo(100);

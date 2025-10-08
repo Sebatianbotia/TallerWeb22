@@ -31,9 +31,9 @@ public class PassengerServiceImplTest {
     @Mock
     PassengerRepository passengerRepository;
     @Mock
-    PassengerProfileServiceImpl passengerProfileService;
-    @Spy
-    PassengerMapper passengerMapper = Mappers.getMapper(PassengerMapper.class);
+    PassengerMapper passengerMapper;
+    @Mock
+    PassengerProfileMapper passengerProfileMapper;
     @InjectMocks
     PassengerServiceimpl passengerServiceimpl;
 
@@ -54,21 +54,11 @@ public class PassengerServiceImplTest {
                 .id(2L)
                 .build();
 
-        when(passengerServiceimpl.create(any(passengerCreateRequest.class)).thenAnswer(inv -> {
-            passengerCreateRequest passengerCreateRequest = inv.getArgument(0);
-            Passenger passenger = passengerMapper.toEntity(passengerCreateRequest);
-            if ( passengerCreateRequest.passengerProfile()!= null) {
-                var profile =  passengerProfileService.createObject(passengerCreateRequest.passengerProfile());
-                passenger.setProfile(profile);
-                profile.setPassenger(passenger);
-            }
-            var save = passengerRepository.save(passenger);
-            return passengerMapper.toDTO(save);
-        });
 
-
-        when(passengerProfileService.createObject(any()))
-                .thenReturn(expectedProfile);
+//        when(passengerMapper.toEntity(any())).thenAnswer(inv -> {
+//            passengerCreateRequest request =  inv.getArgument(0);
+//            return Passenger.builder().fullName(request.fullName()).email(request.email()).build();
+//        })
 
         var res = passengerServiceimpl.create(p);
 

@@ -21,5 +21,6 @@ public interface PassengerProfileMapper {
     @Mapping(target = "phone", source = "phoneNumber" )
     void updateEntity(PassengerProfileDTO.passengerProfileUpdateRequest dto, @MappingTarget PassengerProfile entity);
 
+    @Mapping(target = "phone", source = "phoneNumber")
     PassengerDTO.passengerProfileView toPassengerProfileView(PassengerProfile passengerProfile);
 }
