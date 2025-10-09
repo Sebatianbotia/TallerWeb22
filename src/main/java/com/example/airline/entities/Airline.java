@@ -34,6 +34,9 @@ public class Airline {
 
     public void setFlights(List<Flight> flights) {}
     public void addFlight(Flight fly){
+        if (this.flights == null) {
+            this.flights = new ArrayList<>();
+        }
         this.flights.add(fly);
     }
 }

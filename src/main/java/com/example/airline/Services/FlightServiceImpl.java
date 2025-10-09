@@ -2,9 +2,6 @@ package com.example.airline.Services;
 
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.Mappers.FlightMapper;
-import com.example.airline.Services.Util.AirlineReferenceResolver;
-import com.example.airline.Services.Util.AirportReferenceResolver;
-import com.example.airline.Services.Util.TagReferenceResolver;
 import com.example.airline.entities.Airline;
 import com.example.airline.entities.Airport;
 import com.example.airline.entities.Flight;
@@ -30,32 +27,29 @@ public class FlightServiceImpl implements FlightService{
     private final TagServiceImpl tagService;
     private final SeatInventoryServiceImpl seatInventoryService;
     private final FlightMapper flightMapper;
-    private final AirlineReferenceResolver airlineReferenceResolver;
-    private final AirportReferenceResolver airportReferenceResolver;
-    private final TagReferenceResolver tagReferenceResolver;
 
     @Override
     public FlightDto.flightResponse create(FlightDto.flightCreateRequest request) {
         var flight = flightMapper.toEntity(request);
         if (request.aerlineId() != null) {
-            Airline airline = airlineReferenceResolver.resolveAirlineById(request.aerlineId());
+            Airline airline = airlineService.getObjectById(request.aerlineId());
             flight.setAirline(airline);
             airline.addFlight(flight);
         }
 
         if (request.originAirportCode() != null) {
-            Airport origin = airportReferenceResolver.resolveAirportByCode(request.originAirportCode());
+            Airport origin = airportService.getAirportByCode(request.originAirportCode());
             flight.setOriginAirport(origin);
             origin.addFlightOrigin(flight);
         }
 
         if (request.destinationAirportCode()!= null) {
-            Airport destination = airportReferenceResolver.resolveAirportByCode(request.destinationAirportCode());
+            Airport destination = airportService.getAirportByCode(request.destinationAirportCode());
             flight.setDestinationAirport(destination);
             destination.addFlightDestination(flight);
         }
         if (request.tags() != null) {
-            Set<Tag> tags = tagReferenceResolver.resolveTagsByName(request.tags());
+            Set<Tag> tags = request.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
             flight.setTags(tags);
             tags.forEach(tag -> tag.addFlight(flight));
         }
@@ -77,19 +71,19 @@ public class FlightServiceImpl implements FlightService{
         flightMapper.patch(updateRequest, flight);
 
         if (updateRequest.airlineId() != null) {
-            Airline airline = airlineReferenceResolver.resolveAirlineById(updateRequest.airlineId());
+            Airline airline = airlineService.getObjectById(updateRequest.airlineId());
             flight.setAirline(airline);
             airline.addFlight(flight);
         }
 
         if (updateRequest.originAirportCode() != null) {
-            Airport origin = airportReferenceResolver.resolveAirportByCode(updateRequest.destinationAirportCode());
+            Airport origin = airportService.getAirportByCode(updateRequest.originAirportCode());
             flight.setOriginAirport(origin);
             origin.addFlightOrigin(flight);
         }
 
         if (updateRequest.destinationAirportCode() != null) {
-            Airport destination = airportReferenceResolver.resolveAirportByCode(updateRequest.destinationAirportCode());
+            Airport destination = airportService.getAirportByCode(updateRequest.destinationAirportCode());
             flight.setDestinationAirport(destination);
             destination.addFlightDestination(flight);
         }
@@ -98,7 +92,7 @@ public class FlightServiceImpl implements FlightService{
             if (updateRequest.tags().isEmpty()) {
                 flight.clearTags();
             } else {
-                Set<Tag> tags = tagReferenceResolver.resolveTagsByName(updateRequest.tags());
+                Set<Tag> tags = updateRequest.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
                 flight.setTags(tags);
                 tags.forEach(tag -> tag.addFlight(flight));
             }

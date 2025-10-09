@@ -52,4 +52,8 @@ public class AirportServiceImpl implements AirportService {
     public List<AirportResponse> list() {
         return airportRepository.findAll().stream().map(airportMapper::toDTO).toList();
     }
+
+    public Airport getAirportByCode(String code) {
+        return airportRepository.findByCode(code).orElseThrow(()-> new EntityNotFoundException("Airport with id: " + code + " not found"));
+    }
 }

@@ -8,7 +8,7 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
         uses = {AirlineMapper.class,
-                AirportMapper.class}
+                AirportMapper.class, SeatInventoryMapper.class, TagMapper.class,}
 )
 public interface FlightMapper {
     @Mapping(target = "id", ignore = true)

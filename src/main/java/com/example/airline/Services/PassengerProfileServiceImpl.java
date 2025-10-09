@@ -18,7 +18,6 @@ import java.util.List;
 public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     private final PassengerProfileRepository passengerProfileRepository;
-    private final PassengerRepository passengerRepository;
     private final PassengerProfileMapper passengerProfileMapper;
 
     @Override
@@ -72,8 +71,5 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     public void delete(Long id) {
         var profile = get(id);
         passengerProfileRepository.delete(profile);
-    }
-    public Passenger findPassenger(Long passengerID) {
-        return passengerRepository.findByid(passengerID).orElseThrow(() -> new EntityNotFoundException("PAsseneger not found"));
     }
 }
