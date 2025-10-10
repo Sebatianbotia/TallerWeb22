@@ -11,7 +11,7 @@ public interface FlightService {
 
     FlightDto.flightResponse update(Long id, FlightDto.flightUpdateRequest updateRequest);
 
-    FlightDto.flightResponse find(Long id);
+    FlightDto.flightResponse get(Long id);
 
     List<FlightDto.flightResponse> findAll();
 

@@ -32,13 +32,13 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public SeatInventoryDTO.seatInventoryDtoResponse find(Long id) {
-        var s = findSeatInventoryObject(id);
+    public SeatInventoryDTO.seatInventoryDtoResponse get(Long id) {
+        var s = getObject(id);
         return seatInventoryMapper.toDTO(s);
     }
 
     @Override
-    public SeatInventory findSeatInventoryObject(Long id) {
+    public SeatInventory getObject(Long id) {
         var s = seatInventoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "SeatInventory with id " + id + " not found."
         ));
@@ -48,7 +48,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     @Override
     @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
-        var seatInventory = findSeatInventoryObject(id);
+        var seatInventory = getObject(id);
         seatInventoryMapper.updateEntity(updateRequest, seatInventory);
         return seatInventoryMapper.toDTO(seatInventory);
     }
@@ -67,7 +67,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
 
     @Override
     public void delete(Long id) {
-        var p = findSeatInventoryObject(id);
+        var p = getObject(id);
         seatInventoryRepository.delete(p);
     }
 }

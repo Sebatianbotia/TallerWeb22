@@ -9,7 +9,7 @@ public interface TagService {
 
     TagDTO.tagResponse create(TagDTO.tagCreateRequest createRequest);
 
-    TagDTO.tagResponse find(Long id);
+    TagDTO.tagResponse get(Long id);
 
     TagDTO.tagResponse update(Long id, TagDTO.tagUpdateRequest updateRequest);
 
@@ -17,7 +17,9 @@ public interface TagService {
 
     void delete(Long id);
 
-    Tag findById(Long id);
+    Tag getObject(Long id);
 
-    Tag findTagByName(String name);
+    Tag getObjectByName(String name);
+
+    TagDTO.tagResponse getByName(String name);
 }

@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -80,7 +79,7 @@ public class FlightServiceImplTest {
             }
             return null;
         });
-        when(tagService.findTagByName(any())).thenAnswer(inv -> {
+        when(tagService.getObjectByName(any())).thenAnswer(inv -> {
             String tagName = inv.getArgument(0);
             if (tagName.equals(tag1.getName())) {
                 return tag1;
@@ -201,7 +200,7 @@ public class FlightServiceImplTest {
             }
             return null;
         });
-        when(tagService.findTagByName(any())).thenAnswer(inv -> {
+        when(tagService.getObjectByName(any())).thenAnswer(inv -> {
             String tagName = inv.getArgument(0);
             if (tagName.equals(tag1.getName())) {
                 return tag1;

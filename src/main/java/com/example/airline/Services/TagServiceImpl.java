@@ -6,6 +6,7 @@ import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +25,14 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDTO.tagResponse find(Long id) {
-        return tagMapper.toDTO(findById(id));
+    public TagDTO.tagResponse get(Long id) {
+        return tagMapper.toDTO(getObject(id));
     }
 
     @Override
     @Transactional
     public TagDTO.tagResponse update(Long id, TagDTO.tagUpdateRequest updateRequest) {
-        var tag = findById(id);
+        var tag = getObject(id);
         tagMapper.updateRequest(updateRequest, tag);
         return tagMapper.toDTO(tag);
     }
@@ -48,11 +49,16 @@ public class TagServiceImpl implements TagService {
     }
 
 
-    public Tag findById(Long id) {
+    public Tag getObject(Long id) {
         return tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag no encontrado"));
     }
 
-    public Tag findTagByName(String name) {
+    public Tag getObjectByName(String name) {
         return tagRepository.findTagByNameIgnoreCase(name).orElseThrow(() -> new EntityNotFoundException("Tag no encontrado"));
+    }
+
+    @Override
+    public TagDTO.tagResponse getByName(String name) {
+        return tagMapper.toDTO(getObjectByName(name));
     }
 }

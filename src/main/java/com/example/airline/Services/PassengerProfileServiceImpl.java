@@ -2,10 +2,8 @@ package com.example.airline.Services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.Mappers.PassengerProfileMapper;
-import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
-import com.example.airline.repositories.PassengerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +32,13 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     }
 
     @Override
-    public PassengerProfileDTO.passengerProfileResponse findById(Long id) {
-        var profile = get(id);
+    public PassengerProfileDTO.passengerProfileResponse get(Long id) {
+        var profile = this.getObject(id);
         return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
-    public PassengerProfile get(Long id) {
+    public PassengerProfile getObject(Long id) {
         PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "Profile with id " + id + " not found"
         ));
@@ -50,7 +48,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     @Override
     @Transactional
     public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
-        var profile = get(id);
+        var profile = this.getObject(id);
         passengerProfileMapper.updateEntity(updateRequest, profile);
         return passengerProfileMapper.toDTO(profile);
     }
@@ -69,7 +67,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public void delete(Long id) {
-        var profile = get(id);
+        var profile = this.getObject(id);
         passengerProfileRepository.delete(profile);
     }
 }

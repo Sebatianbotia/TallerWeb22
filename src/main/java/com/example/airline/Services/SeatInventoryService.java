@@ -9,9 +9,9 @@ public interface SeatInventoryService {
 
     SeatInventoryDTO.seatInventoryDtoResponse create(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest);
 
-    SeatInventoryDTO.seatInventoryDtoResponse find(Long id);
+    SeatInventoryDTO.seatInventoryDtoResponse get(Long id);
 
-    SeatInventory findSeatInventoryObject(Long id);
+    SeatInventory getObject(Long id);
 
     SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest);
 

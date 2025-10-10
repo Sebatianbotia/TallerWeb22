@@ -1,8 +1,7 @@
 package com.example.airline.API.Controller;
 
-import static com.example.airline.DTO.PassengerDTO.*;
-
-import com.example.airline.Services.PassengerService;
+import com.example.airline.DTO.PassengerProfileDTO.*;
+import com.example.airline.Services.PassengerProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,34 +10,34 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/passengers")
+@RequestMapping("api/passengerProfiles")
 @RequiredArgsConstructor
 @Validated
-public class PassengerController {
+public class PassengerProfileController {
 
-    private final PassengerService service;
-    
+    private final PassengerProfileService service;
+
 
     @PostMapping
-    public ResponseEntity<passengerResponse> create(@Valid @RequestBody passengerCreateRequest req, UriComponentsBuilder uri) {
+    public ResponseEntity<passengerProfileResponse> create(@Valid @RequestBody  passengerProfileCreateRequest req, UriComponentsBuilder uri) {
         var body = service.create(req);
-        var location = uri.path("/api/passengers/{id}").buildAndExpand(body.id()).toUri();
+        var location = uri.path("/api/passengerProfiles/{id}").buildAndExpand(body.passengerProfileID()).toUri();
         return ResponseEntity.created(location).body(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<passengerResponse> get(@PathVariable Long id) {
+    public ResponseEntity<passengerProfileResponse> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
     }
 
-@DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-@PatchMapping("/{id}")
-    public ResponseEntity<passengerResponse>  update(@PathVariable Long id, @Valid @RequestBody passengerUpdateRequest updateRequest) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<passengerProfileResponse>  update(@PathVariable Long id, @Valid @RequestBody passengerProfileUpdateRequest updateRequest) {
         return ResponseEntity.ok(service.update(id, updateRequest));
-}
+    }
 }

@@ -49,7 +49,7 @@ public class FlightServiceImpl implements FlightService{
             destination.addFlightDestination(flight);
         }
         if (request.tags() != null) {
-            Set<Tag> tags = request.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
+            Set<Tag> tags = request.tags().stream().map(tagService::getObjectByName).collect(Collectors.toSet());
             flight.setTags(tags);
             tags.forEach(tag -> tag.addFlight(flight));
         }
@@ -92,7 +92,7 @@ public class FlightServiceImpl implements FlightService{
             if (updateRequest.tags().isEmpty()) {
                 flight.clearTags();
             } else {
-                Set<Tag> tags = updateRequest.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
+                Set<Tag> tags = updateRequest.tags().stream().map(tagService::getObjectByName).collect(Collectors.toSet());
                 flight.setTags(tags);
                 tags.forEach(tag -> tag.addFlight(flight));
             }
@@ -103,7 +103,7 @@ public class FlightServiceImpl implements FlightService{
 
     @Override
     @Transactional(readOnly = true)
-    public FlightDto.flightResponse find(Long id) {
+    public FlightDto.flightResponse get(Long id) {
         return flightMapper.toDTO(getFlightObject(id));
     }
 
