@@ -102,7 +102,7 @@ public class SeatInventoryServiceImplTest {
 
         when(seatInventoryMapper.toDTO(any())).thenAnswer(inv -> {
             SeatInventory object =  inv.getArgument(0);
-            String flightNumber = "No hay flight";
+            String flightNumber = null;
             if (object.getFlight() != null) {
                 flightNumber = object.getFlight().getNumber();
             }
