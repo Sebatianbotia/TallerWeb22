@@ -1,11 +1,9 @@
 package com.example.airline.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,18 +11,32 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Setter
+@Getter
 
 public class Airline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String code;
 
     @OneToMany(mappedBy = "airline")
     List<Flight> flights;
 
+    public List<Flight> getFlights() {
+        List<Flight> flights = new ArrayList<>();
+        for(Flight flight : flights){
+            flights.add(flight);
+        }
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {}
     public void addFlight(Flight fly){
+        if (this.flights == null) {
+            this.flights = new ArrayList<>();
+        }
         this.flights.add(fly);
     }
 }

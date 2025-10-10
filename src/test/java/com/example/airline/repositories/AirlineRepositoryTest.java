@@ -1,6 +1,7 @@
 package com.example.airline.repositories;
 import com.example.airline.AbstractRepositoryPSQL;
 import com.example.airline.entities.Airline;
+import com.example.airline.entities.Airport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AirlineRepositoryTest extends AbstractRepositoryPSQL {
     @Autowired
-    private com.example.airline.repositories.AirlineRepository airlineRepository;
+    private AirlineRepository airlineRepository;
 
     @Test
     @DisplayName("Buscar por codigo existente zzz")
@@ -33,5 +34,11 @@ public class AirlineRepositoryTest extends AbstractRepositoryPSQL {
     void shouldFindAirlineByInexistentCode() {
         Optional<Airline> notFoundAirline = airlineRepository.findAirlineByCodeIgnoreCase("bb");
         assertThat(notFoundAirline).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Obtener Airport con sus vuelos")
+    void shouldObtainsAirport() {
+
     }
 }

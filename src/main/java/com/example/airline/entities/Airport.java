@@ -1,14 +1,12 @@
 package com.example.airline.entities;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
+@EqualsAndHashCode(exclude = {"flightsOrigin", "flightsDestination"})@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -16,7 +14,7 @@ import java.util.List;
 public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String code;
     private String city;
@@ -26,4 +24,17 @@ public class Airport {
 
     @OneToMany(mappedBy = "destinationAirport")
     private List<Flight> flightsDestination;
+
+    public void addFlightOrigin(Flight flight) {
+        if (this.flightsOrigin == null) {
+            this.flightsOrigin = new ArrayList<>();
+        }
+        flightsOrigin.add(flight);
+    }
+    public void addFlightDestination(Flight flight) {
+        if (this.flightsDestination == null) {
+            this.flightsDestination = new ArrayList<>();
+        }
+        flightsDestination.add(flight);
+    }
 }

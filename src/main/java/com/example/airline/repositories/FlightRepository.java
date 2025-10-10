@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface FlightRepository extends JpaRepository<Flight, Long> {
     List<Flight> findFlightByAirline_NameIgnoreCase(String airlineName, Pageable pageable);
@@ -51,5 +52,7 @@ having count(distinct t.id) = :tamañoTags
 """, nativeQuery = true)
         List<Flight> findFlightsWithTags(@Param("tags") Collection<String> tags,
                                          @Param("tamañoTags") int sizeTags);
-    }
+
+}
+
 

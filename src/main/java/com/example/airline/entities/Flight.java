@@ -1,15 +1,14 @@
 package com.example.airline.entities;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = {"originAirport", "destinationAirport", "seatInventories", "bookingItems", "tags"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +18,7 @@ import java.util.Set;
 public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String number;
     private OffsetDateTime arrivalTime;
     private OffsetDateTime departureTime;
@@ -38,12 +37,17 @@ public class Flight {
             joinColumns = @JoinColumn(name="FlightId"),
             inverseJoinColumns = @JoinColumn(name="TagId")
     )
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
     @OneToMany(mappedBy = "flight")
     private List<SeatInventory> seatInventories;
     @OneToMany(mappedBy = "flight")
     private List<BookingItem> bookingItems;
 
-
+    public void clearTags() {
+        if (this.tags != null) {
+            this.tags.forEach(tag -> tag.getFlights().remove(this));
+            this.tags.clear();
+        }
+    }
 
 }

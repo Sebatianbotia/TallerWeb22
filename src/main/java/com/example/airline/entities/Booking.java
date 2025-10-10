@@ -25,4 +25,8 @@ public class Booking {
     @OneToMany(mappedBy = "booking")
     private List<BookingItem> items;
 
+    public void addItem(BookingItem item) {
+        this.items.add(item);
+    }
+
 }

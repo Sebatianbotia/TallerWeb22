@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -22,4 +23,10 @@ private String name;
 @ManyToMany(mappedBy = "tags")
 private Set<Flight> flights;
 
+public void  addFlight(Flight flight) {
+    if (this.flights == null) {
+        this.flights = new HashSet<>();
+    }
+this.flights.add(flight);
+}
 }
