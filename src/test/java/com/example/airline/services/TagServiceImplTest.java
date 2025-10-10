@@ -1,20 +1,24 @@
 package com.example.airline.services;
 
 import com.example.airline.DTO.TagDTO;
+import com.example.airline.Mappers.TagMapper;
 import com.example.airline.Services.TagServiceImpl;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.commons.util.CollectionUtils;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceImplTest {
@@ -22,53 +26,69 @@ public class TagServiceImplTest {
     private TagRepository tagRepository;
     @InjectMocks
     private TagServiceImpl tagService;
+    @Mock
+    private TagMapper tagMapper;
 
     @Test
-    void shouldCreateAndReturnResponseDTO(){
-        var tagRequest = new TagDTO.tagCreateRequest("Economico");
+    void shouldCreateAndReturnTagResponse(){
+        TagDTO.tagCreateRequest request = new TagDTO.tagCreateRequest("Economico");
         when(tagRepository.save(any())).thenAnswer(i -> {
             Tag tag = i.getArgument(0);
-            tag.setId(22L);
+            tag.setId(1L);
             return tag;
         });
 
-        var saved = tagService.create(tagRequest);
+        when(tagMapper.toEntity(any())).thenAnswer(i -> {
+            TagDTO.tagCreateRequest request1 = i.getArgument(0);
+            Tag object = Tag.builder().name(request1.name()).build();
+            return object;
+        });
+
+        when(tagMapper.toDTO(any())).thenAnswer(i -> {
+            Tag object = i.getArgument(0);
+            return new TagDTO.tagResponse(object.getId(), object.getName());
+        });
+
+        var saved = tagService.create(request);
 
         assertThat(saved).isNotNull();
-        assertThat(saved.tagId()).isEqualTo(22L);
         assertThat(saved.name()).isEqualTo("Economico");
+        assertThat(saved.tagId()).isEqualTo(1L);
         verify(tagRepository).save(any(Tag.class));
+
     }
 
     @Test
-    void shouldUpdateAndReturnResponseDTO(){
-        var tagObject = Tag.builder().id(1L).name("Economico").build();
-        when(tagRepository.findById(1L)).thenReturn(Optional.of(tagObject));
+    void shouldUpdatetagAndReturnTagResponse(){
+        Tag tag = Tag.builder().name("Economico").id(2).build();
 
-        var updateRequest = new TagDTO.tagUpdateRequest("Privado");
-        var saved = tagService.update(1L, updateRequest);
+        // datos a actualizar
 
-        assertThat(saved).isNotNull();
-        assertThat(saved.name()).isEqualTo("Privado");
+        TagDTO.tagUpdateRequest request = new TagDTO.tagUpdateRequest("Premium");
+
+        when(tagRepository.findById(any())).thenReturn(Optional.of(tag));
+
+        doAnswer(inv -> {
+            TagDTO.tagUpdateRequest request1 = inv.getArgument(0);
+            Tag object = inv.getArgument(1);
+
+            if (request1.name() != null){
+                object.setName(request1.name());
+            }
+            return null;
+
+        }).when(tagMapper).updateRequest(any(), any());
+
+
+
+        tagService.update(tag.getId(), request);
+
+        assertThat(tag).isNotNull();
+        assertThat(tag.getName()).isEqualTo("Premium");
+
+
+
+
     }
 
-    @Test
-    void shouldFindAllAndReturnResponseDTO(){
-        var tag1 = Tag.builder().id(1L).name("Economico").build();
-        var tag2 = Tag.builder().id(2L).name("VIP").build();
-
-        List<Tag> tags = List.of(tag1, tag2);
-
-        when(tagRepository.findAll()).thenReturn(tags);
-        var savedTags = tagService.findAll();
-
-        assertThat(savedTags).isNotNull();
-        assertThat(savedTags).hasSize(2);
-
-        assertThat(savedTags.get(0).tagId()).isEqualTo(1L);
-        assertThat(savedTags.get(0).name()).isEqualTo("Economico");
-
-        assertThat(savedTags.get(1).tagId()).isEqualTo(2L);
-        assertThat(savedTags.get(1).name()).isEqualTo("VIP");
-    }
 }

@@ -6,10 +6,16 @@ import com.example.airline.entities.Passenger;
 import java.util.List;
 
 public interface PassengerService {
+
     PassengerDTO.passengerResponse create(PassengerDTO.passengerCreateRequest createRequest);
+
     PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest);
+
     void delete(Long id);
+
     PassengerDTO.passengerResponse find(Long id);
-    Passenger get(Long id);
+
     List<PassengerDTO.passengerResponse> findAll();
+
+    Passenger get(Long id);
 }

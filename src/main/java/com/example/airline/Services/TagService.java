@@ -6,10 +6,18 @@ import com.example.airline.entities.Tag;
 import java.util.List;
 
 public interface TagService {
+
     TagDTO.tagResponse create(TagDTO.tagCreateRequest createRequest);
+
     TagDTO.tagResponse find(Long id);
-    TagDTO.tagResponse update(Long id,TagDTO.tagUpdateRequest updateRequest);
+
+    TagDTO.tagResponse update(Long id, TagDTO.tagUpdateRequest updateRequest);
+
     List<TagDTO.tagResponse> findAll();
+
     void delete(Long id);
 
+    Tag findById(Long id);
+
+    Tag findTagByName(String name);
 }

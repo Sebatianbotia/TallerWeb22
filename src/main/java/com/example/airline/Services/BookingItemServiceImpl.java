@@ -1,48 +1,91 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.BookingItemDTO.*;
-import com.example.airline.Services.Mappers.BookingItemMapper;
-import com.example.airline.Services.Mappers.BookingMapper;
+import com.example.airline.Mappers.BookingItemMapper;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.BookingItem;
 import com.example.airline.entities.Flight;
 import com.example.airline.repositories.BookingItemsRepository;
-import com.example.airline.repositories.BookingRepository;
-import com.example.airline.repositories.FlightRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
 public class BookingItemServiceImpl implements BookingItemService {
-    BookingRepository bookingRepository;
-    FlightRepository flightRepository;
-    BookingItemsRepository bookingItemsRepository;
-    @Override
-    public bookingItemReponse create( bookingItemCreateRequest request) {
-        Booking booking = findBooking(request.bookingId());
-        Flight flight = findFlight(request.fligthId());
-        BookingItem bookingItem = BookingItemMapper.toEntity(booking, flight, request);
-        booking.addItem(bookingItem);
-        return BookingItemMapper.toDTO(bookingItem);
-    }
+
+    private final BookingItemsRepository bookingItemsRepository;
+    private final BookingItemMapper bookingItemMapper;
+    private final BookingServiceImpl bookingServiceImpl;
+    private final FlightServiceImpl flightServiceImpl;
 
     @Override
-    public bookingItemReponse update(bookingItemUpdateRequest request) {
-        BookingItem bookingItem = findBookingItem(request.bookingItemsId());
-        BookingItemMapper.updateBookingItem(bookingItem, request);
-        return BookingItemMapper.toDTO(bookingItem);
+    public bookingItemReponse create(bookingItemCreateRequest request) {
+        BookingItem bookingItem = bookingItemMapper.toEntity(request);
+        Flight f = flightServiceImpl.getFlightObject(request.fligthId());
+        Booking b = bookingServiceImpl.getObject(request.bookingId());
+
+
+        // Asignamos el vuelo y el booking
+        bookingItem.setBooking(b);
+        bookingItem.setFlight(f);
+        if (b.getItems() == null) {
+            b.setItems(new ArrayList<>());
+        }
+        b.getItems().add(bookingItem);
+
+        // ✅ Lo mismo para Flight
+        if (f.getBookingItems() == null) {
+            f.setBookingItems(new ArrayList<>());
+        }
+        f.getBookingItems().add(bookingItem);
+
+        bookingItem = bookingItemsRepository.save(bookingItem);
+
+        return bookingItemMapper.toDTO(bookingItem);
     }
+
 
     @Override
-    public void delete(long id) {
-        bookingRepository.deleteById(id);
+    @Transactional
+    public bookingItemReponse update(BookingItem bookingItem,bookingItemUpdateRequest request) {
+        bookingItemMapper.updateEntity(request, bookingItem);
+        if (bookingItem.getFlight().getId() != request.flightId()){
+            Flight f =  flightServiceImpl.getFlightObject(request.flightId());
+            bookingItem.getFlight().getBookingItems().remove(bookingItem);
+            bookingItem.setFlight(f);
+
+        }
+        if (bookingItem.getBooking().getId() != request.bookingId()){
+            Booking b =  bookingServiceImpl.getObject(request.bookingId());
+            bookingItem.getBooking().getItems().remove(bookingItem);
+            bookingItem.setBooking(b);
+        }
+        BookingItem savedItem = bookingItemsRepository.save(bookingItem);
+
+
+        return bookingItemMapper.toDTO(savedItem);
     }
 
-    public Booking findBooking(Long id) {
-        return bookingRepository.findBookingById(id).orElseThrow(()-> new EntityNotFoundException("Booking not found"));
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        bookingItemsRepository.deleteById(id);
     }
-    public Flight findFlight(Long flightId) {
-        return flightRepository.findById(flightId).orElseThrow(()-> new EntityNotFoundException("Flight not found"));
-    }
+
+
     public BookingItem findBookingItem(Long id) {
         return bookingItemsRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Booking Item not found"));
+    }
+
+    @Override
+    public List<bookingItemReponse> findAll() {
+        return bookingItemsRepository.findAll().stream().map(bookingItemMapper::toDTO).toList();
     }
 }

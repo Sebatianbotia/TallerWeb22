@@ -1,8 +1,7 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
-import com.example.airline.Services.Mappers.PassengerMapper;
-import com.example.airline.Services.Mappers.PassengerProfileMapper;
+import com.example.airline.Mappers.PassengerProfileMapper;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
@@ -19,17 +18,17 @@ import java.util.List;
 public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     private final PassengerProfileRepository passengerProfileRepository;
-    private final PassengerRepository passengerRepository;
+    private final PassengerProfileMapper passengerProfileMapper;
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse create(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        var profile = PassengerProfileMapper.toEntity(createRequest);
-        return PassengerProfileMapper.toDTO(passengerProfileRepository.save(profile));
+        var profile = passengerProfileMapper.toEntity(createRequest);
+        return passengerProfileMapper.toDTO(passengerProfileRepository.save(profile));
     }
 
     @Override
     public PassengerProfile createObject(PassengerProfileDTO.passengerProfileCreateRequest createRequest) {
-        var profile = PassengerProfile.builder().countryCode(createRequest.countryCode()).phone(createRequest.phoneNumber()).build();
+        var profile = passengerProfileMapper.toEntity(createRequest);
         profile =  passengerProfileRepository.save(profile);
         return profile;
     }
@@ -37,42 +36,40 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     @Override
     public PassengerProfileDTO.passengerProfileResponse findById(Long id) {
         var profile = get(id);
-        return PassengerProfileMapper.toDTO(profile);
+        return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
     public PassengerProfile get(Long id) {
-        var profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 "Profile with id " + id + " not found"
         ));
         return profile;
     }
 
     @Override
+    @Transactional
     public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
         var profile = get(id);
-        PassengerProfileMapper.path(profile, updateRequest);
-        return PassengerProfileMapper.toDTO(profile);
+        passengerProfileMapper.updateEntity(updateRequest, profile);
+        return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
     public PassengerProfileDTO.passengerProfileResponse update(PassengerProfile profile, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
-        PassengerProfileMapper.path(profile, updateRequest);
-        return PassengerProfileMapper.toDTO(profile);
+        passengerProfileMapper.updateEntity(updateRequest, profile);
+        return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
     public List<PassengerProfileDTO.passengerProfileResponse> findAll() {
         var profiles = passengerProfileRepository.findAll();
-        return profiles.stream().map(PassengerProfileMapper::toDTO).toList();
+        return profiles.stream().map(passengerProfileMapper::toDTO).toList();
     }
 
     @Override
     public void delete(Long id) {
         var profile = get(id);
         passengerProfileRepository.delete(profile);
-    }
-    public Passenger findPassenger(Long passengerID) {
-        return passengerRepository.findByid(passengerID).orElseThrow(() -> new EntityNotFoundException("PAsseneger not found"));
     }
 }

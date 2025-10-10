@@ -1,8 +1,7 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.SeatInventoryDTO;
-import com.example.airline.Services.Mappers.SeatInventoryMapper;
-import com.example.airline.entities.Flight;
+import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,26 +14,27 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 @Transactional
-public class SeatInventoryServiceImpl implements  SeatInventoryService {
+public class SeatInventoryServiceImpl implements SeatInventoryService {
 
     private final SeatInventoryRepository seatInventoryRepository;
+    private final SeatInventoryMapper seatInventoryMapper;
 
     @Override
     public SeatInventoryDTO.seatInventoryDtoResponse create(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest) {
-        SeatInventory seatInventory = SeatInventoryMapper.toEntity(inventoryCreateRequest);
+        SeatInventory seatInventory = seatInventoryMapper.toEntity(inventoryCreateRequest);
         seatInventoryRepository.save(seatInventory);
-        return SeatInventoryMapper.toDTO(seatInventory);
+        return seatInventoryMapper.toDTO(seatInventory);
     }
 
     public SeatInventory createAndReturn(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest){
-        SeatInventory seatInventory = SeatInventoryMapper.toEntity(inventoryCreateRequest);
+        SeatInventory seatInventory = seatInventoryMapper.toEntity(inventoryCreateRequest);
         return seatInventoryRepository.save(seatInventory);
     }
 
     @Override
     public SeatInventoryDTO.seatInventoryDtoResponse find(Long id) {
         var s = findSeatInventoryObject(id);
-        return SeatInventoryMapper.toDTO(s);
+        return seatInventoryMapper.toDTO(s);
     }
 
     @Override
@@ -46,22 +46,23 @@ public class SeatInventoryServiceImpl implements  SeatInventoryService {
     }
 
     @Override
+    @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
         var seatInventory = findSeatInventoryObject(id);
-        SeatInventoryMapper.path(seatInventory, updateRequest);
-        return SeatInventoryMapper.toDTO(seatInventory);
+        seatInventoryMapper.updateEntity(updateRequest, seatInventory);
+        return seatInventoryMapper.toDTO(seatInventory);
     }
 
     @Override
+    @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(SeatInventory entity, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
-        SeatInventoryMapper.path(entity, updateRequest);
-        seatInventoryRepository.save(entity);
-        return SeatInventoryMapper.toDTO(entity);
+        seatInventoryMapper.updateEntity(updateRequest, entity);
+        return seatInventoryMapper.toDTO(entity);
     }
 
     @Override
     public List<SeatInventoryDTO.seatInventoryDtoResponse> findAll() {
-        return seatInventoryRepository.findAll().stream().map(SeatInventoryMapper::toDTO).toList();
+        return seatInventoryRepository.findAll().stream().map(seatInventoryMapper::toDTO).toList();
     }
 
     @Override

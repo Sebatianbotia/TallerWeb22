@@ -1,8 +1,11 @@
 package com.example.airline.Services;
 
 import com.example.airline.DTO.FlightDto;
-import com.example.airline.Services.Mappers.FlightMapper;
+import com.example.airline.Mappers.FlightMapper;
+import com.example.airline.entities.Airline;
+import com.example.airline.entities.Airport;
 import com.example.airline.entities.Flight;
+import com.example.airline.entities.Tag;
 import com.example.airline.repositories.FlightRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,81 +26,95 @@ public class FlightServiceImpl implements FlightService{
     private final AirlineServiceImpl airlineService;
     private final TagServiceImpl tagService;
     private final SeatInventoryServiceImpl seatInventoryService;
+    private final FlightMapper flightMapper;
 
     @Override
-    public FlightDto.flightResponse create(FlightDto.flightCreateRequest createRequest) {
-        var flight = FlightMapper.toEntity(createRequest);
-        var originAirport = airportService.getObjectById(createRequest.originAirportCode());
-        var destinationAirport = airportService.getObjectById(createRequest.destinationAirportCode());
-        var airline = airlineService.getObjectById(createRequest.airlineId());
-        var tag = createRequest.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
-        var seatInventories = createRequest.seatInventories().stream().map(seatInventoryService::createAndReturn).toList();
-
-
-        flight.setOriginAirport(originAirport);
-        flight.setDestinationAirport(destinationAirport);
-        flight.setAirline(airline);
-        flight.setTags(tag);
-        flight.setSeatInventories(seatInventories);
-
-
-        originAirport.addFlightOrigin(flight);
-        destinationAirport.addFlightDestination(flight);
-        airline.addFlight(flight);
-        tag.forEach(tag2 -> tag2.addFlight(flight));
-        seatInventories.forEach(seat -> seat.setFlight(flight));
-
-
-        var saveFlight = flightRepository.save(flight);
-        return FlightMapper.toDTO(saveFlight);
-
-    }
-
-    @Override
-    public FlightDto.flightResponse update(Long id, FlightDto.flightUpdateRequest updateRequest) {
-        var flight = getFlightObject(id);
-        FlightMapper.path(flight, updateRequest);
-        if (updateRequest.airlineId() != null){
-            var airline = airlineService.getObjectById(updateRequest.airlineId());
-            flight.getAirline().getFlights().remove(flight);
+    public FlightDto.flightResponse create(FlightDto.flightCreateRequest request) {
+        var flight = flightMapper.toEntity(request);
+        if (request.aerlineId() != null) {
+            Airline airline = airlineService.getObjectById(request.aerlineId());
             flight.setAirline(airline);
             airline.addFlight(flight);
         }
-        if (updateRequest.originAirportId() != null){
-            var originAirport = airportService.getObjectById(updateRequest.originAirportId());
-            flight.getOriginAirport().getFlightsOrigin().remove(flight);
-            flight.setOriginAirport(originAirport);
-            originAirport.addFlightOrigin(flight);
+
+        if (request.originAirportCode() != null) {
+            Airport origin = airportService.getAirportByCode(request.originAirportCode());
+            flight.setOriginAirport(origin);
+            origin.addFlightOrigin(flight);
         }
-        if (updateRequest.destinationAirportId() != null){
-            var destinationAirport = airportService.getObjectById(updateRequest.destinationAirportId());
-            flight.getDestinationAirport().getFlightsDestination().remove(flight);
-            flight.setDestinationAirport(destinationAirport);
-            destinationAirport.addFlightDestination(flight);
+
+        if (request.destinationAirportCode()!= null) {
+            Airport destination = airportService.getAirportByCode(request.destinationAirportCode());
+            flight.setDestinationAirport(destination);
+            destination.addFlightDestination(flight);
         }
-        if (updateRequest.tags() != null){
-            var newTags = updateRequest.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
-            var oldTags = flight.getTags();
-            oldTags.forEach(oldTag -> oldTag.getFlights().remove(flight));
-            flight.setTags(newTags);
-            newTags.forEach(newTag -> newTag.getFlights().add(flight));
+        if (request.tags() != null) {
+            Set<Tag> tags = request.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
+            flight.setTags(tags);
+            tags.forEach(tag -> tag.addFlight(flight));
         }
-        return FlightMapper.toDTO(flightRepository.save(flight));
+        var seatInventories = request.seatInventories().stream().map(seatInventoryService::createAndReturn).toList();
+        flight.setSeatInventories(seatInventories);
+        flight.getTags().forEach(tag2 -> tag2.addFlight(flight));
+        seatInventories.forEach(seat -> seat.setFlight(flight));
+
+        var saveFlight = flightRepository.save(flight);
+        return flightMapper.toDTO(saveFlight);
+
     }
 
     @Override
+    @Transactional
+    public FlightDto.flightResponse update(Long id, FlightDto.flightUpdateRequest updateRequest) {
+        Flight flight = getFlightObject(id);
+
+        flightMapper.patch(updateRequest, flight);
+
+        if (updateRequest.airlineId() != null) {
+            Airline airline = airlineService.getObjectById(updateRequest.airlineId());
+            flight.setAirline(airline);
+            airline.addFlight(flight);
+        }
+
+        if (updateRequest.originAirportCode() != null) {
+            Airport origin = airportService.getAirportByCode(updateRequest.originAirportCode());
+            flight.setOriginAirport(origin);
+            origin.addFlightOrigin(flight);
+        }
+
+        if (updateRequest.destinationAirportCode() != null) {
+            Airport destination = airportService.getAirportByCode(updateRequest.destinationAirportCode());
+            flight.setDestinationAirport(destination);
+            destination.addFlightDestination(flight);
+        }
+
+        if (updateRequest.tags() != null) {
+            if (updateRequest.tags().isEmpty()) {
+                flight.clearTags();
+            } else {
+                Set<Tag> tags = updateRequest.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
+                flight.setTags(tags);
+                tags.forEach(tag -> tag.addFlight(flight));
+            }
+        }
+        Flight updatedFlight = flightRepository.save(flight);
+        return flightMapper.toDTO(updatedFlight);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public FlightDto.flightResponse find(Long id) {
-        return FlightMapper.toDTO(getFlightObject(id));
+        return flightMapper.toDTO(getFlightObject(id));
     }
 
     @Override
     public List<FlightDto.flightResponse> findAll() {
-        return flightRepository.findAll().stream().map(FlightMapper::toDTO).toList();
+        return flightRepository.findAll().stream().map(flightMapper::toDTO).toList();
     }
 
     @Override
     public void delete(Long id) {
-        flightRepository.deleteById(id);
+        flightRepository.deleteById(id);//Revisar el borrado en cascada
     }
 
     @Override
