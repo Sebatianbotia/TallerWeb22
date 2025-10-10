@@ -29,14 +29,6 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex, WebRequest req) {
-        var violations = ex.getBindingResult().getFieldErrors()
-                .stream().map(fe -> new ApiError.fieldViolation(fe.getField(), fe.getDefaultMessage())).toList();
-        var body = ApiError.of(HttpStatus.BAD_REQUEST, "Validation failed", req.getDescription(false), violations);
-        return ResponseEntity.badRequest().body(body);
-    }
-
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiError> handleConstraint(ConstraintViolationException ex, WebRequest req) {
         var violations = ex.getConstraintViolations().stream()
