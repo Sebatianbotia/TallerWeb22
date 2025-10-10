@@ -1,8 +1,9 @@
 package com.example.airline.API.Controller;
 
-import static com.example.airline.DTO.PassengerDTO.*;
-
-import com.example.airline.Services.PassengerService;
+import com.example.airline.DTO.BookingDTO;
+import com.example.airline.DTO.BookingItemDTO;
+import com.example.airline.DTO.PassengerDTO;
+import com.example.airline.Services.BookingItemServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +12,22 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/passengers")
+@RequestMapping("api/bookingItems")
 @RequiredArgsConstructor
 @Validated
-public class PassengerController {
+public class BookingItemController {
+    private final BookingItemServiceImpl service;
 
-    private final PassengerService service;
-    
 
     @PostMapping
-    public ResponseEntity<passengerResponse> create(@Valid @RequestBody passengerCreateRequest req, UriComponentsBuilder uri) {
+    public ResponseEntity<BookingItemDTO.bookingItemReponse> create(@Valid @RequestBody BookingItemDTO.bookingItemCreateRequest req, UriComponentsBuilder uri) {
         var body = service.create(req);
-        var location = uri.path("/api/passengers/{id}").buildAndExpand(body.id()).toUri();
+        var location = uri.path("/api/bookingItems/{id}").buildAndExpand(body.bookingitemsId()).toUri();
         return ResponseEntity.created(location).body(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<passengerResponse> get(@PathVariable Long id) {
+    public ResponseEntity<BookingItemDTO.bookingItemReponse> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
     }
 
@@ -38,7 +38,8 @@ public class PassengerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<passengerResponse>  update(@PathVariable Long id, @Valid @RequestBody passengerUpdateRequest updateRequest) {
+    public ResponseEntity<BookingItemDTO.bookingItemReponse>  update(@PathVariable Long id, @Valid @RequestBody BookingItemDTO.bookingItemUpdateRequest updateRequest) {
         return ResponseEntity.ok(service.update(id, updateRequest));
     }
+
 }

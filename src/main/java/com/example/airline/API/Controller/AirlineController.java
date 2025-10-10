@@ -1,8 +1,9 @@
 package com.example.airline.API.Controller;
 
-import static com.example.airline.DTO.PassengerDTO.*;
-
-import com.example.airline.Services.PassengerService;
+import com.example.airline.DTO.AirlaneDTO;
+import com.example.airline.DTO.PassengerDTO;
+import com.example.airline.Services.AirlineService;
+import com.example.airline.Services.AirlineServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +12,22 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/passengers")
+@RequestMapping("api/airlines")
 @RequiredArgsConstructor
 @Validated
-public class PassengerController {
+public class AirlineController {
 
-    private final PassengerService service;
-    
+    private final AirlineServiceImpl service;
 
     @PostMapping
-    public ResponseEntity<passengerResponse> create(@Valid @RequestBody passengerCreateRequest req, UriComponentsBuilder uri) {
+    public ResponseEntity<AirlaneDTO.airlineResponse> create(@Valid @RequestBody AirlaneDTO.airlineCreateRequest req, UriComponentsBuilder uri) {
         var body = service.create(req);
-        var location = uri.path("/api/passengers/{id}").buildAndExpand(body.id()).toUri();
+        var location = uri.path("/api/airlines/{id}").buildAndExpand(body.id()).toUri();
         return ResponseEntity.created(location).body(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<passengerResponse> get(@PathVariable Long id) {
+    public ResponseEntity<AirlaneDTO.airlineResponse> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
     }
 
@@ -38,7 +38,7 @@ public class PassengerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<passengerResponse>  update(@PathVariable Long id, @Valid @RequestBody passengerUpdateRequest updateRequest) {
+    public ResponseEntity<AirlaneDTO.airlineResponse>  update(@PathVariable Long id, @Valid @RequestBody AirlaneDTO.airlineUpdateRequest updateRequest) {
         return ResponseEntity.ok(service.update(id, updateRequest));
     }
 }

@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.BookingItemDTO.*;
 import com.example.airline.Mappers.BookingItemMapper;
 import com.example.airline.entities.Booking;
@@ -51,7 +52,8 @@ public class BookingItemServiceImpl implements BookingItemService {
 
     @Override
     @Transactional
-    public bookingItemReponse update(BookingItem bookingItem,bookingItemUpdateRequest request) {
+    public bookingItemReponse update(Long id, bookingItemUpdateRequest request) {
+        BookingItem bookingItem = findBookingItem(id);
         bookingItemMapper.updateEntity(request, bookingItem);
         if (bookingItem.getFlight().getId() != request.flightId()){
             Flight f =  flightServiceImpl.getFlightObject(request.flightId());
@@ -69,6 +71,12 @@ public class BookingItemServiceImpl implements BookingItemService {
 
         return bookingItemMapper.toDTO(savedItem);
     }
+
+    public BookingItemDTO.bookingItemReponse get(Long bookingId) {
+        return bookingItemMapper.toDTO(bookingItemsRepository.getReferenceById(bookingId));
+    }
+
+
 
 
     @Override
