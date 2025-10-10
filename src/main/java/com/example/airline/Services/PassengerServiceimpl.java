@@ -35,7 +35,7 @@ public class PassengerServiceimpl implements PassengerService{
     @Override
     @Transactional
     public PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
-        var m = get(id);
+        var m = this.getObject(id);
         passengerMapper.updateEntity(m, updateRequest);
         if (updateRequest.passengerProfile() != null) {
             if (m.getProfile() == null) {
@@ -48,14 +48,10 @@ public class PassengerServiceimpl implements PassengerService{
 
     @Override
     public void delete(Long id) {
-        var m = get(id);
+        var m = this.getObject(id);
         passengerRepository.delete(m);
     }
 
-    @Override
-    public PassengerDTO.passengerResponse find(Long id) {
-        return passengerMapper.toDTO(get(id));
-    }
 
     @Override
     public List<PassengerDTO.passengerResponse> findAll() {
@@ -64,8 +60,17 @@ public class PassengerServiceimpl implements PassengerService{
     }
 
     @Override
-    public Passenger get(Long id){
+    public Passenger getObject(Long id){
         var p =  passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Passenger with id " + id + " not found"));
         return p;
     }
+
+    @Override
+    public PassengerDTO.passengerResponse get(Long id) {
+        return passengerMapper.toDTO(this.getObject(id));
+    }
+
+
+
+
 }

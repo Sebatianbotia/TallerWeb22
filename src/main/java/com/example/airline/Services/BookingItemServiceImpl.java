@@ -31,7 +31,6 @@ public class BookingItemServiceImpl implements BookingItemService {
         Booking b = bookingServiceImpl.getObject(request.bookingId());
 
 
-        // Asignamos el vuelo y el booking
         bookingItem.setBooking(b);
         bookingItem.setFlight(f);
         if (b.getItems() == null) {
@@ -39,7 +38,6 @@ public class BookingItemServiceImpl implements BookingItemService {
         }
         b.getItems().add(bookingItem);
 
-        // ✅ Lo mismo para Flight
         if (f.getBookingItems() == null) {
             f.setBookingItems(new ArrayList<>());
         }

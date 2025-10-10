@@ -13,9 +13,9 @@ public interface PassengerService {
 
     void delete(Long id);
 
-    PassengerDTO.passengerResponse find(Long id);
-
     List<PassengerDTO.passengerResponse> findAll();
 
-    Passenger get(Long id);
+    Passenger getObject(Long id);
+
+    PassengerDTO.passengerResponse get(Long passengerId);
 }

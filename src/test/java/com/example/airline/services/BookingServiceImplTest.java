@@ -3,15 +3,11 @@ package com.example.airline.services;
 import com.example.airline.DTO.BookingDTO.*;
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.Mappers.BookingMapper;
-import com.example.airline.Mappers.PassengerMapper;
-import com.example.airline.Services.BookingService;
 import com.example.airline.Services.BookingServiceImpl;
 import com.example.airline.Services.PassengerServiceimpl;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.Passenger;
 import com.example.airline.repositories.BookingRepository;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,7 +58,7 @@ public class BookingServiceImplTest {
             booking.setPassenger(passenger);
 
 
-        when(passengerService.get(any())).thenReturn(passenger);
+        when(passengerService.getObject(any())).thenReturn(passenger);
         when(bookingMapper.toEntity(any(bookingCreateRequest.class))).thenReturn(booking);
         when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
         when(bookingMapper.toDTO(any(Booking.class))).thenAnswer(invocation -> {
