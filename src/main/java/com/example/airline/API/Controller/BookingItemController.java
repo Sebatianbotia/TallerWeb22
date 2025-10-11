@@ -3,6 +3,7 @@ package com.example.airline.API.Controller;
 import com.example.airline.DTO.BookingDTO;
 import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.PassengerDTO;
+import com.example.airline.Services.BookingItemService;
 import com.example.airline.Services.BookingItemServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 @Validated
 public class BookingItemController {
-    private final BookingItemServiceImpl service;
+    private final BookingItemService service;
 
 
     @PostMapping

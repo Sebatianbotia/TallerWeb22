@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Validated
 public class BookingController {
 
-    private final BookingServiceImpl service;
+    private final BookingService service;
 
     @PostMapping
     public ResponseEntity<BookingDTO.bookingResponse> create(@Valid @RequestBody BookingDTO.bookingCreateRequest req, UriComponentsBuilder uri) {

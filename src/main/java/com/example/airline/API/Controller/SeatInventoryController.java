@@ -1,6 +1,7 @@
 package com.example.airline.API.Controller;
 
 import com.example.airline.DTO.SeatInventoryDTO.*;
+import com.example.airline.Services.SeatInventoryService;
 import com.example.airline.Services.SeatInventoryServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Validated
 public class SeatInventoryController {
 
-    private final SeatInventoryServiceImpl service;
+    private final SeatInventoryService service;
 
 
     @PostMapping

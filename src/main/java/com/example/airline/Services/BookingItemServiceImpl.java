@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.BookingItemDTO.*;
 import com.example.airline.Mappers.BookingItemMapper;
@@ -87,7 +88,7 @@ public class BookingItemServiceImpl implements BookingItemService {
 
 
     public BookingItem findBookingItem(Long id) {
-        return bookingItemsRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Booking Item not found"));
+        return bookingItemsRepository.findById(id).orElseThrow(()-> new NotFoundException("Booking Item not found"));
     }
 
     @Override

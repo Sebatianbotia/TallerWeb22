@@ -13,11 +13,12 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(EntityNotFoundException.class) //@ExceptionHandler se encarga de tomar la excepcion indicada como argumento y ejecutar la funcion que tiene asignada
-    public ResponseEntity<ApiError>  handleEntityNotFoundException(EntityNotFoundException e, WebRequest req) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException e, WebRequest req) {
         var body = ApiError.of(HttpStatus.NOT_FOUND, e.getMessage(), req.getDescription(false), List.of());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class) // MethodArgumentNotValidException esta es una excepcion que ocurre cuando se pasa un parametro que se ha anotado como debe ser el parametro (Validation)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest req) {
@@ -55,5 +56,12 @@ public class GlobalExceptionHandler {
         var body = ApiError.of(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", req.getDescription(false), List.of());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(NotFoundException ex, WebRequest req) {
+        var body = ApiError.of(HttpStatus.NOT_FOUND, ex.getMessage(), req.getDescription(false), List.of());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
 
 }

@@ -1,10 +1,9 @@
-package com.example.airline.Api;
+package com.example.airline.Api.Controller;
 
 import com.example.airline.API.Controller.TagController;
 import com.example.airline.Services.TagService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.exception.NotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.airline.API.Error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -46,13 +45,24 @@ public class TagControllerTest {
 
     @Test
     void getShouldAndReturn200() throws Exception{
-        when(service.get(5L)).thenReturn(new tagResponse(2L,"Name"));
+        when(service.get(5L)).thenReturn(new tagResponse(5L,"Name"));
         mvc.perform(get("/api/tags/5")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.tagId").value(2L));
+                .andExpect(jsonPath("$.tagId").value(5L));
     }
 
     @Test
     void get_shouldReturn404WhenNotFound() throws Exception{
-        when(service.get(5L)).thenReturn(new NotFoundException("Tag with 5L"));
+        when(service.get(5L)).thenThrow(new NotFoundException("Tag with 5L"));
+
+        mvc.perform(get("/api/tags/5"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Tag with 5L"));
+    }
+
+    @Test
+    void deleteShouldReturn204() throws Exception {
+        mvc.perform(delete("/api/tags/5"))
+                .andExpect(status().isNoContent());
+        verify(service).delete(5L);
     }
 }

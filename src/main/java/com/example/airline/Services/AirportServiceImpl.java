@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.AirportDTO.*;
 import com.example.airline.Mappers.AirportMapper;
 import com.example.airline.entities.Airport;
@@ -26,18 +27,18 @@ public class AirportServiceImpl implements AirportService {
     @Override
     @Transactional(readOnly = true)
     public AirportResponse get(Long id) {
-        var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
+        var a = airportRepository.findById(id).orElseThrow(()-> new NotFoundException("Airport not found"));
         return airportMapper.toDTO(a);
     }
     @Override
     public Airport getObjectById(Long id) {
-        return airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport with code " + id + " not found"));
+        return airportRepository.findById(id).orElseThrow(()-> new NotFoundException("Airport with code " + id + " not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
     public AirportResponse update(Long id, AirportUpdateRequest request) {
-        var a = airportRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airport not found"));
+        var a = airportRepository.findById(id).orElseThrow(()-> new NotFoundException("Airport not found"));
         airportMapper.updateEntity(request,a);
         return airportMapper.toDTO(a);
     }
@@ -54,6 +55,6 @@ public class AirportServiceImpl implements AirportService {
     }
 
     public Airport getAirportByCode(String code) {
-        return airportRepository.findByCode(code).orElseThrow(()-> new EntityNotFoundException("Airport with id: " + code + " not found"));
+        return airportRepository.findByCode(code).orElseThrow(()-> new NotFoundException("Airport with id: " + code + " not found"));
     }
 }

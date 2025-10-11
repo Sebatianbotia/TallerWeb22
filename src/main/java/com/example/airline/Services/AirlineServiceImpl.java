@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.AirlaneDTO;
 import com.example.airline.Mappers.AirlineMapper;
 import com.example.airline.entities.Airline;
@@ -34,7 +35,7 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Override
     public Airline getObjectById(Long id) {
-        return airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline with id " + id + " not found"));
+        return airlineRepository.findById(id).orElseThrow(()-> new NotFoundException("Airline with id " + id + " not found"));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Override
     public AirlaneDTO.airlineResponse update(Long id, AirlaneDTO.airlineUpdateRequest req) {
-        var a = airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
+        var a = airlineRepository.findById(id).orElseThrow(()-> new NotFoundException("Airline not found"));
         Mapper.updateEntity(a,req);
         return  Mapper.toDTO(a);
     }

@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Validated
 public class AirlineController {
 
-    private final AirlineServiceImpl service;
+    private final AirlineService service;
 
     @PostMapping
     public ResponseEntity<AirlaneDTO.airlineResponse> create(@Valid @RequestBody AirlaneDTO.airlineCreateRequest req, UriComponentsBuilder uri) {

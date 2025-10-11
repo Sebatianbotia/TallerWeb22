@@ -7,7 +7,7 @@ import com.example.airline.DTO.AirportDTO;
 import com.example.airline.Services.AirlineService;
 import com.example.airline.Services.AirportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.exception.NotFoundException;
+import com.example.airline.API.Error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,7 +40,7 @@ class AirportControllerTest {
         mvc.perform(post("/api/airports")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(req))).andExpect(status().isCreated())
-                .andExpect(header().string("Location", org.hamcrest.Matchers.endsWith("/api/airlines/13")))
+                .andExpect(header().string("Location", org.hamcrest.Matchers.endsWith("/api/airports/13")))
                 .andExpect(jsonPath("$.id").value(13));
 
     }
@@ -57,7 +57,7 @@ class AirportControllerTest {
 
         mvc.perform(get("/api/airports/69"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Member 99 not found"));
+                .andExpect(jsonPath("$.message").value("Airport 99 not found"));
     }
 
     @Test

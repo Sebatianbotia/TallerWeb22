@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.Mappers.FlightMapper;
 import com.example.airline.entities.Airline;
@@ -119,7 +120,7 @@ public class FlightServiceImpl implements FlightService{
 
     @Override
     public Flight getFlightObject(Long id) {
-        var f =  flightRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        var f =  flightRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "flight with id: " + id + " not found"
         ));
         return f;

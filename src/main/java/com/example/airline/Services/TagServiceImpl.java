@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.Mappers.TagMapper;
 import com.example.airline.entities.Tag;
@@ -50,11 +51,11 @@ public class TagServiceImpl implements TagService {
 
 
     public Tag getObject(Long id) {
-        return tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag no encontrado"));
+        return tagRepository.findById(id).orElseThrow(() -> new NotFoundException("Tag no encontrado"));
     }
 
     public Tag getObjectByName(String name) {
-        return tagRepository.findTagByNameIgnoreCase(name).orElseThrow(() -> new EntityNotFoundException("Tag no encontrado"));
+        return tagRepository.findTagByNameIgnoreCase(name).orElseThrow(() -> new NotFoundException("Tag no encontrado"));
     }
 
     @Override

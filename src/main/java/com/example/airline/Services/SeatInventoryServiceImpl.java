@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.entities.SeatInventory;
@@ -39,7 +40,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
 
     @Override
     public SeatInventory getObject(Long id) {
-        var s = seatInventoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        var s = seatInventoryRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "SeatInventory with id " + id + " not found."
         ));
         return s;

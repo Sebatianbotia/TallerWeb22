@@ -7,7 +7,7 @@ import com.example.airline.DTO.TagDTO;
 import com.example.airline.Services.AirlineService;
 import com.example.airline.Services.TagService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.exception.NotFoundException;
+import com.example.airline.API.Error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -62,7 +62,7 @@ class AirlineControllerTest {
 
     @Test
     void delete_shouldReturn204() throws Exception {
-        mvc.perform(delete("/api/members/3"))
+        mvc.perform(delete("/api/airlines/3"))
                 .andExpect(status().isNoContent());
         verify(service).delete(3L);
     }

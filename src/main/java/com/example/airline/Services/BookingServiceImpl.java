@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.BookingDTO;
 import com.example.airline.Mappers.BookingMapper; // Usamos el mapper
 import com.example.airline.entities.Booking;
@@ -48,7 +49,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public Booking getObject(Long id){
-        return bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        return bookingRepository.findById(id).orElseThrow(() -> new NotFoundException("Booking not found"));
     }
 
 }

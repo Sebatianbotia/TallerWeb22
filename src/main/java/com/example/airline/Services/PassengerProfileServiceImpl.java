@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.Mappers.PassengerProfileMapper;
 import com.example.airline.entities.PassengerProfile;
@@ -39,7 +40,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
 
     @Override
     public PassengerProfile getObject(Long id) {
-        PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "Profile with id " + id + " not found"
         ));
         return profile;

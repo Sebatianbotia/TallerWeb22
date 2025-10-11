@@ -8,7 +8,7 @@ import com.example.airline.Services.BookingItemService;
 import com.example.airline.Services.BookingService;
 import com.example.airline.entities.Cabin;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.exception.NotFoundException;
+import com.example.airline.API.Error.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -54,7 +54,7 @@ class BookingItemControllerTest {
     void getShouldAndReturn200() throws Exception{
         when(service.get(13L)).thenReturn( new BookingItemDTO.bookingItemReponse(13L, Cabin.ECONOMY, 12L, null));
         mvc.perform(get("/api/bookingItems/13")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(13));
+                .andExpect(jsonPath("$.bookingitemsId").value(13L));
     }
     @Test
     void get_shouldReturn404WhenNotFound() throws Exception {
@@ -62,7 +62,7 @@ class BookingItemControllerTest {
 
         mvc.perform(get("/api/bookingItems/69"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("bookingItem 99 not found"));
+                .andExpect(jsonPath("$.message").value("BookingItem 99 not found"));
     }
 
     @Test

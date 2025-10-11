@@ -1,5 +1,6 @@
 package com.example.airline.Services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.entities.Passenger;
@@ -61,7 +62,7 @@ public class PassengerServiceimpl implements PassengerService{
 
     @Override
     public Passenger getObject(Long id){
-        var p =  passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Passenger with id " + id + " not found"));
+        var p =  passengerRepository.findById(id).orElseThrow(() -> new NotFoundException("Passenger with id " + id + " not found"));
         return p;
     }
 
