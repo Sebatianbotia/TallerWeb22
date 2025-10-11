@@ -12,4 +12,6 @@ public interface BookingItemService {
     void delete(Long id);
     BookingItem findBookingItem(Long id);
     List<bookingItemReponse> findAll();
+
+    bookingItemReponse get(Long l);
 }

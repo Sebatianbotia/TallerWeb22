@@ -94,4 +94,5 @@ public class BookingItemServiceImpl implements BookingItemService {
     public List<bookingItemReponse> findAll() {
         return bookingItemsRepository.findAll().stream().map(bookingItemMapper::toDTO).toList();
     }
+
 }
