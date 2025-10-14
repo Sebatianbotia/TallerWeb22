@@ -1,13 +1,11 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.Mappers.TagMapper;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

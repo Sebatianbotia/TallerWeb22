@@ -2,19 +2,14 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.Mappers.TagMapper;
-import com.example.airline.Services.TagServiceImpl;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.util.CollectionUtils;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;

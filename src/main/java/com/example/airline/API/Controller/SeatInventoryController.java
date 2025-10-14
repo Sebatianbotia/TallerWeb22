@@ -1,8 +1,7 @@
 package com.example.airline.API.Controller;
 
 import com.example.airline.DTO.SeatInventoryDTO.*;
-import com.example.airline.Services.SeatInventoryService;
-import com.example.airline.Services.SeatInventoryServiceImpl;
+import com.example.airline.services.SeatInventoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

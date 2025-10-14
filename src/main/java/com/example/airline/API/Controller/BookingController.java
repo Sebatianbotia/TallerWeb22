@@ -1,9 +1,7 @@
 package com.example.airline.API.Controller;
 
 import com.example.airline.DTO.BookingDTO;
-import com.example.airline.DTO.PassengerDTO;
-import com.example.airline.Services.BookingService;
-import com.example.airline.Services.BookingServiceImpl;
+import com.example.airline.services.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

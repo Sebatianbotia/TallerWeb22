@@ -1,11 +1,8 @@
 package com.example.airline.Api.Controller;
 
-import com.example.airline.API.Controller.BookingController;
 import com.example.airline.API.Controller.BookingItemController;
-import com.example.airline.DTO.BookingDTO;
 import com.example.airline.DTO.BookingItemDTO;
-import com.example.airline.Services.BookingItemService;
-import com.example.airline.Services.BookingService;
+import com.example.airline.services.BookingItemService;
 import com.example.airline.entities.Cabin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.airline.API.Error.NotFoundException;
@@ -18,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

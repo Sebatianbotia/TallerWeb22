@@ -1,7 +1,7 @@
 package com.example.airline.Api.Controller;
 
 import com.example.airline.API.Controller.PassengerProfileController;
-import com.example.airline.Services.PassengerProfileService;
+import com.example.airline.services.PassengerProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.airline.API.Error.NotFoundException;
 import org.junit.jupiter.api.Test;

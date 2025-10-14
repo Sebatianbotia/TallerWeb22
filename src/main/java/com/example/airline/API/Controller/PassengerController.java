@@ -2,7 +2,7 @@ package com.example.airline.API.Controller;
 
 import static com.example.airline.DTO.PassengerDTO.*;
 
-import com.example.airline.Services.PassengerService;
+import com.example.airline.services.PassengerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

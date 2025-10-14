@@ -1,11 +1,10 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

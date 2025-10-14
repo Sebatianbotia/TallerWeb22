@@ -1,4 +1,4 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.PassengerDTO;
@@ -6,7 +6,6 @@ import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

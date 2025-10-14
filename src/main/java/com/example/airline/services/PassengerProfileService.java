@@ -1,4 +1,4 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.entities.PassengerProfile;

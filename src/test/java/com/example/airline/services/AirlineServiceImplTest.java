@@ -2,7 +2,6 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.AirlaneDTO.*;
 import com.example.airline.Mappers.AirlineMapper;
-import com.example.airline.Services.AirlineServiceImpl;
 import com.example.airline.entities.Airline;
 import com.example.airline.repositories.AirlineRepository;
 import org.junit.jupiter.api.Test;

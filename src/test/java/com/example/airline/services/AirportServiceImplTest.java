@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 import com.example.airline.DTO.AirportDTO.*;
 import com.example.airline.Mappers.AirportMapper;
-import com.example.airline.Services.AirportServiceImpl;
 import com.example.airline.entities.Airport;
 import com.example.airline.repositories.AirportRepository;
 import org.junit.jupiter.api.Test;

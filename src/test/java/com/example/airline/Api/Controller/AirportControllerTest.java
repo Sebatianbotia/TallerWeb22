@@ -1,11 +1,8 @@
 package com.example.airline.Api.Controller;
 
 import com.example.airline.API.Controller.AirportController;
-import com.example.airline.API.Controller.TagController;
-import com.example.airline.DTO.AirlaneDTO;
 import com.example.airline.DTO.AirportDTO;
-import com.example.airline.Services.AirlineService;
-import com.example.airline.Services.AirportService;
+import com.example.airline.services.AirportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.airline.API.Error.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

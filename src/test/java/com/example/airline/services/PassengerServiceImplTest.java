@@ -1,20 +1,15 @@
 package com.example.airline.services;
 
-import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.DTO.PassengerDTO.*;
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.Mappers.PassengerProfileMapper;
-import com.example.airline.Services.PassengerProfileServiceImpl;
-import com.example.airline.Services.PassengerServiceimpl;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
 import com.example.airline.repositories.PassengerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;

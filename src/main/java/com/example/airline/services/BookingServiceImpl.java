@@ -1,4 +1,4 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.BookingDTO;
@@ -6,7 +6,6 @@ import com.example.airline.Mappers.BookingMapper; // Usamos el mapper
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.Passenger;
 import com.example.airline.repositories.BookingRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor; // Usamos Lombok para inyección de dependencias
 import org.springframework.stereotype.Service; // Indicamos que es un servicio
 import org.springframework.transaction.annotation.Transactional;

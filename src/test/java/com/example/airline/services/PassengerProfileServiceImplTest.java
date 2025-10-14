@@ -1,9 +1,7 @@
 package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
-import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.Mappers.PassengerProfileMapper;
-import com.example.airline.Services.PassengerProfileServiceImpl;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
 import org.junit.jupiter.api.Test;

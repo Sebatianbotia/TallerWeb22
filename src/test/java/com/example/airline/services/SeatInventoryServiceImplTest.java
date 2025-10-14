@@ -2,7 +2,6 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.Mappers.SeatInventoryMapper;
-import com.example.airline.Services.SeatInventoryServiceImpl;
 import com.example.airline.entities.Cabin;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;

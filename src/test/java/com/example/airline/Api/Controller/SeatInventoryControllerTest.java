@@ -1,9 +1,7 @@
 package com.example.airline.Api.Controller;
 
 import com.example.airline.API.Controller.SeatInventoryController;
-import com.example.airline.API.Controller.TagController;
-import com.example.airline.Services.SeatInventoryService;
-import com.example.airline.Services.TagService;
+import com.example.airline.services.SeatInventoryService;
 import com.example.airline.entities.Cabin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.airline.API.Error.NotFoundException;
