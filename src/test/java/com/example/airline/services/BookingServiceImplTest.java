@@ -1,9 +1,12 @@
 package com.example.airline.services;
 
 import com.example.airline.DTO.BookingDTO.*;
+import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.Mappers.BookingMapper;
 import com.example.airline.entities.Booking;
+import com.example.airline.entities.BookingItem;
+import com.example.airline.entities.Cabin;
 import com.example.airline.entities.Passenger;
 import com.example.airline.repositories.BookingRepository;
 import org.junit.jupiter.api.Test;
@@ -11,11 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -120,4 +128,5 @@ public class BookingServiceImplTest {
         assertEquals("Josesito crack7770", response.passenger().fullName());
         assertEquals("mamamaa@gmail.com", response.passenger().email());
     }
+
 }

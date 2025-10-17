@@ -3,17 +3,26 @@ package com.example.airline.services;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 import java.util.Optional;
+
+import com.example.airline.DTO.AirportDTO;
 import com.example.airline.DTO.AirportDTO.*;
 import com.example.airline.Mappers.AirportMapper;
 import com.example.airline.entities.Airport;
 import com.example.airline.repositories.AirportRepository;
+import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -92,6 +101,34 @@ class AirportServiceImplTest {
         assertEquals("NEW", actualResponse.code());
         assertEquals("New City", actualResponse.city());
 
+    }
+
+    @Test
+    void shoulFindallAndReturPage(){
+        var airport1 = Airport.builder().id(1L).code("fundacion").city("Santa Marta").build();
+        var airport2 = Airport.builder().id(2L).code("Fundacho").city("Santa Maria").build();
+
+        Page<Airport> page = new PageImpl<>(List.of(airport1,airport2));
+
+        when(airportRepository.findAll(PageRequest.of(0,2))).thenReturn(page);
+
+        when(mapper.toDTO(any())).thenAnswer(inv -> {
+            Airport airportEntity = inv.getArgument(0);
+
+            return new AirportDTO.AirportResponse(airportEntity.getId(), airportEntity.getName(), airportEntity.getCode(),
+                    airportEntity.getCity(), null, null
+                    );
+        });
+
+        Page<AirportResponse> pages = airportService.list(PageRequest.of(0, 2));
+
+        assertThat(pages).isNotNull();
+        assertThat(pages.getTotalElements()).isEqualTo(2);
+        assertThat(pages.getTotalPages()).isEqualTo(1);
+        assertThat(pages.getContent()).hasSize(2);
+        assertThat(pages.getContent().get(0)).isEqualTo(mapper.toDTO(airport1));
+        assertThat(pages.getContent().get(1)).isEqualTo(mapper.toDTO(airport2));
+        assertThat(pages.getContent().getFirst().code()).isEqualTo("fundacion");
     }
 
 }

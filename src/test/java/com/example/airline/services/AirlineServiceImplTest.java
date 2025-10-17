@@ -4,15 +4,19 @@ import com.example.airline.DTO.AirlaneDTO.*;
 import com.example.airline.Mappers.AirlineMapper;
 import com.example.airline.entities.Airline;
 import com.example.airline.repositories.AirlineRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -97,6 +101,40 @@ class AirlineServiceImplTest {
         assertEquals(TEST_ID, actualResponse.id());
         assertEquals("Jose", actualResponse.name());
         assertEquals("456", actualResponse.code());
+
+    }
+
+    @Test
+    void shouldFindAllAndReturPage(){
+        var airline1 = Airline.builder().id(1L).code("1").name("areod").build();
+        var airline2 = Airline.builder().id(2L).code("3").name("eol").build();
+        Page page = new PageImpl<>(List.of(airline1, airline2));
+
+
+        when(airlineRepository.findAll(PageRequest.of(0,2))).thenReturn(page);
+
+        when(mapper.toDTO(any())).thenAnswer(inv -> {
+           Airline airline = inv.getArgument(0);
+
+           return new airlineResponse(airline.getId(),airline.getName(),airline.getCode(),Collections.emptyList());
+
+        });
+
+        Page<airlineResponse> pages = airlineServiceImpl.list(PageRequest.of(0, 2));
+
+        assertNotNull(pages);
+        assertThat(pages.getTotalElements()).isEqualTo(2);
+        assertThat(pages.getTotalPages()).isEqualTo(1);
+        assertThat(pages.getContent()).hasSize(2);
+        assertThat(pages.getContent().get(1).id()).isEqualTo(2L);
+        assertThat(pages.getContent().get(1).name()).isEqualTo("eol");
+        assertThat(pages.getContent().get(0).id()).isEqualTo(1L);
+        assertThat(pages.getContent().get(0).name()).isEqualTo("areod");
+
+
+
+
+
 
     }
 }

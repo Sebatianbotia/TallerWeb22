@@ -6,6 +6,8 @@ import com.example.airline.Mappers.AirlineMapper;
 import com.example.airline.entities.Airline;
 import com.example.airline.repositories.AirlineRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,8 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<AirlaneDTO.airlineResponse> list() {
-        return airlineRepository.findAll().stream().map(Mapper::toDTO).toList();
+    public Page<AirlaneDTO.airlineResponse> list(Pageable pageable) {
+        return airlineRepository.findAll(pageable).map(Mapper::toDTO);
     }
 
     @Override

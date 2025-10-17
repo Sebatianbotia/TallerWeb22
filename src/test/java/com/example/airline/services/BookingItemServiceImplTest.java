@@ -1,22 +1,25 @@
 package com.example.airline.services;
 
+import com.example.airline.DTO.AirportDTO;
 import com.example.airline.DTO.BookingItemDTO.*;
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.Mappers.BookingItemMapper;
-import com.example.airline.entities.Booking;
-import com.example.airline.entities.BookingItem;
-import com.example.airline.entities.Cabin;
-import com.example.airline.entities.Flight;
+import com.example.airline.entities.*;
 import com.example.airline.repositories.BookingItemsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -95,5 +98,34 @@ class BookingItemServiceImplTest {
         assertEquals(Cabin.ECONOMY, actualResponse.cabin());
         assertEquals(FLIGHT_ID, actualResponse.flight().flightId());
 
+    }
+
+    @Test
+    void shoulFindallAndReturPage(){
+        var booking1 = BookingItem.builder().id(1L).cabin(Cabin.ECONOMY).build();
+        var booking2 = BookingItem.builder().id(2L).cabin(Cabin.BUSINESS).build();
+
+        Page<BookingItem> page = new PageImpl<>(List.of(booking1,booking2));
+
+        when(bookingItemsRepository.findAll(PageRequest.of(0,2))).thenReturn(page);
+
+        when(bookingItemMapper.toDTO(any())).thenAnswer(inv -> {
+            BookingItem bookingItem = inv.getArgument(0);
+            Long bookingId = null;
+            if (bookingItem != null) {
+                bookingId = bookingItem.getId();
+            }
+
+            return new bookingItemReponse(bookingItem.getId(), bookingItem.getCabin(),bookingId, null );
+        });
+
+        Page<bookingItemReponse> pages = bookingItemService.list(PageRequest.of(0, 2));
+
+        assertThat(pages).isNotNull();
+        assertThat(pages.getTotalElements()).isEqualTo(2);
+        assertThat(pages.getTotalPages()).isEqualTo(1);
+        assertThat(pages.getContent()).hasSize(2);
+        assertThat(pages.getContent().get(0)).isEqualTo(bookingItemMapper.toDTO(booking1));
+        assertThat(pages.getContent().get(1)).isEqualTo(bookingItemMapper.toDTO(booking2));
     }
 }

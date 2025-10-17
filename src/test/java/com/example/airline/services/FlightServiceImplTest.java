@@ -9,6 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -270,9 +273,9 @@ public class FlightServiceImplTest {
         Flight flight1 =Flight.builder().id(1L).number("numerito").airline(airline).originAirport(originAirport).destinationAirport(destinationAirport).seatInventories(List.of(seatInventory1Object)).build();
         Flight flight2 = Flight.builder().id(2L).number("numeron").airline(airline).originAirport(destinationAirport).destinationAirport(originAirport).seatInventories(List.of(seatInventory2Object)).build();
 
-        List<Flight> flighCreated = List.of(flight1, flight2);
+        Page<Flight> flighCreated = new PageImpl<>(List.of(flight1, flight2));
 
-        when(flightRepository.findAll()).thenReturn(flighCreated);
+        when(flightRepository.findAll(PageRequest.of(0, 2))).thenReturn(flighCreated);
 
         when(airlineMapper.toFlightView(any())).thenAnswer(inv -> {
             Airline airline = inv.getArgument(0);
@@ -309,21 +312,21 @@ public class FlightServiceImplTest {
                     flight.getId(), flight.getNumber(), flight.getArrivalTime(), flight.getDepartureTime(), arlineView , originAirportView, destinationAirportView, tagResponse, seatInventory);
         });
 
-        List<FlightDto.flightResponse> flights = flightService.findAll();
+        Page<FlightDto.flightResponse> flights = flightService.list(PageRequest.of(0,2));
 
         assertThat(flights).isNotNull();
         assertThat(flights).isNotEmpty();
-        assertThat(flights.size()).isEqualTo(2);
-        assertThat(flights.getFirst().flightId()).isEqualTo(1L);
-        assertThat(flights.getFirst().number()).isEqualTo("numerito");
-        assertThat(flights.getFirst().originAirport().code()).isEqualTo("airportOrigne");
-        assertThat(flights.getFirst().destinationAirport().code()).isEqualTo("airportdestine");
-        assertThat(flights.getFirst().seatInventories().size()).isEqualTo(1);
-        assertThat(flights.get(1).flightId()).isEqualTo(2L);
-        assertThat(flights.get(1).number()).isEqualTo("numeron");
-        assertThat(flights.get(1).originAirport().code()).isEqualTo("airportdestine");
-        assertThat(flights.get(1).destinationAirport().code()).isEqualTo("airportOrigne");
-        assertThat(flights.get(1).seatInventories().size()).isEqualTo(1);
+        assertThat(flights.getContent().size()).isEqualTo(2);
+        assertThat(flights.getContent().getFirst().flightId()).isEqualTo(1L);
+        assertThat(flights.getContent().getFirst().number()).isEqualTo("numerito");
+        assertThat(flights.getContent().getFirst().originAirport().code()).isEqualTo("airportOrigne");
+        assertThat(flights.getContent().getFirst().destinationAirport().code()).isEqualTo("airportdestine");
+        assertThat(flights.getContent().getFirst().seatInventories().size()).isEqualTo(1);
+        assertThat(flights.getContent().get(1).flightId()).isEqualTo(2L);
+        assertThat(flights.getContent().get(1).number()).isEqualTo("numeron");
+        assertThat(flights.getContent().get(1).originAirport().code()).isEqualTo("airportdestine");
+        assertThat(flights.getContent().get(1).destinationAirport().code()).isEqualTo("airportOrigne");
+        assertThat(flights.getContent().get(1).seatInventories().size()).isEqualTo(1);
 
     }
 }

@@ -9,6 +9,8 @@ import com.example.airline.entities.Flight;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.FlightRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,8 +110,8 @@ public class FlightServiceImpl implements FlightService{
     }
 
     @Override
-    public List<FlightDto.flightResponse> findAll() {
-        return flightRepository.findAll().stream().map(flightMapper::toDTO).toList();
+    public Page<FlightDto.flightResponse> list(Pageable pageable) {
+        return flightRepository.findAll(pageable).map(flightMapper::toDTO);
     }
 
     @Override

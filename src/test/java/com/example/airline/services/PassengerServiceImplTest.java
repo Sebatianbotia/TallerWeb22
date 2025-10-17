@@ -13,6 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 
 import java.util.ArrayList;
@@ -155,11 +158,11 @@ public class PassengerServiceImplTest {
     void shouldFindAll(){
         var profile = PassengerProfile.builder().id(1L).countryCode("45").build();
         var passenger  = Passenger.builder().id(1L).fullName("Jose").profile(profile).build();
-        List<Passenger> findAllss = new ArrayList<>(List.of(
+        Page<Passenger> findAllss = new PageImpl<>(List.of(
                 passenger
         ));
 
-        when(passengerRepository.findAll()).thenReturn(findAllss);
+        when(passengerRepository.findAll(PageRequest.of(0,1))).thenReturn(findAllss);
 
         when(passengerProfileMapper.toPassengerProfileView(any())).thenAnswer(inv -> {
             PassengerProfile object = inv.getArgument(0);
@@ -174,11 +177,11 @@ public class PassengerServiceImplTest {
             return new passengerResponse(object.getId(), object.getFullName(), object.getEmail(), passengerProfileMapper.toPassengerProfileView(object.getProfile()));
         });
 
-        var passengerDTO = passengerServiceimpl.findAll();
+        var passengerDTO = passengerServiceimpl.list(PageRequest.of(0,1));
 
-        assertThat(passengerDTO.size()).isEqualTo(1);
-        assertThat(passengerDTO.getFirst().fullName()).isEqualTo("Jose");
-        assertThat(passengerDTO.getFirst().passengerProfile().countryCode()).isEqualTo("45");
+        assertThat(passengerDTO.getContent().size()).isEqualTo(1);
+        assertThat(passengerDTO.getContent().getFirst().fullName()).isEqualTo("Jose");
+        assertThat(passengerDTO.getContent().getFirst().passengerProfile().countryCode()).isEqualTo("45");
 
 
 

@@ -9,6 +9,8 @@ import com.example.airline.entities.BookingItem;
 import com.example.airline.entities.Flight;
 import com.example.airline.repositories.BookingItemsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,8 +93,8 @@ public class BookingItemServiceImpl implements BookingItemService {
     }
 
     @Override
-    public List<bookingItemReponse> findAll() {
-        return bookingItemsRepository.findAll().stream().map(bookingItemMapper::toDTO).toList();
+    public Page<bookingItemReponse> list(Pageable pageable) {
+        return bookingItemsRepository.findAll(pageable).map(bookingItemMapper::toDTO);
     }
 
 }

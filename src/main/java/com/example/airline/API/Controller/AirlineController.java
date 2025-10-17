@@ -27,6 +27,7 @@ public class AirlineController {
     @GetMapping("/{id}")
     public ResponseEntity<AirlaneDTO.airlineResponse> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
+
     }
 
     @DeleteMapping("/{id}")

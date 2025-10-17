@@ -7,6 +7,8 @@ import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,9 +62,8 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     }
 
     @Override
-    public List<PassengerProfileDTO.passengerProfileResponse> findAll() {
-        var profiles = passengerProfileRepository.findAll();
-        return profiles.stream().map(passengerProfileMapper::toDTO).toList();
+    public Page<PassengerProfileDTO.passengerProfileResponse> list(Pageable pageable) {
+        return passengerProfileRepository.findAll(pageable).map(passengerProfileMapper::toDTO);
     }
 
     @Override

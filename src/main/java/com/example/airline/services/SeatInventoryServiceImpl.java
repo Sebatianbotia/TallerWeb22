@@ -6,6 +6,8 @@ import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,8 +63,8 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public List<SeatInventoryDTO.seatInventoryDtoResponse> findAll() {
-        return seatInventoryRepository.findAll().stream().map(seatInventoryMapper::toDTO).toList();
+    public Page<SeatInventoryDTO.seatInventoryDtoResponse> list(Pageable  pageable) {
+        return seatInventoryRepository.findAll(pageable).map(seatInventoryMapper::toDTO);
     }
 
     @Override

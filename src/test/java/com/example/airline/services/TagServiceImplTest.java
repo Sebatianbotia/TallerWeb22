@@ -1,7 +1,9 @@
 package com.example.airline.services;
 
+import com.example.airline.DTO.AirlaneDTO;
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.Mappers.TagMapper;
+import com.example.airline.entities.Airline;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
 import org.junit.jupiter.api.Test;
@@ -9,9 +11,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -80,6 +88,38 @@ public class TagServiceImplTest {
 
         assertThat(tag).isNotNull();
         assertThat(tag.getName()).isEqualTo("Premium");
+
+
+
+
+    }
+
+    @Test
+    void shouldFindAllAndReturPage(){
+        var tag1 = Tag.builder().id(1L).name("Economico").build();
+        var tag2 = Tag.builder().id(2L).name("Gratis").build();
+        Page<Tag> page = new PageImpl<>(List.of(tag1, tag2));
+
+
+        when(tagRepository.findAll(PageRequest.of(0,2))).thenReturn(page);
+
+        when(tagMapper.toDTO(any())).thenAnswer(i -> {
+            Tag object = i.getArgument(0);
+            return new TagDTO.tagResponse(object.getId(), object.getName());
+        });
+
+        Page<TagDTO.tagResponse> pages = tagService.list(PageRequest.of(0, 2));
+
+        assertNotNull(pages);
+        assertThat(pages.getTotalElements()).isEqualTo(2);
+        assertThat(pages.getTotalPages()).isEqualTo(1);
+        assertThat(pages.getContent()).hasSize(2);
+        assertThat(pages.getContent().get(1).tagId()).isEqualTo(2L);
+        assertThat(pages.getContent().get(1).name()).isEqualTo("Gratis");
+        assertThat(pages.getContent().get(0).tagId()).isEqualTo(1L);
+        assertThat(pages.getContent().get(0).name()).isEqualTo("Economico");
+
+
 
 
 

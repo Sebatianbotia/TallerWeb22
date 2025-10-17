@@ -2,6 +2,8 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.TagDTO;
 import com.example.airline.entities.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface TagService {
 
     TagDTO.tagResponse update(Long id, TagDTO.tagUpdateRequest updateRequest);
 
-    List<TagDTO.tagResponse> findAll();
+    Page<TagDTO.tagResponse> list(Pageable  pageable);
 
     void delete(Long id);
 

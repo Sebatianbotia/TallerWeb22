@@ -6,6 +6,8 @@ import com.example.airline.Mappers.TagMapper;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +39,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDTO.tagResponse> findAll() {
-        var tags = tagRepository.findAll();
-        return tags.stream().map(tagMapper::toDTO).toList();
+    public Page<TagDTO.tagResponse> list(Pageable pageable) {
+        return  tagRepository.findAll(pageable).map(tagMapper::toDTO);
     }
 
     @Override
