@@ -1,11 +1,13 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.AirlaneDTO;
 import com.example.airline.Mappers.AirlineMapper;
 import com.example.airline.entities.Airline;
 import com.example.airline.repositories.AirlineRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +36,13 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Override
     public Airline getObjectById(Long id) {
-        return airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline with id " + id + " not found"));
+        return airlineRepository.findById(id).orElseThrow(()-> new NotFoundException("Airline with id " + id + " not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<AirlaneDTO.airlineResponse> list() {
-        return airlineRepository.findAll().stream().map(Mapper::toDTO).toList();
+    public Page<AirlaneDTO.airlineResponse> list(Pageable pageable) {
+        return airlineRepository.findAll(pageable).map(Mapper::toDTO);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class AirlineServiceImpl implements AirlineService{
 
     @Override
     public AirlaneDTO.airlineResponse update(Long id, AirlaneDTO.airlineUpdateRequest req) {
-        var a = airlineRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Airline not found"));
+        var a = airlineRepository.findById(id).orElseThrow(()-> new NotFoundException("Airline not found"));
         Mapper.updateEntity(a,req);
         return  Mapper.toDTO(a);
     }

@@ -1,5 +1,6 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.Mappers.FlightMapper;
 import com.example.airline.entities.Airline;
@@ -7,8 +8,9 @@ import com.example.airline.entities.Airport;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.Tag;
 import com.example.airline.repositories.FlightRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +51,7 @@ public class FlightServiceImpl implements FlightService{
             destination.addFlightDestination(flight);
         }
         if (request.tags() != null) {
-            Set<Tag> tags = request.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
+            Set<Tag> tags = request.tags().stream().map(tagService::getObjectByName).collect(Collectors.toSet());
             flight.setTags(tags);
             tags.forEach(tag -> tag.addFlight(flight));
         }
@@ -92,7 +94,7 @@ public class FlightServiceImpl implements FlightService{
             if (updateRequest.tags().isEmpty()) {
                 flight.clearTags();
             } else {
-                Set<Tag> tags = updateRequest.tags().stream().map(tagService::findTagByName).collect(Collectors.toSet());
+                Set<Tag> tags = updateRequest.tags().stream().map(tagService::getObjectByName).collect(Collectors.toSet());
                 flight.setTags(tags);
                 tags.forEach(tag -> tag.addFlight(flight));
             }
@@ -103,13 +105,13 @@ public class FlightServiceImpl implements FlightService{
 
     @Override
     @Transactional(readOnly = true)
-    public FlightDto.flightResponse find(Long id) {
+    public FlightDto.flightResponse get(Long id) {
         return flightMapper.toDTO(getFlightObject(id));
     }
 
     @Override
-    public List<FlightDto.flightResponse> findAll() {
-        return flightRepository.findAll().stream().map(flightMapper::toDTO).toList();
+    public Page<FlightDto.flightResponse> list(Pageable pageable) {
+        return flightRepository.findAll(pageable).map(flightMapper::toDTO);
     }
 
     @Override
@@ -119,7 +121,7 @@ public class FlightServiceImpl implements FlightService{
 
     @Override
     public Flight getFlightObject(Long id) {
-        var f =  flightRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        var f =  flightRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "flight with id: " + id + " not found"
         ));
         return f;

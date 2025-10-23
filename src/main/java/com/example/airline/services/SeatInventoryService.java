@@ -1,7 +1,9 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.entities.SeatInventory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -9,15 +11,15 @@ public interface SeatInventoryService {
 
     SeatInventoryDTO.seatInventoryDtoResponse create(SeatInventoryDTO.seatInventoryCreateRequest inventoryCreateRequest);
 
-    SeatInventoryDTO.seatInventoryDtoResponse find(Long id);
+    SeatInventoryDTO.seatInventoryDtoResponse get(Long id);
 
-    SeatInventory findSeatInventoryObject(Long id);
+    SeatInventory getObject(Long id);
 
     SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest);
 
     SeatInventoryDTO.seatInventoryDtoResponse update(SeatInventory entity, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest);
 
-    List<SeatInventoryDTO.seatInventoryDtoResponse> findAll();
+    Page<SeatInventoryDTO.seatInventoryDtoResponse> list(Pageable pageable);
 
     void delete(Long id);
 }

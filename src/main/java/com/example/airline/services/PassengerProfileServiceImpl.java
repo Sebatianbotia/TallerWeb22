@@ -1,14 +1,14 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.PassengerProfileDTO;
 import com.example.airline.Mappers.PassengerProfileMapper;
-import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
-import com.example.airline.repositories.PassengerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,14 +34,14 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     }
 
     @Override
-    public PassengerProfileDTO.passengerProfileResponse findById(Long id) {
-        var profile = get(id);
+    public PassengerProfileDTO.passengerProfileResponse get(Long id) {
+        var profile = this.getObject(id);
         return passengerProfileMapper.toDTO(profile);
     }
 
     @Override
-    public PassengerProfile get(Long id) {
-        PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+    public PassengerProfile getObject(Long id) {
+        PassengerProfile profile = passengerProfileRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "Profile with id " + id + " not found"
         ));
         return profile;
@@ -50,7 +50,7 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     @Override
     @Transactional
     public PassengerProfileDTO.passengerProfileResponse update(Long id, PassengerProfileDTO.passengerProfileUpdateRequest updateRequest) {
-        var profile = get(id);
+        var profile = this.getObject(id);
         passengerProfileMapper.updateEntity(updateRequest, profile);
         return passengerProfileMapper.toDTO(profile);
     }
@@ -62,14 +62,13 @@ public class PassengerProfileServiceImpl implements PassengerProfileService {
     }
 
     @Override
-    public List<PassengerProfileDTO.passengerProfileResponse> findAll() {
-        var profiles = passengerProfileRepository.findAll();
-        return profiles.stream().map(passengerProfileMapper::toDTO).toList();
+    public Page<PassengerProfileDTO.passengerProfileResponse> list(Pageable pageable) {
+        return passengerProfileRepository.findAll(pageable).map(passengerProfileMapper::toDTO);
     }
 
     @Override
     public void delete(Long id) {
-        var profile = get(id);
+        var profile = this.getObject(id);
         passengerProfileRepository.delete(profile);
     }
 }

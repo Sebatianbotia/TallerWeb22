@@ -1,13 +1,15 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.entities.Passenger;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class PassengerServiceimpl implements PassengerService{
     @Override
     @Transactional
     public PassengerDTO.passengerResponse update(Long id, PassengerDTO.passengerUpdateRequest updateRequest) {
-        var m = get(id);
+        var m = this.getObject(id);
         passengerMapper.updateEntity(m, updateRequest);
         if (updateRequest.passengerProfile() != null) {
             if (m.getProfile() == null) {
@@ -48,24 +50,28 @@ public class PassengerServiceimpl implements PassengerService{
 
     @Override
     public void delete(Long id) {
-        var m = get(id);
+        var m = this.getObject(id);
         passengerRepository.delete(m);
     }
 
+
     @Override
-    public PassengerDTO.passengerResponse find(Long id) {
-        return passengerMapper.toDTO(get(id));
+    public Page<PassengerDTO.passengerResponse> list(Pageable pageable) {
+        return  passengerRepository.findAll(pageable).map(passengerMapper::toDTO);
     }
 
     @Override
-    public List<PassengerDTO.passengerResponse> findAll() {
-        var passenger =  passengerRepository.findAll();
-        return passenger.stream().map(passengerMapper::toDTO).toList();
-    }
-
-    @Override
-    public Passenger get(Long id){
-        var p =  passengerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Passenger with id " + id + " not found"));
+    public Passenger getObject(Long id){
+        var p =  passengerRepository.findById(id).orElseThrow(() -> new NotFoundException("Passenger with id " + id + " not found"));
         return p;
     }
+
+    @Override
+    public PassengerDTO.passengerResponse get(Long id) {
+        return passengerMapper.toDTO(this.getObject(id));
+    }
+
+
+
+
 }

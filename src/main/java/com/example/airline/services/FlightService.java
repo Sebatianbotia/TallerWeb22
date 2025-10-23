@@ -1,7 +1,9 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.DTO.FlightDto;
 import com.example.airline.entities.Flight;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,9 +13,9 @@ public interface FlightService {
 
     FlightDto.flightResponse update(Long id, FlightDto.flightUpdateRequest updateRequest);
 
-    FlightDto.flightResponse find(Long id);
+    FlightDto.flightResponse get(Long id);
 
-    List<FlightDto.flightResponse> findAll();
+    Page<FlightDto.flightResponse> list(Pageable pageable);
 
     void delete(Long id);
 

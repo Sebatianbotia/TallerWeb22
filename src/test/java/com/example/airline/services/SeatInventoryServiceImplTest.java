@@ -2,7 +2,6 @@ package com.example.airline.services;
 
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.Mappers.SeatInventoryMapper;
-import com.example.airline.Services.SeatInventoryServiceImpl;
 import com.example.airline.entities.Cabin;
 import com.example.airline.entities.Flight;
 import com.example.airline.entities.SeatInventory;
@@ -12,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -126,9 +128,9 @@ public class SeatInventoryServiceImplTest {
         var seat1 = new SeatInventory(10L, 50, 40, Cabin.ECONOMY, null);
         var seat2 = new SeatInventory(20L, 100, 95, Cabin.BUSINESS, null);
 
-        List<SeatInventory> seatInventories = List.of(seat1, seat2);
+        Page<SeatInventory> seatInventories = new PageImpl<>(List.of(seat1, seat2));
 
-        when(seatInventoryRepository.findAll()).thenReturn(seatInventories);
+        when(seatInventoryRepository.findAll(PageRequest.of(0,2))).thenReturn(seatInventories);
 
         when(seatInventoryMapper.toDTO(any())).thenAnswer(inv -> {
             SeatInventory object =  inv.getArgument(0);
@@ -142,20 +144,20 @@ public class SeatInventoryServiceImplTest {
         });
 
 
-        var savedSeats = seatInventoryServiceImpl.findAll();
+        var savedSeats = seatInventoryServiceImpl.list(PageRequest.of(0,2));
 
         assertThat(savedSeats).isNotNull();
         assertThat(savedSeats).hasSize(2);
 
-        assertThat(savedSeats.getFirst().seatInventoryId()).isEqualTo(10L);
-        assertThat(savedSeats.getFirst().totalSeats()).isEqualTo(50);
-        assertThat(savedSeats.getFirst().availableSeats()).isEqualTo(40);
-        assertThat(savedSeats.getFirst().cabin()).isEqualTo(Cabin.ECONOMY);
-        assertThat(savedSeats.getFirst().flightNumber()).isNotNull();
+        assertThat(savedSeats.getContent().getFirst().seatInventoryId()).isEqualTo(10L);
+        assertThat(savedSeats.getContent().getFirst().totalSeats()).isEqualTo(50);
+        assertThat(savedSeats.getContent().getFirst().availableSeats()).isEqualTo(40);
+        assertThat(savedSeats.getContent().getFirst().cabin()).isEqualTo(Cabin.ECONOMY);
+        assertThat(savedSeats.getContent().getFirst().flightNumber()).isNotNull();
 
-        assertThat(savedSeats.get(1).seatInventoryId()).isEqualTo(20L);
-        assertThat(savedSeats.get(1).totalSeats()).isEqualTo(100);
-        assertThat(savedSeats.get(1).availableSeats()).isEqualTo(95);
-        assertThat(savedSeats.get(1).cabin()).isEqualTo(Cabin.BUSINESS);
+        assertThat(savedSeats.getContent().get(1).seatInventoryId()).isEqualTo(20L);
+        assertThat(savedSeats.getContent().get(1).totalSeats()).isEqualTo(100);
+        assertThat(savedSeats.getContent().get(1).availableSeats()).isEqualTo(95);
+        assertThat(savedSeats.getContent().get(1).cabin()).isEqualTo(Cabin.BUSINESS);
     }
 }

@@ -1,7 +1,9 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.DTO.AirportDTO;
 import com.example.airline.entities.Airport;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,5 +17,5 @@ public interface AirportService {
 
     AirportDTO.AirportResponse update(Long id, AirportDTO.AirportUpdateRequest request);
     void delete(Long id);
-    List<AirportDTO.AirportResponse> list();
+    Page<AirportDTO.AirportResponse> list(Pageable pageable);
 }

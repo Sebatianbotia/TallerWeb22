@@ -1,11 +1,13 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
+import com.example.airline.API.Error.NotFoundException;
 import com.example.airline.DTO.SeatInventoryDTO;
 import com.example.airline.Mappers.SeatInventoryMapper;
 import com.example.airline.entities.SeatInventory;
 import com.example.airline.repositories.SeatInventoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,14 +34,14 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public SeatInventoryDTO.seatInventoryDtoResponse find(Long id) {
-        var s = findSeatInventoryObject(id);
+    public SeatInventoryDTO.seatInventoryDtoResponse get(Long id) {
+        var s = getObject(id);
         return seatInventoryMapper.toDTO(s);
     }
 
     @Override
-    public SeatInventory findSeatInventoryObject(Long id) {
-        var s = seatInventoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+    public SeatInventory getObject(Long id) {
+        var s = seatInventoryRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 "SeatInventory with id " + id + " not found."
         ));
         return s;
@@ -48,7 +50,7 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     @Override
     @Transactional
     public SeatInventoryDTO.seatInventoryDtoResponse update(Long id, SeatInventoryDTO.seatInventoryUpdateRequest updateRequest) {
-        var seatInventory = findSeatInventoryObject(id);
+        var seatInventory = getObject(id);
         seatInventoryMapper.updateEntity(updateRequest, seatInventory);
         return seatInventoryMapper.toDTO(seatInventory);
     }
@@ -61,13 +63,13 @@ public class SeatInventoryServiceImpl implements SeatInventoryService {
     }
 
     @Override
-    public List<SeatInventoryDTO.seatInventoryDtoResponse> findAll() {
-        return seatInventoryRepository.findAll().stream().map(seatInventoryMapper::toDTO).toList();
+    public Page<SeatInventoryDTO.seatInventoryDtoResponse> list(Pageable  pageable) {
+        return seatInventoryRepository.findAll(pageable).map(seatInventoryMapper::toDTO);
     }
 
     @Override
     public void delete(Long id) {
-        var p = findSeatInventoryObject(id);
+        var p = getObject(id);
         seatInventoryRepository.delete(p);
     }
 }

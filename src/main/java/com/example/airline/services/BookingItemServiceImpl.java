@@ -1,13 +1,16 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
+import com.example.airline.API.Error.NotFoundException;
+import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.BookingItemDTO.*;
 import com.example.airline.Mappers.BookingItemMapper;
 import com.example.airline.entities.Booking;
 import com.example.airline.entities.BookingItem;
 import com.example.airline.entities.Flight;
 import com.example.airline.repositories.BookingItemsRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +34,6 @@ public class BookingItemServiceImpl implements BookingItemService {
         Booking b = bookingServiceImpl.getObject(request.bookingId());
 
 
-        // Asignamos el vuelo y el booking
         bookingItem.setBooking(b);
         bookingItem.setFlight(f);
         if (b.getItems() == null) {
@@ -39,7 +41,6 @@ public class BookingItemServiceImpl implements BookingItemService {
         }
         b.getItems().add(bookingItem);
 
-        // ✅ Lo mismo para Flight
         if (f.getBookingItems() == null) {
             f.setBookingItems(new ArrayList<>());
         }
@@ -53,7 +54,8 @@ public class BookingItemServiceImpl implements BookingItemService {
 
     @Override
     @Transactional
-    public bookingItemReponse update(BookingItem bookingItem,bookingItemUpdateRequest request) {
+    public bookingItemReponse update(Long id, bookingItemUpdateRequest request) {
+        BookingItem bookingItem = findBookingItem(id);
         bookingItemMapper.updateEntity(request, bookingItem);
         if (bookingItem.getFlight().getId() != request.flightId()){
             Flight f =  flightServiceImpl.getFlightObject(request.flightId());
@@ -72,6 +74,12 @@ public class BookingItemServiceImpl implements BookingItemService {
         return bookingItemMapper.toDTO(savedItem);
     }
 
+    public BookingItemDTO.bookingItemReponse get(Long bookingId) {
+        return bookingItemMapper.toDTO(bookingItemsRepository.getReferenceById(bookingId));
+    }
+
+
+
 
     @Override
     @Transactional
@@ -81,11 +89,12 @@ public class BookingItemServiceImpl implements BookingItemService {
 
 
     public BookingItem findBookingItem(Long id) {
-        return bookingItemsRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Booking Item not found"));
+        return bookingItemsRepository.findById(id).orElseThrow(()-> new NotFoundException("Booking Item not found"));
     }
 
     @Override
-    public List<bookingItemReponse> findAll() {
-        return bookingItemsRepository.findAll().stream().map(bookingItemMapper::toDTO).toList();
+    public Page<bookingItemReponse> list(Pageable pageable) {
+        return bookingItemsRepository.findAll(pageable).map(bookingItemMapper::toDTO);
     }
+
 }

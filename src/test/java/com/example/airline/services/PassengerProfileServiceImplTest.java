@@ -1,9 +1,7 @@
 package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerProfileDTO;
-import com.example.airline.Mappers.PassengerMapper;
 import com.example.airline.Mappers.PassengerProfileMapper;
-import com.example.airline.Services.PassengerProfileServiceImpl;
 import com.example.airline.entities.PassengerProfile;
 import com.example.airline.repositories.PassengerProfileRepository;
 import org.junit.jupiter.api.Test;
@@ -11,6 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,19 +95,17 @@ public class PassengerProfileServiceImplTest {
     @Test
     void shouldFindAllAndReturnResponseDTO(){
         var pp = PassengerProfile.builder().id(1L).phone("222").build();
-        List<PassengerProfile> passengerProfiles = new ArrayList<>(
-                List.of(pp)
-        );
-        when(passengerProfileRepository.findAll()).thenReturn(passengerProfiles);
+        Page<PassengerProfile> page = new PageImpl<>(List.of(pp));
+        when(passengerProfileRepository.findAll(PageRequest.of(0,2))).thenReturn(page);
 
         when(passengerProfileMapper.toDTO(any())).thenAnswer(inv -> {
             PassengerProfile object = inv.getArgument(0);
             return new PassengerProfileDTO.passengerProfileResponse(object.getId(), object.getPhone(), object.getCountryCode());
         });
 
-        var saved = passengerProfileService.findAll();
+        var saved = passengerProfileService.list(PageRequest.of(0, 2));
 
-        assertThat(saved.getFirst().passengerProfileID()).isEqualTo(1L);
-        assertThat(saved.getFirst().phoneNumber()).isEqualTo("222");
+        assertThat(saved.getContent().getFirst().passengerProfileID()).isEqualTo(1L);
+        assertThat(saved.getContent().getFirst().phoneNumber()).isEqualTo("222");
     }
 }

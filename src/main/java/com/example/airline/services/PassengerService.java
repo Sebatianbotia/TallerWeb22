@@ -1,7 +1,9 @@
-package com.example.airline.Services;
+package com.example.airline.services;
 
 import com.example.airline.DTO.PassengerDTO;
 import com.example.airline.entities.Passenger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,9 +15,9 @@ public interface PassengerService {
 
     void delete(Long id);
 
-    PassengerDTO.passengerResponse find(Long id);
+    Page<PassengerDTO.passengerResponse> list(Pageable pageable);
 
-    List<PassengerDTO.passengerResponse> findAll();
+    Passenger getObject(Long id);
 
-    Passenger get(Long id);
+    PassengerDTO.passengerResponse get(Long passengerId);
 }
