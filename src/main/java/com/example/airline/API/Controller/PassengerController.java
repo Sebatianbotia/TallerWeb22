@@ -2,9 +2,13 @@ package com.example.airline.API.Controller;
 
 import static com.example.airline.DTO.PassengerDTO.*;
 
+import com.example.airline.DTO.FlightDto;
 import com.example.airline.services.PassengerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,14 @@ public class PassengerController {
     @GetMapping("/{id}")
     public ResponseEntity<passengerResponse> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<passengerResponse>> list(@RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "8") int size) {
+        var result = service.list(PageRequest.of(page, size, Sort.by("id").ascending()));
+        return ResponseEntity.ok(result);
+
     }
 
     @DeleteMapping("/{id}")

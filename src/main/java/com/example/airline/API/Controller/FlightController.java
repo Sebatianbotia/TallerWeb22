@@ -1,9 +1,13 @@
 package com.example.airline.API.Controller;
 
+import com.example.airline.DTO.BookingItemDTO;
 import com.example.airline.DTO.FlightDto.*;
 import com.example.airline.services.FlightService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +27,13 @@ public class FlightController {
         var body = service.create(req);
         var location = uri.path("/api/flights/{id}").buildAndExpand(body.flightId()).toUri();
         return ResponseEntity.created(location).body(body);
+    }
+    @GetMapping
+    public ResponseEntity<Page<flightResponse>> list(@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "8") int size) {
+        var result = service.list(PageRequest.of(page, size, Sort.by("id").ascending()));
+        return ResponseEntity.ok(result);
+
     }
 
     @GetMapping("/{id}")
